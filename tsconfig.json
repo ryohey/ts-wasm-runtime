@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": false
+  },
+  "exclude": ["node_modules", "**/*.test.ts"]
+}
