@@ -4,20 +4,12 @@ import { parser, param, funcBody, num } from "./wasm-parser"
 describe("parser", () => {
   it("parse param", () => {
     const r = param(["param", "i32"], 0)
-    assert.deepEqual(r, [
-      true,
-      { nodeType: "param", name: null, type: "i32" },
-      2
-    ])
+    assert.deepEqual(r, [true, { name: null, type: "i32" }, 2])
   })
 
   it("parse param with name", () => {
     const r = param(["param", "$p2", "f64"], 0)
-    assert.deepEqual(r, [
-      true,
-      { nodeType: "param", name: "$p2", type: "f64" },
-      3
-    ])
+    assert.deepEqual(r, [true, { name: "$p2", type: "f64" }, 3])
   })
 
   it("parses num", () => {
@@ -31,17 +23,15 @@ describe("parser", () => {
       true,
       [
         {
-          nodeType: "op",
           opType: "get_local",
           parameters: "$lhs"
         },
         {
-          nodeType: "op",
           opType: "get_local",
           parameters: "$rhs"
         }
       ],
-      2
+      4
     ])
   })
 
@@ -63,31 +53,27 @@ describe("parser", () => {
     assert.deepEqual(r, [
       true,
       {
-        nodeType: "func",
         parameters: [
-          { nodeType: "param", name: "$lhs", type: "i32" },
-          { nodeType: "param", name: "$rhs", type: "i32" }
+          { name: "$lhs", type: "i32" },
+          { name: "$rhs", type: "i32" }
         ],
-        result: { nodeType: "result", type: "i32" },
+        result: { type: "i32" },
         body: [
           {
-            nodeType: "op",
             opType: "get_local",
             parameters: "$lhs"
           },
           {
-            nodeType: "op",
             opType: "get_local",
             parameters: "$rhs"
           },
           {
-            nodeType: "op",
             opType: "i32.add",
             parameters: null
           }
         ]
       },
-      7
+      9
     ])
   })
 })

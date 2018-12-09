@@ -24,10 +24,13 @@ export class VirtualMachine<Code, Memory> {
     this.instructionSet = instructionSet
   }
 
-  public run(program: Code[], memory: Memory) {
+  public initialize(program: Code[], memory: Memory) {
     this.memory = memory
     this.program = program
-    this.programCounter = 0
+  }
+
+  public run(addr: number) {
+    this.programCounter = addr
 
     while (true) {
       try {
@@ -51,5 +54,10 @@ export class VirtualMachine<Code, Memory> {
 
   private jump = (addr: number) => {
     this.programCounter = addr
+  }
+
+  // for debug
+  public getMemory(): Memory {
+    return this.memory
   }
 }

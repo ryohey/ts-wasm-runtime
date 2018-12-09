@@ -8,7 +8,7 @@ import { controlInstructionSet } from "./instructions/control"
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
 // Provides WASM instruction set and creates VirtualMachine.
-export const createWASMVM = (): VirtualMachine<WASMCode, WASMMemory> => {
+const createWASMVM = (): VirtualMachine<WASMCode, WASMMemory> => {
   const instructionSet = mergeInstructionSet(
     memoryInstructionSet as WASMInstructionSet,
     variableInstructionSet as WASMInstructionSet,
@@ -28,4 +28,28 @@ const mergeInstructionSet = <T, S>(
     }
   }
   throw new Error(`There is no instruction for ${code}`)
+}
+
+export class WASMVirtualMachine {
+  private readonly vm = createWASMVM()
+  private currentMemory: WASMMemory
+
+  // { 関数名: アドレス } のテーブル
+  private functionTable: { [index: string]: number } = {}
+
+  constructor() {}
+
+  instantiateModule(program: WASMCode[]) {
+    // 関数のアドレステーブルの解決や
+    // グローバル変数を用意してメモリを生成する
+    // コード内の変数名や関数名を index に置換する
+    this.currentMemory = new WASMMemory()
+    this.vm.initialize(program, this.currentMemory)
+  }
+
+  // export された関数を呼ぶ
+  callFunction(name: string) {
+    this.vm.run(this.functionTable[name])
+    return this.currentMemory
+  }
 }
