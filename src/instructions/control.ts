@@ -4,7 +4,6 @@ import {
   WASMMemory,
   WASMContext
 } from "../wasm-code"
-import { Stack } from "../stack"
 
 export const controlInstructionSet: PartialInstructionSet<
   WASMCode,
@@ -28,18 +27,20 @@ export const controlInstructionSet: PartialInstructionSet<
     case "br_table":
       return null
     case "return":
-      return (_, { stack, values }) => {
+      return (_, { callStack, values }, _pc, jump) => {
         // TODO: check result type
         const val = values.pop()
-        stack.pop()
-        stack.peek().values.push(val)
+        const { returnAddress } = callStack.peek()
+        callStack.pop()
+        callStack.peek().values.push(val)
+        jump(returnAddress)
       }
     case "call":
-      return (_, { stack, values }) => {
+      return (_, { callStack, values }, pc) => {
         // TODO: check parameters
-        const ctx = new WASMContext()
-        ctx.local.push(values.peek())
-        stack.push(ctx)
+        const local = [values.peek()]
+        const ctx = new WASMContext(local, pc)
+        callStack.push(ctx)
       }
     case "call_indirect":
       return null

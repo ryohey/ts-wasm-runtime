@@ -1,9 +1,9 @@
-import { PartialInstructionSet, WASMCode, WASMMemory } from "../wasm-code"
+import { PartialInstructionSet, WASMCode, WASMLocalMemory } from "../wasm-code"
 
 // https://webassembly.github.io/spec/core/text/instructions.html#memory-instructions
 export const memoryInstructionSet: PartialInstructionSet<
   WASMCode,
-  WASMMemory
+  WASMLocalMemory
 > = code => {
   switch (code.opcode) {
     case "i32.load":

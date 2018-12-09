@@ -5,12 +5,14 @@ import { variableInstructionSet } from "./instructions/variable"
 import { numericInstructionSet } from "./instructions/numeric"
 import { controlInstructionSet } from "./instructions/control"
 
+type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
+
 // Provides WASM instruction set and creates VirtualMachine.
 export const createWASMVM = (): VirtualMachine<WASMCode, WASMMemory> => {
   const instructionSet = mergeInstructionSet(
-    memoryInstructionSet,
-    variableInstructionSet,
-    numericInstructionSet,
+    memoryInstructionSet as WASMInstructionSet,
+    variableInstructionSet as WASMInstructionSet,
+    numericInstructionSet as WASMInstructionSet,
     controlInstructionSet
   )
   return new VirtualMachine(instructionSet)

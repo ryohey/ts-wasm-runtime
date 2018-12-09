@@ -2,33 +2,44 @@ import { Instruction } from "./vm"
 import { Stack } from "./stack"
 
 export interface WASMCode {
-  opcode: string
-  value: number
+  readonly opcode: string
+  readonly value: number
 }
 
 export class WASMContext {
-  values = new Stack<number>()
-  local: number[] = []
+  readonly values = new Stack<number>()
+  readonly local: number[] = []
+  readonly returnAddress: number
+
+  constructor(local: number[], returnAddress: number) {
+    this.local = local
+    this.returnAddress = returnAddress
+  }
 }
 
 export class WASMMemory {
   // control instruction のみが直接 stack を触るべき
-  stack = new Stack<WASMContext>()
-
-  memory: number[] = []
-  global: number[] = []
+  readonly callStack = new Stack<WASMContext>()
+  readonly memory: number[] = []
+  readonly global: number[] = []
 
   constructor() {
-    this.stack.push(new WASMContext())
+    this.callStack.push(new WASMContext([], 0))
   }
 
   get local(): number[] {
-    return this.stack.peek().local
+    return this.callStack.peek().local
   }
 
   get values(): Stack<number> {
-    return this.stack.peek().values
+    return this.callStack.peek().values
   }
 }
+
+// 通常の instruction が操作できるメモリ
+export type WASMLocalMemory = Pick<
+  WASMMemory,
+  "values" | "memory" | "global" | "local"
+>
 
 export type PartialInstructionSet<T, S> = (code: T) => Instruction<T, S> | null
