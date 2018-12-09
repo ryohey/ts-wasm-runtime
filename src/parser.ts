@@ -1,9 +1,18 @@
-export type Parser<T> = (target: T, position: number) => [boolean, any, number]
+// 戻り値の最後はデバッグ情報
+export type Parser<T> = (
+  target: T,
+  position: number
+) => [boolean, any, number, string?]
 
 export const token = (word: string): Parser<string> => (target, position) =>
   target.substr(position, word.length) === word
     ? [true, word, position + word.length]
-    : [false, null, position]
+    : [
+        false,
+        null,
+        position,
+        `token: ${target.substr(position, word.length)} is not ${word}`
+      ]
 
 export const seq = <T>(...parsers: Parser<T>[]): Parser<T> => (
   target,
@@ -27,7 +36,12 @@ export const regexp = (reg: RegExp): Parser<string> => (target, position) => {
   const result = reg.exec(target.slice(position))
   return result
     ? [true, result[0], position + result[0].length]
-    : [false, null, position]
+    : [
+        false,
+        null,
+        position,
+        `regexp: ${target.slice(position)} does not match ${reg.source}`
+      ]
 }
 
 export const or = <T>(...parsers: Parser<T>[]): Parser<T> => (
@@ -40,7 +54,12 @@ export const or = <T>(...parsers: Parser<T>[]): Parser<T> => (
       return parsed
     }
   }
-  return [false, null, position]
+  return [
+    false,
+    null,
+    position,
+    `or: cannot parse ${target} with ${parsers.map(p => p.name).join(", ")}`
+  ]
 }
 
 export const lazy = <T>(generator: () => Parser<T>): Parser<T> => {
@@ -73,7 +92,7 @@ export const many = <T>(parser: Parser<T>): Parser<T> => (target, position) => {
     }
   }
   if (result.length === 0) {
-    return [false, null, position]
+    return [false, null, position, new Error().stack]
   }
   return [true, result, position]
 }

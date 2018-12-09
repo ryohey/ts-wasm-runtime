@@ -9,21 +9,28 @@ const isString = (x: any): x is string =>
 const keyword = (word: string): Parser<atom[]> => (target, position) =>
   target[position] === word
     ? [true, word, position + 1]
-    : [false, null, position]
+    : [false, null, position, `keyword: ${target[position]} is not ${word}`]
 
 const regexp = (reg: RegExp): Parser<atom[]> => (target, position) => {
   const str = target[position]
   if (!isString(str)) {
-    return [false, null, position]
+    return [false, null, position, `regexp: ${target[position]} is not string`]
   }
   reg.lastIndex = 0
   const result = reg.exec(str)
-  return result ? [true, str, position + 1] : [false, null, position]
+  return result
+    ? [true, str, position + 1]
+    : [
+        false,
+        null,
+        position,
+        `regexp: ${target[position]} does not match ${reg.source}`
+      ]
 }
 
 export const num: Parser<atom[]> = (target, position) => {
   if (typeof target[position] !== "number") {
-    return [false, null, position]
+    return [false, null, position, `num: ${target} is not number`]
   }
   return [true, target[position], position + 1]
 }
@@ -35,22 +42,37 @@ const array = (parser: Parser<atom[]>): Parser<atom[]> => (
 ) => {
   const arr = target[position]
   if (!Array.isArray(arr)) {
-    return [false, null, position]
+    return [false, null, position, `array: ${target} is not array`]
   }
   const result = parser(arr, 0)
   if (result[0]) {
     return [true, result[1], position + 1]
   }
-  return [false, null, position]
+  return [false, null, position, result[3]]
 }
 
 // https://github.com/WebAssembly/spec/blob/master/interpreter/README.md#s-expression-syntax
 
-const name = regexp(/^\$[a-zA-Z][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*$/)
+const identifier = regexp(/^\$[a-zA-Z][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*$/)
+const name = regexp(/^[a-zA-Z]+$/)
 const string = regexp(/^\"(.+)\"/)
-const _var = or(num, name)
+const _var = or(num, identifier)
 
 /* func */
+
+export interface ASTFunction {
+  identifier: string | null
+  export: string | null
+  parameters: [
+    {
+      identifier: string | null
+      type: string
+    }
+  ]
+  result: {
+    type: string
+  }
+}
 
 const valType = or(
   keyword("i32"),
@@ -61,7 +83,8 @@ const valType = or(
 const blockType = map(seq(keyword("result"), valType), r => ({
   type: r[1]
 }))
-const op = map(
+
+export const op = map(
   or(
     keyword("unreachable"),
     keyword("nop"),
@@ -89,26 +112,31 @@ const op = map(
 
 const instr = or(op)
 export const param: Parser<atom[]> = map(
-  seq(keyword("param"), opt(name), valType),
-  r => ({ name: r[1], type: r[2] })
+  seq(keyword("param"), opt(identifier), valType),
+  r => ({ identifier: r[1], type: r[2] })
 )
 
 // とりあえず適当
 export const funcBody = many(instr)
 
-const func: Parser<atom[]> = map(
+export const func: Parser<atom[]> = map(
   seq(
     keyword("func"),
+    opt(identifier),
+    opt(map(array(seq(keyword("export"), name)), r => r[1])),
     opt(many(array(param))),
     opt(array(blockType)),
     funcBody
   ),
   r => {
     return {
-      parameters: r[1],
-      result: r[2],
-      body: r[3]
-    }
+      nodeType: "func",
+      identifier: r[1],
+      export: r[2],
+      parameters: r[3],
+      result: r[4],
+      body: r[5]
+    } as ASTFunction
   }
 )
 
@@ -117,9 +145,13 @@ const func: Parser<atom[]> = map(
 const moduleExport = seq(
   keyword("export"),
   string,
-  or(array(seq(keyword("func"), name)), array(seq(keyword("memory"), name)))
+  or(
+    array(seq(keyword("func"), identifier)),
+    array(seq(keyword("memory"), identifier))
+  )
 )
 
-const moduleParser = seq(keyword("module"), many(or(moduleExport, func)))
-
-export const parser = func
+export const moduleParser = seq(
+  keyword("module"),
+  many(or(array(moduleExport), array(func)))
+)
