@@ -1,19 +1,18 @@
-export type Parser = (
-  target: string,
-  position: number
-) => [boolean, any, number]
+export type Parser<T> = (target: T, position: number) => [boolean, any, number]
 
-export const token = (word: string): Parser => (target, position) =>
+export const token = (word: string): Parser<string> => (target, position) =>
   target.substr(position, word.length) === word
     ? [true, word, position + word.length]
     : [false, null, position]
 
-export const seq = (...parsers: Parser[]): Parser => (target, position) => {
+export const seq = <T>(...parsers: Parser<T>[]): Parser<T> => (
+  target,
+  position
+) => {
   const result = []
   for (let parser of parsers) {
     const parsed = parser(target, position)
     if (parsed[0]) {
-      console.log("seq: ", parsed[1])
       result.push(parsed[1])
       position = parsed[2]
     } else {
@@ -23,7 +22,7 @@ export const seq = (...parsers: Parser[]): Parser => (target, position) => {
   return [true, result, position]
 }
 
-export const regexp = (reg: RegExp): Parser => (target, position) => {
+export const regexp = (reg: RegExp): Parser<string> => (target, position) => {
   reg.lastIndex = 0
   const result = reg.exec(target.slice(position))
   return result
@@ -31,7 +30,10 @@ export const regexp = (reg: RegExp): Parser => (target, position) => {
     : [false, null, position]
 }
 
-export const or = (...parsers: Parser[]): Parser => (target, position) => {
+export const or = <T>(...parsers: Parser<T>[]): Parser<T> => (
+  target,
+  position
+) => {
   for (let parser of parsers) {
     const parsed = parser(target, position)
     if (parsed[0]) {
@@ -41,12 +43,49 @@ export const or = (...parsers: Parser[]): Parser => (target, position) => {
   return [false, null, position]
 }
 
-export const lazy = (generator: () => Parser): Parser => {
-  let parser: Parser
+export const lazy = <T>(generator: () => Parser<T>): Parser<T> => {
+  let parser: Parser<T>
   return (target, position) => {
     if (parser === undefined) {
       parser = generator()
     }
     return parser(target, position)
+  }
+}
+
+export const opt = <T>(parser: Parser<T>): Parser<T> => (target, position) => {
+  const result = parser(target, position)
+  if (result[0]) {
+    return result
+  }
+  return [true, null, position]
+}
+
+export const many = <T>(parser: Parser<T>): Parser<T> => (target, position) => {
+  const result = []
+  while (true) {
+    const parsed = parser(target, position)
+    if (parsed[0]) {
+      result.push(parsed[1])
+      position = parsed[2]
+    } else {
+      break
+    }
+  }
+  if (result.length === 0) {
+    return [false, null, position]
+  }
+  return [true, result, position]
+}
+
+export const map = <T>(
+  parser: Parser<T>,
+  transform: (any) => any
+): Parser<T> => (target, position) => {
+  const result = parser(target, position)
+  if (result[0]) {
+    return [result[0], transform(result[1]), result[2]]
+  } else {
+    return result
   }
 }
