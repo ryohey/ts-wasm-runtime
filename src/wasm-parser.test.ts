@@ -1,5 +1,6 @@
 import * as assert from "assert"
 import { moduleParser, func, param, funcBody, num, op } from "./wasm-parser"
+import { parser as sParser } from "./s-parser"
 
 describe("parser", () => {
   it("parse param", () => {
@@ -109,7 +110,7 @@ describe("parser", () => {
       [
         "func",
         "$add",
-        ["export", "add"],
+        ["export", `"add"`],
         ["param", "$lhs", "i32"],
         ["param", "$rhs", "i32"],
         ["result", "i32"],
@@ -126,7 +127,7 @@ describe("parser", () => {
       {
         nodeType: "func",
         identifier: "$add",
-        export: "add",
+        export: `"add"`,
         parameters: [
           { identifier: "$lhs", type: "i32" },
           { identifier: "$rhs", type: "i32" }
@@ -157,7 +158,7 @@ describe("parser", () => {
         "module",
         [
           "func",
-          ["export", "add"],
+          ["export", `"add"`],
           ["param", "i32"],
           ["param", "i32"],
           ["result", "i32"],
@@ -172,13 +173,13 @@ describe("parser", () => {
     )
     assert.deepEqual(r, [
       true,
-      [
-        "module",
-        [
+      {
+        nodeType: "module",
+        functions: [
           {
             nodeType: "func",
             identifier: null,
-            export: "add",
+            export: `"add"`,
             parameters: [
               {
                 identifier: null,
@@ -208,7 +209,63 @@ describe("parser", () => {
             ]
           }
         ]
-      ],
+      },
+      2
+    ])
+  })
+  it("parses modules from string", () => {
+    const sExp = sParser(
+      `(module 
+        (func (export "add") (param i32) (param i32) (result i32)
+          get_local 0 
+          get_local 1
+          i32.add
+        )
+      )`,
+      0
+    )
+
+    const r = moduleParser(sExp[1], 0)
+
+    assert.deepStrictEqual(r, [
+      true,
+      {
+        nodeType: "module",
+        functions: [
+          {
+            nodeType: "func",
+            identifier: null,
+            export: `"add"`,
+            parameters: [
+              {
+                identifier: null,
+                type: "i32"
+              },
+              {
+                identifier: null,
+                type: "i32"
+              }
+            ],
+            result: {
+              type: "i32"
+            },
+            body: [
+              {
+                opType: "get_local",
+                parameters: 0
+              },
+              {
+                opType: "get_local",
+                parameters: 1
+              },
+              {
+                opType: "i32.add",
+                parameters: null
+              }
+            ]
+          }
+        ]
+      },
       2
     ])
   })

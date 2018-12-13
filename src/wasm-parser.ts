@@ -9,12 +9,22 @@ const isString = (x: any): x is string =>
 const keyword = (word: string): Parser<atom[]> => (target, position) =>
   target[position] === word
     ? [true, word, position + 1]
-    : [false, null, position, `keyword: ${target[position]} is not ${word}`]
+    : [
+        false,
+        null,
+        position,
+        `keyword@${position}: ${target[position]} is not ${word}`
+      ]
 
 const regexp = (reg: RegExp): Parser<atom[]> => (target, position) => {
   const str = target[position]
   if (!isString(str)) {
-    return [false, null, position, `regexp: ${target[position]} is not string`]
+    return [
+      false,
+      null,
+      position,
+      `regexp@${position}: ${target[position]} is not string`
+    ]
   }
   reg.lastIndex = 0
   const result = reg.exec(str)
@@ -24,13 +34,13 @@ const regexp = (reg: RegExp): Parser<atom[]> => (target, position) => {
         false,
         null,
         position,
-        `regexp: ${target[position]} does not match ${reg.source}`
+        `regexp@${position}: ${target[position]} does not match ${reg.source}`
       ]
 }
 
 export const num: Parser<atom[]> = (target, position) => {
   if (typeof target[position] !== "number") {
-    return [false, null, position, `num: ${target} is not number`]
+    return [false, null, position, `num@${position}: ${target} is not number`]
   }
   return [true, target[position], position + 1]
 }
@@ -42,7 +52,7 @@ const array = (parser: Parser<atom[]>): Parser<atom[]> => (
 ) => {
   const arr = target[position]
   if (!Array.isArray(arr)) {
-    return [false, null, position, `array: ${target} is not array`]
+    return [false, null, position, `array@${position}: ${target} is not array`]
   }
   const result = parser(arr, 0)
   if (result[0]) {
@@ -135,7 +145,7 @@ export const func: Parser<atom[]> = map(
   seq(
     keyword("func"),
     opt(identifier),
-    opt(map(array(seq(keyword("export"), name)), r => r[1])),
+    opt(map(array(seq(keyword("export"), string)), r => r[1])),
     opt(many(array(param))),
     opt(array(blockType)),
     funcBody
@@ -172,7 +182,12 @@ const moduleExport = seq(
   )
 )
 
-export const moduleParser = seq(
-  keyword("module"),
-  many(or(array(moduleExport), array(func)))
+export const moduleParser = map(
+  seq(keyword("module"), many(or(array(moduleExport), array(func)))),
+  r => {
+    return {
+      nodeType: "module",
+      functions: r[1].filter(n => n.nodeType === "func")
+    }
+  }
 )

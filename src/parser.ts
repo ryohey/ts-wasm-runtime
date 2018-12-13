@@ -11,7 +11,10 @@ export const token = (word: string): Parser<string> => (target, position) =>
         false,
         null,
         position,
-        `token: ${target.substr(position, word.length)} is not ${word}`
+        `token@${position}: ${target.substr(
+          position,
+          word.length
+        )} is not ${word}`
       ]
 
 export const seq = <T>(...parsers: Parser<T>[]): Parser<T> => (
@@ -40,7 +43,9 @@ export const regexp = (reg: RegExp): Parser<string> => (target, position) => {
         false,
         null,
         position,
-        `regexp: ${target.slice(position)} does not match ${reg.source}`
+        `regexp@${position}: ${target.slice(position)} does not match ${
+          reg.source
+        }`
       ]
 }
 
@@ -58,7 +63,9 @@ export const or = <T>(...parsers: Parser<T>[]): Parser<T> => (
     false,
     null,
     position,
-    `or: cannot parse ${target} with ${parsers.map(p => p.name).join(", ")}`
+    `or@${position}: cannot parse ${target} with ${parsers
+      .map(p => p.name)
+      .join(", ")}`
   ]
 }
 
@@ -92,7 +99,7 @@ export const many = <T>(parser: Parser<T>): Parser<T> => (target, position) => {
     }
   }
   if (result.length === 0) {
-    return [false, null, position, new Error().stack]
+    return [false, null, position, `many@${position}: cannot parse`]
   }
   return [true, result, position]
 }

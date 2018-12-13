@@ -21,7 +21,7 @@ describe("wasm-vm", () => {
     assert(ast[0])
     const program = compile(ast[1])
     const vm = new WASMVirtualMachine()
-    vm.instantiateModule(...program)
+    vm.instantiateModule(program[0], program[1])
     const memory = vm.callFunction("add")
     assert(true)
   })
