@@ -4,6 +4,7 @@ import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { numericInstructionSet } from "./instructions/numeric"
 import { controlInstructionSet } from "./instructions/control"
+import { WASMFunctionTableEntry } from "./compiler"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -33,17 +34,19 @@ const mergeInstructionSet = <T, S>(
 export class WASMVirtualMachine {
   private readonly vm = createWASMVM()
   private currentMemory: WASMMemory
-
-  // { 関数名: アドレス } のテーブル
-  private functionTable: { [index: string]: number } = {}
+  private functionTable: WASMFunctionTableEntry[]
 
   constructor() {}
 
-  instantiateModule(program: WASMCode[]) {
+  instantiateModule(
+    program: WASMCode[],
+    functionTable: WASMFunctionTableEntry[]
+  ) {
     // 関数のアドレステーブルの解決や
     // グローバル変数を用意してメモリを生成する
     // コード内の変数名や関数名を index に置換する
     this.currentMemory = new WASMMemory()
+    this.functionTable = functionTable
     this.vm.initialize(program, this.currentMemory)
   }
 

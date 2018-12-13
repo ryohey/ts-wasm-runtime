@@ -34,11 +34,12 @@ describe("parser", () => {
 
   it("parse multiline text", () => {
     const r = parser(
-      `(a 
-      (b c))`,
+      `(a
+      (b c)
+      )`,
       0
     )
-    assert.deepEqual(r, [true, ["a", ["b", "c"]], 16])
+    assert.deepEqual(r, [true, ["a", ["b", "c"]], 22])
   })
 
   it("parse wasm", () => {

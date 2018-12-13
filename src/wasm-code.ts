@@ -3,7 +3,7 @@ import { Stack } from "./stack"
 
 export interface WASMCode {
   readonly opcode: string
-  readonly value: number
+  readonly value?: number
 }
 
 export class WASMContext {

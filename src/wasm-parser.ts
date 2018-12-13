@@ -60,18 +60,30 @@ const _var = or(num, identifier)
 
 /* func */
 
-export interface ASTFunction {
+export interface ASTModuleNode {
+  nodeType: string
+}
+
+export interface ASTFunctionParameter {
+  identifier: string | null
+  type: string
+}
+
+export interface ASTFunctionResult {
+  type: string
+}
+
+export interface ASTFunctionInstruction {
+  opType: string
+  parameters: any
+}
+
+export interface ASTFunction extends ASTModuleNode {
   identifier: string | null
   export: string | null
-  parameters: [
-    {
-      identifier: string | null
-      type: string
-    }
-  ]
-  result: {
-    type: string
-  }
+  parameters: ASTFunctionParameter[]
+  result: ASTFunctionResult
+  body: ASTFunctionInstruction[]
 }
 
 const valType = or(
@@ -141,6 +153,15 @@ export const func: Parser<atom[]> = map(
 )
 
 /* module */
+
+export interface ASTModule {
+  nodeType: "module"
+  functions: ASTFunction[]
+  // types
+  // tables
+  // globals
+  // memories
+}
 
 const moduleExport = seq(
   keyword("export"),
