@@ -29,7 +29,7 @@ const regexp = (reg: RegExp): Parser<atom[]> => (target, position) => {
   reg.lastIndex = 0
   const result = reg.exec(str)
   return result
-    ? [true, str, position + 1]
+    ? [true, result[1], position + 1]
     : [
         false,
         null,
@@ -63,8 +63,10 @@ const array = (parser: Parser<atom[]>): Parser<atom[]> => (
 
 // https://github.com/WebAssembly/spec/blob/master/interpreter/README.md#s-expression-syntax
 
-const identifier = regexp(/^\$[a-zA-Z][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*$/)
-const name = regexp(/^[a-zA-Z]+$/)
+const identifier = regexp(
+  /^(\$[a-zA-Z][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*)$/
+)
+const name = regexp(/^([a-zA-Z]+)$/)
 const string = regexp(/^\"(.+)\"/)
 const _var = or(num, identifier)
 

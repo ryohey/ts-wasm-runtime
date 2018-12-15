@@ -127,7 +127,7 @@ describe("parser", () => {
       {
         nodeType: "func",
         identifier: "$add",
-        export: `"add"`,
+        export: "add",
         parameters: [
           { identifier: "$lhs", type: "i32" },
           { identifier: "$rhs", type: "i32" }
@@ -179,7 +179,7 @@ describe("parser", () => {
           {
             nodeType: "func",
             identifier: null,
-            export: `"add"`,
+            export: "add",
             parameters: [
               {
                 identifier: null,
@@ -235,7 +235,7 @@ describe("parser", () => {
           {
             nodeType: "func",
             identifier: null,
-            export: `"add"`,
+            export: "add",
             parameters: [
               {
                 identifier: null,
