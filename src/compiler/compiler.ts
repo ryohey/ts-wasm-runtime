@@ -1,5 +1,6 @@
-import { WASMCode, WASMContext } from "./wasm-code"
-import { ASTModule, ASTFunction } from "./wasm-parser"
+import { WASMCode } from "../wasm-vm/wasm-code"
+import { ASTFunction } from "../wasm-parser/func"
+import { ASTModule } from "../wasm-parser/module"
 
 export interface WASMFunctionTableEntry {
   export: string

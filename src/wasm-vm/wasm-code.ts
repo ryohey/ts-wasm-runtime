@@ -1,4 +1,4 @@
-import { Instruction } from "./vm"
+import { Instruction } from "../vm/vm"
 import { Stack } from "./stack"
 
 export interface WASMCode {

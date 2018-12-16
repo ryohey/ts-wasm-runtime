@@ -66,4 +66,24 @@ describe("parser", () => {
       103
     ])
   })
+
+  it("parses wasm2", () => {
+    const r = parser(
+      `(module 
+      (func (export "hello") (result i32)
+        i32.const 42
+      )
+    )`,
+      0
+    )
+
+    assert.deepStrictEqual(r, [
+      true,
+      [
+        "module",
+        ["func", ["export", '"hello"'], ["result", "i32"], "i32.const", 42]
+      ],
+      85
+    ])
+  })
 })

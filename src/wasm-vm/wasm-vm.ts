@@ -1,4 +1,4 @@
-import { VirtualMachine, InstructionSet } from "./vm"
+import { VirtualMachine, InstructionSet } from "../vm/vm"
 import {
   WASMCode,
   WASMMemory,
@@ -9,7 +9,7 @@ import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { numericInstructionSet } from "./instructions/numeric"
 import { controlInstructionSet } from "./instructions/control"
-import { WASMFunctionTableEntry } from "./compiler"
+import { WASMFunctionTableEntry } from "../compiler/compiler"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 

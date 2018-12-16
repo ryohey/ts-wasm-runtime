@@ -1,4 +1,14 @@
-import { Parser, regexp, or, seq, token, lazy, opt, many, map } from "./parser"
+import {
+  Parser,
+  regexp,
+  or,
+  seq,
+  token,
+  lazy,
+  opt,
+  many,
+  map
+} from "../parser/parser"
 
 const number = map(regexp(/^[0-9]+\.?[0-9]*/), parseFloat)
 const text = regexp(/^[a-zA-Z\$][0-9a-zA-Z\._]*/)

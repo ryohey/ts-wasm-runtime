@@ -1,6 +1,6 @@
 import * as assert from "assert"
 import { compile } from "./compiler"
-import { ASTModule } from "./wasm-parser"
+import { ASTModule } from "../wasm-parser/module"
 
 describe("compiler", () => {
   it("compiles", () => {
