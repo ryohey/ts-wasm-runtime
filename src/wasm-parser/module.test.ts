@@ -1,6 +1,6 @@
 import * as assert from "assert"
 import { parser as sParser } from "../s-parser/s-parser"
-import { moduleParser } from "."
+import { moduleParser } from "./module"
 
 describe("module parser", () => {
   it("parses module", () => {

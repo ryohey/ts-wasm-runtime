@@ -1,13 +1,13 @@
 import * as assert from "assert"
 import { parser as sParser } from "../s-parser/s-parser"
-import { moduleParser } from "../wasm-parser"
+import { wasmParser } from "../wasm-parser"
 import { compile } from "../compiler/compiler"
 import { WASMVirtualMachine } from "./wasm-vm"
 
 const wasmTextCompiler = (text: string) => {
   const sExp = sParser(text, 0)
   assert(sExp[0])
-  const ast = moduleParser(sExp[1], 0)
+  const ast = wasmParser(sExp[1], 0)
   assert(ast[0])
   return compile(ast[1])
 }
