@@ -57,6 +57,7 @@ describe("parser", () => {
           { identifier: "$rhs", type: "i32" }
         ],
         result: { type: "i32" },
+        locals: null,
         body: [
           {
             opType: "get_local",
@@ -104,6 +105,7 @@ describe("parser", () => {
           { identifier: "$rhs", type: "i32" }
         ],
         result: { type: "i32" },
+        locals: null,
         body: [
           {
             opType: "get_local",
@@ -138,9 +140,32 @@ describe("parser", () => {
         identifier: null,
         nodeType: "func",
         parameters: null,
-        result: { type: "i32" }
+        result: { type: "i32" },
+        locals: null
       },
       5
+    ])
+  })
+  it("parses function with local", () => {
+    const sExp = sParser(
+      `(func (export "hello") (result i32) (local i32)
+        get_local 0
+      )`,
+      0
+    )
+    const r = func(sExp[1], 0)
+    assert.deepStrictEqual(r, [
+      true,
+      {
+        body: [{ opType: "get_local", parameters: 0 }],
+        export: "hello",
+        identifier: null,
+        nodeType: "func",
+        parameters: null,
+        result: { type: "i32" },
+        locals: ["i32"]
+      },
+      6
     ])
   })
 })
