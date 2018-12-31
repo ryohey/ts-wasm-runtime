@@ -1,5 +1,5 @@
 import * as assert from "assert"
-import { parser } from "./s-parser"
+import { parser, multiParser } from "./s-parser"
 
 describe("parser", () => {
   it("parse text", () => {
@@ -85,5 +85,16 @@ describe("parser", () => {
       ],
       85
     ])
+  })
+
+  it("parses multiple list", () => {
+    const r = multiParser(
+      `(aa bb)
+      (c d)
+      `,
+      0
+    )
+
+    assert.deepStrictEqual(r, [true, [["aa", "bb"], ["c", "d"]], 26])
   })
 })

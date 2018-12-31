@@ -31,3 +31,9 @@ const list: Parser<string> = lazy(() =>
 const expression = or(types, list)
 
 export const parser = expression
+export const multiParser = many(
+  map(
+    seq(expression, opt(separator)),
+    r => r[0] // remove separator
+  )
+)

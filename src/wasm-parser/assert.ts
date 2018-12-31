@@ -1,4 +1,4 @@
-import { map, seq } from "../parser/parser"
+import { map, seq, opt } from "../parser/parser"
 import { keyword, array } from "./utils"
 import { string } from "./types"
 import { operations } from "./operations"
@@ -14,7 +14,7 @@ export interface ASTAssertReturn {
 export const assertionParser = map(
   seq(
     keyword("assert_return"),
-    array(seq(keyword("invoke"), string, array(operations))),
+    array(seq(keyword("invoke"), string, opt(array(operations)))),
     array(operations)
   ),
   r => {

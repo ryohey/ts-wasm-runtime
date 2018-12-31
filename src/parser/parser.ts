@@ -115,3 +115,14 @@ export const map = <T>(
     return result
   }
 }
+
+export const transform = <T, S>(
+  transformParser: Parser<T>,
+  parser: Parser<S>
+): Parser<T> => (target, position) => {
+  const result = transformParser(target, position)
+  if (!result[0]) {
+    return result
+  }
+  return parser(result[1], 0)
+}
