@@ -26,6 +26,7 @@ describe("module parser", () => {
       true,
       {
         nodeType: "module",
+        exports: [],
         functions: [
           {
             nodeType: "func",
@@ -44,6 +45,7 @@ describe("module parser", () => {
             result: {
               type: "i32"
             },
+            locals: null,
             body: [
               {
                 opType: "get_local",
@@ -82,6 +84,7 @@ describe("module parser", () => {
       true,
       {
         nodeType: "module",
+        exports: [],
         functions: [
           {
             nodeType: "func",
@@ -100,6 +103,7 @@ describe("module parser", () => {
             result: {
               type: "i32"
             },
+            locals: null,
             body: [
               {
                 opType: "get_local",

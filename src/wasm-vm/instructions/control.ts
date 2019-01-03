@@ -39,6 +39,7 @@ export const controlInstructionSet: PartialInstructionSet<
       return (_, { callStack, values }, pc) => {
         // TODO: check parameters
         const local = [values.peek()]
+        // TODO: add locals specified in function with default value
         const ctx = new WASMContext(local, pc)
         callStack.push(ctx)
       }

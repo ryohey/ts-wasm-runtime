@@ -1,5 +1,5 @@
-import { map, seq } from "../parser/parser"
-import { keyword, array } from "./utils"
+import { map, seq, opt } from "../parser/parser"
+import { keyword, array, atom } from "./utils"
 import { string } from "./types"
 import { operations } from "./operations"
 import { ASTFunctionInstruction } from "./func"
@@ -14,14 +14,14 @@ export interface ASTAssertReturn {
 export const assertionParser = map(
   seq(
     keyword("assert_return"),
-    array(seq(keyword("invoke"), string, array(operations))),
+    array(seq(keyword("invoke"), string, opt(array(operations)))),
     array(operations)
   ),
   r => {
     return {
       nodeType: "assert_return",
       invoke: r[1][1],
-      args: [r[1][2]],
+      args: r[1][2] ? [r[1][2]] : [],
       expected: [r[2]]
     } as ASTAssertReturn
   }

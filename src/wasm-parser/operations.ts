@@ -1,22 +1,29 @@
-import { or, seq, many, map } from "../parser/parser"
-import { keyword } from "./utils"
+import { or, seq, many, map, Parser } from "../parser/parser"
+import { keyword, atom } from "./utils"
 import { operand } from "./types"
+import { ASTFunctionInstruction } from "./func"
 
 // operation with no parameters
-const op = (str: string) =>
+const op = (str: string): Parser<atom[], ASTFunctionInstruction> =>
   map(keyword(str), r => ({
     opType: r,
     parameters: null
   }))
 
 // operation with single parameter
-const op1 = (str: string) =>
+const op1 = (str: string): Parser<atom[], ASTFunctionInstruction> =>
   map(seq(keyword(str), operand), r => ({
     opType: r[0],
     parameters: r[1]
   }))
 
-export const operations = or(
+const opN = (str: string): Parser<atom[], ASTFunctionInstruction> =>
+  map(seq(keyword(str), many(operand)), r => ({
+    opType: r[0],
+    parameters: r[1]
+  }))
+
+export const operations: Parser<atom[], ASTFunctionInstruction> = or(
   op("nop"),
   op("unreachable"),
   op("block"),
@@ -24,11 +31,11 @@ export const operations = or(
   op("if"),
   op1("br"),
   op1("br_if"),
-  seq(keyword("br_table"), many(operand)),
+  opN("br_table"),
   op1("call"),
   op("call_indirect"),
   op("drop"),
-  seq(keyword("select")),
+  op("select"),
   op1("get_local"),
   op1("set_local"),
   op1("tee_local"),
