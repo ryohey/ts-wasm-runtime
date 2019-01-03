@@ -1,19 +1,19 @@
 import * as assert from "assert"
-import { parser, multiParser } from "./s-parser"
+import { parser, multiParser, expression } from "./s-parser"
 
 describe("parser", () => {
   it("parse text", () => {
-    const r = parser("abc", 0)
+    const r = expression("abc", 0)
     assert.deepEqual(r, [true, "abc", 3])
   })
 
   it("parse number", () => {
-    const r = parser("123", 0)
+    const r = expression("123", 0)
     assert.deepEqual(r, [true, 123, 3])
   })
 
   it("parse number", () => {
-    const r = parser("123.456", 0)
+    const r = expression("123.456", 0)
     assert.deepEqual(r, [true, 123.456, 7])
   })
 

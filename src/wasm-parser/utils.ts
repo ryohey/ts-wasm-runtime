@@ -8,7 +8,10 @@ interface AtomArray extends Array<atom> {}
 const isString = (x: any): x is string =>
   typeof x === "string" || x instanceof String
 
-export const keyword = (word: string): Parser<atom[]> => (target, position) => {
+export const keyword = (word: string): Parser<atom[], string> => (
+  target,
+  position
+) => {
   if (target[position] === word) {
     return [true, word, position + 1]
   }
@@ -20,7 +23,10 @@ export const keyword = (word: string): Parser<atom[]> => (target, position) => {
   ]
 }
 
-export const regexp = (reg: RegExp): Parser<atom[]> => (target, position) => {
+export const regexp = (reg: RegExp): Parser<atom[], string> => (
+  target,
+  position
+) => {
   const str = target[position]
   if (!isString(str)) {
     return [
@@ -43,7 +49,7 @@ export const regexp = (reg: RegExp): Parser<atom[]> => (target, position) => {
 }
 
 // 配列内を渡された parser でパースする
-export const array = (parser: Parser<atom[]>): Parser<atom[]> => (
+export const array = <T>(parser: Parser<atom[], T>): Parser<atom[], T> => (
   target,
   position
 ) => {
@@ -58,9 +64,10 @@ export const array = (parser: Parser<atom[]>): Parser<atom[]> => (
   return [false, null, position, result[3]]
 }
 
-export const num: Parser<atom[]> = (target, position) => {
-  if (typeof target[position] !== "number") {
+export const num: Parser<atom[], number> = (target, position) => {
+  const v = target[position]
+  if (typeof v !== "number") {
     return [false, null, position, `num@${position}: ${target} is not number`]
   }
-  return [true, target[position], position + 1]
+  return [true, v, position + 1]
 }
