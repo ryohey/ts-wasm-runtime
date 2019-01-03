@@ -26,6 +26,7 @@ describe("module parser", () => {
       true,
       {
         nodeType: "module",
+        exports: [],
         functions: [
           {
             nodeType: "func",
@@ -83,6 +84,7 @@ describe("module parser", () => {
       true,
       {
         nodeType: "module",
+        exports: [],
         functions: [
           {
             nodeType: "func",
