@@ -93,13 +93,14 @@ export const regexp = (reg: RegExp): Parser<string, string> => (
       ]
 }
 
+export function or<T, S>(...parsers: Parser<T, S>[]): Parser<T, S>
 export function or<T, P0, P1>(
   ...parsers: [Parser<T, P0>, Parser<T, P1>]
 ): Parser<T, P0 | P1>
 export function or<T, P0, P1, P2>(
   ...parsers: [Parser<T, P0>, Parser<T, P1>, Parser<T, P2>]
 ): Parser<T, P0 | P1 | P2>
-export function or<T, S>(...parsers: Parser<T, S>[]): Parser<T, S> {
+export function or<T>(...parsers: Parser<T, any>[]): Parser<T, any> {
   return (target, position) => {
     for (let parser of parsers) {
       const parsed = parser(target, position)
