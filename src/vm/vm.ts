@@ -32,11 +32,10 @@ export class VirtualMachine<Code, Memory> {
   public run(addr: number) {
     this.programCounter = addr
 
-    while (true) {
+    while (this.programCounter < this.program.length) {
+      const code = this.program[this.programCounter++]
       try {
-        if (!this.eval()) {
-          break
-        }
+        this.runInstruction(code)
       } catch (e) {
         console.error(e.message)
         break
@@ -48,16 +47,6 @@ export class VirtualMachine<Code, Memory> {
     console.log(`[${this.programCounter}] run ${JSON.stringify(code)}`)
     const instr = this.instructionSet(code)
     instr(code, this.memory, this.programCounter, this.jump)
-  }
-
-  private eval() {
-    if (this.programCounter >= this.program.length) {
-      // "end of program"
-      return false
-    }
-    const code = this.program[this.programCounter++]
-    this.runInstruction(code)
-    return true
   }
 
   private jump = (addr: number) => {
