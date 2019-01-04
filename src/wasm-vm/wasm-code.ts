@@ -1,20 +1,29 @@
 import { Instruction } from "../vm/vm"
 import { Stack } from "./stack"
+import { ValType } from "../wasm-parser/types"
 
 export interface WASMCode {
   readonly opcode: string
-  readonly value?: number
+  readonly parameters: number[]
 }
 
 export class WASMContext {
   readonly values = new Stack<number>()
-  readonly local: number[] = []
+  readonly local: number[]
   readonly returnAddress: number
 
-  constructor(local: number[], returnAddress: number) {
-    this.local = local
+  constructor(returnAddress: number, local: number[] = []) {
     this.returnAddress = returnAddress
+    this.local = local
   }
+}
+
+export interface WASMFunctionTableEntry {
+  export: string
+  identifier: string
+  pointer: number
+  parameters: ValType[]
+  locals: ValType[]
 }
 
 export class WASMMemory {
@@ -22,9 +31,11 @@ export class WASMMemory {
   readonly callStack = new Stack<WASMContext>()
   readonly memory: number[] = []
   readonly global: number[] = []
+  readonly functions: WASMFunctionTableEntry[]
 
-  constructor() {
-    this.callStack.push(new WASMContext([], 0))
+  constructor(functions: WASMFunctionTableEntry[]) {
+    this.callStack.push(new WASMContext(0))
+    this.functions = functions
   }
 
   get local(): number[] {

@@ -1,20 +1,14 @@
-import { WASMCode } from "../wasm-vm/wasm-code"
+import { WASMCode, WASMFunctionTableEntry } from "../wasm-vm/wasm-code"
 import { ASTFunction } from "../wasm-parser/func"
 import { ASTModule } from "../wasm-parser/module"
-
-export interface WASMFunctionTableEntry {
-  export: string
-  identifier: string
-  pointer: number
-}
 
 const compileFunction = (ast: ASTFunction): WASMCode[] => {
   const fn: WASMCode[] = ast.body.map(inst => ({
     opcode: inst.opType,
-    value: inst.parameters
+    parameters: inst.parameters as number[] // TODO: 文字列を解決する
   }))
   if (fn[fn.length - 1].opcode !== "return") {
-    fn.push({ opcode: "return" })
+    fn.push({ opcode: "return", parameters: [] })
   }
   // TODO: 変数の identifier を index に置換
   return fn
@@ -43,8 +37,10 @@ export const compile = (
     return {
       export: fn.export,
       identifier: fn.identifier,
+      locals: fn.locals,
+      parameters: fn.parameters.map(p => p.type),
       pointer
-    }
+    } as WASMFunctionTableEntry
   })
 
   // TODO: identifier を function table から pointer に置換

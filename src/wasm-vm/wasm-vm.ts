@@ -3,13 +3,13 @@ import {
   WASMCode,
   WASMMemory,
   PartialInstructionSet,
-  WASMContext
+  WASMContext,
+  WASMFunctionTableEntry
 } from "./wasm-code"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { numericInstructionSet } from "./instructions/numeric"
 import { controlInstructionSet } from "./instructions/control"
-import { WASMFunctionTableEntry } from "../compiler/compiler"
 import { ASTAssertReturn } from "../wasm-parser/assert"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
