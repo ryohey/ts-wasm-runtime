@@ -18,13 +18,21 @@ const runTestCase = (vm: WASMVirtualMachine, ast: ASTAssertReturn) => {
   for (const exp of ast.expected) {
     const received = mem.values.pop()
     if (received !== exp.parameters[0]) {
-      throw new Error(`expected ${exp.parameters} but received ${received}`)
+      throw new Error(
+        `FAIL: ${ast.invoke}, expected ${
+          exp.parameters
+        } but received ${received}`
+      )
     }
   }
+  console.log(`PASS: ${ast.invoke}`)
 }
 
 export const runTests = (code: string) => {
   const r = wastParser(code, 0)
+  if (!r[0]) {
+    throw new Error("failed to parse")
+  }
   const testCases = r[1].filter(isAssertReturn)
   const modules = r[1].filter(isModule)
 
