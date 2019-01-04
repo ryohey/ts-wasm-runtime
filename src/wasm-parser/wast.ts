@@ -1,4 +1,4 @@
-import { Parser, or, opt, many, transform } from "../parser/parser"
+import { or, many, transform } from "../parser/parser"
 import { multiParser } from "../s-parser/s-parser"
 import { moduleParser } from "./module"
 import { assertionParser } from "./assert"
@@ -9,4 +9,4 @@ export const combinedParser = many(
 )
 
 // wasm spec test parser
-export const wastParser: Parser<string> = transform(multiParser, combinedParser)
+export const wastParser = transform(multiParser, combinedParser)

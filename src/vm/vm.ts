@@ -17,7 +17,7 @@ export type Instruction<Code, Memory> = (
 export class VirtualMachine<Code, Memory> {
   private memory: Memory
   private instructionSet: InstructionSet<Code, Memory>
-  private programCounter: number = 0
+  public programCounter: number = 0
   private program: Code[] = []
 
   constructor(instructionSet: InstructionSet<Code, Memory>) {
@@ -34,7 +34,9 @@ export class VirtualMachine<Code, Memory> {
 
     while (true) {
       try {
-        this.eval()
+        if (!this.eval()) {
+          break
+        }
       } catch (e) {
         console.error(e.message)
         break
@@ -42,22 +44,23 @@ export class VirtualMachine<Code, Memory> {
     }
   }
 
-  private eval() {
-    if (this.programCounter >= this.program.length) {
-      throw new Error("end of program")
-    }
-    const code = this.program[this.programCounter++]
-    // instruction を実行
+  public runInstruction(code: Code) {
+    console.log(`[${this.programCounter}] run ${JSON.stringify(code)}`)
     const instr = this.instructionSet(code)
     instr(code, this.memory, this.programCounter, this.jump)
   }
 
-  private jump = (addr: number) => {
-    this.programCounter = addr
+  private eval() {
+    if (this.programCounter >= this.program.length) {
+      // "end of program"
+      return false
+    }
+    const code = this.program[this.programCounter++]
+    this.runInstruction(code)
+    return true
   }
 
-  // for debug
-  public getMemory(): Memory {
-    return this.memory
+  private jump = (addr: number) => {
+    this.programCounter = addr
   }
 }

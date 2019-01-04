@@ -1,18 +1,18 @@
 export class Stack<T> {
   private arr: T[] = []
 
-  push(value: T) {
+  push = (value: T) => {
     this.arr.push(value)
   }
 
-  pop() {
+  pop = () => {
     if (this.arr.length === 0) {
       throw new Error("Stack is empty")
     }
     return this.arr.pop()
   }
 
-  peek() {
+  peek = () => {
     if (this.arr.length === 0) {
       throw new Error("Stack is empty")
     }

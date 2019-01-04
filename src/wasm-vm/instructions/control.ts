@@ -36,12 +36,20 @@ export const controlInstructionSet: PartialInstructionSet<
         jump(returnAddress)
       }
     case "call":
-      return (_, { callStack, values }, pc) => {
+      return (code, { callStack, values, functions }, pc, jump) => {
+        const fn = functions.find(f => f.pointer === code.parameters[0])
+        const local = []
+
         // TODO: check parameters
-        const local = [values.peek()]
-        // TODO: add locals specified in function with default value
-        const ctx = new WASMContext(local, pc)
+        fn.parameters.forEach(_ => local.push(values.pop()))
+
+        // initialize local values
+        fn.locals.forEach(_ => local.push(0))
+
+        const ctx = new WASMContext(pc, local)
         callStack.push(ctx)
+
+        jump(fn.pointer)
       }
     case "call_indirect":
       return null
