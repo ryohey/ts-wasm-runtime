@@ -1,4 +1,4 @@
-import { or } from "../parser/parser"
+import { or, Parser } from "../parser/parser"
 import { num, regexp, keyword } from "./utils"
 
 export type atom = string | number | AtomArray
@@ -15,9 +15,16 @@ export interface ASTModuleNode {
   nodeType: string
 }
 
+export enum ValType {
+  i32 = "i32",
+  i64 = "i64",
+  f32 = "f32",
+  f64 = "f64"
+}
+
 export const valType = or(
-  keyword("i32"),
-  keyword("i64"),
-  keyword("f32"),
-  keyword("f64")
+  keyword(ValType.i32),
+  keyword(ValType.i64),
+  keyword(ValType.f32),
+  keyword(ValType.f64)
 )

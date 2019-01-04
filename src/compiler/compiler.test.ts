@@ -1,6 +1,7 @@
 import * as assert from "assert"
 import { compile } from "./compiler"
 import { ASTModule } from "../wasm-parser/module"
+import { ValType } from "../wasm-parser/types"
 
 describe("compiler", () => {
   it("compiles", () => {
@@ -15,6 +16,7 @@ describe("compiler", () => {
     */
     const ast: ASTModule = {
       nodeType: "module",
+      exports: [],
       functions: [
         {
           nodeType: "func",
@@ -23,28 +25,27 @@ describe("compiler", () => {
           parameters: [
             {
               identifier: null,
-              type: "i32"
+              type: ValType.i32
             },
             {
               identifier: null,
-              type: "i32"
+              type: ValType.i32
             }
           ],
-          result: {
-            type: "i32"
-          },
+          locals: [],
+          result: ValType.i32,
           body: [
             {
               opType: "get_local",
-              parameters: 0
+              parameters: [0]
             },
             {
               opType: "get_local",
-              parameters: 1
+              parameters: [1]
             },
             {
               opType: "i32.add",
-              parameters: null
+              parameters: []
             }
           ]
         }
@@ -53,12 +54,20 @@ describe("compiler", () => {
     const codes = compile(ast)
     assert.deepStrictEqual(codes, [
       [
-        { opcode: "get_local", value: 0 },
-        { opcode: "get_local", value: 1 },
-        { opcode: "i32.add", value: null },
-        { opcode: "return" }
+        { opcode: "get_local", parameters: [0] },
+        { opcode: "get_local", parameters: [1] },
+        { opcode: "i32.add", parameters: [] },
+        { opcode: "return", parameters: [] }
       ],
-      [{ export: "add", identifier: null, pointer: 0 }]
+      [
+        {
+          export: "add",
+          locals: [],
+          parameters: ["i32", "i32"],
+          identifier: null,
+          pointer: 0
+        }
+      ]
     ])
   })
 })

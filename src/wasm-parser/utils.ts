@@ -8,7 +8,7 @@ interface AtomArray extends Array<atom> {}
 const isString = (x: any): x is string =>
   typeof x === "string" || x instanceof String
 
-export const keyword = (word: string): Parser<atom[], string> => (
+export const keyword = <T extends string>(word: T): Parser<atom[], T> => (
   target,
   position
 ) => {

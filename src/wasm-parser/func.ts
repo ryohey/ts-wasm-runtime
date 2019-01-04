@@ -1,6 +1,6 @@
 import { map, seq, opt, Parser, or, many } from "../parser/parser"
 import { keyword, array, atom } from "./utils"
-import { valType, ASTModuleNode, identifier, string } from "./types"
+import { valType, ASTModuleNode, identifier, string, ValType } from "./types"
 import { operations } from "./operations"
 
 export interface ASTFunction extends ASTModuleNode {
@@ -8,31 +8,22 @@ export interface ASTFunction extends ASTModuleNode {
   identifier: string | null
   export: string | null
   parameters: ASTFunctionParameter[]
-  result: ASTFunctionResult
+  result: ValType
   body: ASTFunctionInstruction[]
+  locals: ValType[]
 }
 
 export interface ASTFunctionParameter {
   identifier: string | null
-  type: string
-}
-
-export interface ASTFunctionResult {
-  type: string
+  type: ValType
 }
 
 export interface ASTFunctionInstruction {
   opType: string
-  parameters: any
+  parameters: (string | number)[]
 }
 
-const blockType = map(
-  seq(keyword("result"), valType),
-  r =>
-    ({
-      type: r[1]
-    } as ASTFunctionResult)
-)
+const blockType = map(seq(keyword("result"), valType), r => r[1])
 
 export const param = map(
   seq(keyword("param"), opt(identifier), valType),
