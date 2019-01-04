@@ -17,10 +17,10 @@ describe("assertParser", () => {
         args: [
           {
             opType: "i32.const",
-            parameters: 0
+            parameters: [0]
           }
         ],
-        expected: [{ opType: "i32.const", parameters: 97 }]
+        expected: [{ opType: "i32.const", parameters: [97] }]
       },
       3
     ])

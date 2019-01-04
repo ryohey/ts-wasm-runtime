@@ -11,7 +11,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "f32.const":
     case "f64.const":
       return (code, { values }) => {
-        values.push(code.value)
+        code.parameters.forEach(values.push)
       }
     case "i32.add":
     case "i64.add":

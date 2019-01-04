@@ -48,9 +48,9 @@ export const func: Parser<atom[], ASTFunction> = map(
       nodeType: "func",
       identifier: r[1],
       export: r[2],
-      parameters: r[3],
+      parameters: r[3] || [],
       result: r[4],
-      locals: r[5],
+      locals: r[5] || [],
       body: r[6]
     } as ASTFunction
   }

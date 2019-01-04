@@ -8,22 +8,22 @@ export const variableInstructionSet: PartialInstructionSet<
   switch (code.opcode) {
     case "get_local":
       return (code, { values, local }) => {
-        values.push(local[code.value])
+        values.push(local[code.parameters[0]])
       }
     case "set_local":
       return (code, { values, local }) => {
-        local[code.value] = values.peek()
+        local[code.parameters[0]] = values.peek()
       }
     case "tee_local":
       // TODO:
       return null
     case "global.get":
       return (code, { values, global }) => {
-        values.push(global[code.value])
+        values.push(global[code.parameters[0]])
       }
     case "global.set":
       return (code, { values, global }) => {
-        global[code.value] = values.peek()
+        global[code.parameters[0]] = values.peek()
       }
   }
   return null

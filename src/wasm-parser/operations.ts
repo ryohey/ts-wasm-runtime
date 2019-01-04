@@ -7,14 +7,14 @@ import { ASTFunctionInstruction } from "./func"
 const op = (str: string): Parser<atom[], ASTFunctionInstruction> =>
   map(keyword(str), r => ({
     opType: r,
-    parameters: null
+    parameters: []
   }))
 
 // operation with single parameter
 const op1 = (str: string): Parser<atom[], ASTFunctionInstruction> =>
   map(seq(keyword(str), operand), r => ({
     opType: r[0],
-    parameters: r[1]
+    parameters: [r[1]]
   }))
 
 const opN = (str: string): Parser<atom[], ASTFunctionInstruction> =>

@@ -42,22 +42,20 @@ describe("module parser", () => {
                 type: "i32"
               }
             ],
-            result: {
-              type: "i32"
-            },
-            locals: null,
+            result: "i32",
+            locals: [],
             body: [
               {
                 opType: "get_local",
-                parameters: 0
+                parameters: [0]
               },
               {
                 opType: "get_local",
-                parameters: 1
+                parameters: [1]
               },
               {
                 opType: "i32.add",
-                parameters: null
+                parameters: []
               }
             ]
           }
@@ -100,22 +98,20 @@ describe("module parser", () => {
                 type: "i32"
               }
             ],
-            result: {
-              type: "i32"
-            },
-            locals: null,
+            result: "i32",
+            locals: [],
             body: [
               {
                 opType: "get_local",
-                parameters: 0
+                parameters: [0]
               },
               {
                 opType: "get_local",
-                parameters: 1
+                parameters: [1]
               },
               {
                 opType: "i32.add",
-                parameters: null
+                parameters: []
               }
             ]
           }

@@ -8,7 +8,7 @@ describe("operations", () => {
       true,
       {
         opType: "get_local",
-        parameters: 0
+        parameters: [0]
       },
       2
     ])
@@ -20,7 +20,7 @@ describe("operations", () => {
       true,
       {
         opType: "get_local",
-        parameters: "$lhs"
+        parameters: ["$lhs"]
       },
       2
     ])

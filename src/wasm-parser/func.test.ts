@@ -20,11 +20,11 @@ describe("parser", () => {
       [
         {
           opType: "get_local",
-          parameters: "$lhs"
+          parameters: ["$lhs"]
         },
         {
           opType: "get_local",
-          parameters: "$rhs"
+          parameters: ["$rhs"]
         }
       ],
       4
@@ -56,20 +56,20 @@ describe("parser", () => {
           { identifier: "$lhs", type: "i32" },
           { identifier: "$rhs", type: "i32" }
         ],
-        result: { type: "i32" },
-        locals: null,
+        result: "i32",
+        locals: [],
         body: [
           {
             opType: "get_local",
-            parameters: "$lhs"
+            parameters: ["$lhs"]
           },
           {
             opType: "get_local",
-            parameters: "$rhs"
+            parameters: ["$rhs"]
           },
           {
             opType: "i32.add",
-            parameters: null
+            parameters: []
           }
         ]
       },
@@ -104,20 +104,20 @@ describe("parser", () => {
           { identifier: "$lhs", type: "i32" },
           { identifier: "$rhs", type: "i32" }
         ],
-        result: { type: "i32" },
-        locals: null,
+        result: "i32",
+        locals: [],
         body: [
           {
             opType: "get_local",
-            parameters: "$lhs"
+            parameters: ["$lhs"]
           },
           {
             opType: "get_local",
-            parameters: "$rhs"
+            parameters: ["$rhs"]
           },
           {
             opType: "i32.add",
-            parameters: null
+            parameters: []
           }
         ]
       },
@@ -135,13 +135,13 @@ describe("parser", () => {
     assert.deepStrictEqual(r, [
       true,
       {
-        body: [{ opType: "i32.const", parameters: 42 }],
+        body: [{ opType: "i32.const", parameters: [42] }],
         export: "hello",
         identifier: null,
         nodeType: "func",
-        parameters: null,
-        result: { type: "i32" },
-        locals: null
+        parameters: [],
+        result: "i32",
+        locals: []
       },
       5
     ])
@@ -157,12 +157,12 @@ describe("parser", () => {
     assert.deepStrictEqual(r, [
       true,
       {
-        body: [{ opType: "get_local", parameters: 0 }],
+        body: [{ opType: "get_local", parameters: [0] }],
         export: "hello",
         identifier: null,
         nodeType: "func",
-        parameters: null,
-        result: { type: "i32" },
+        parameters: [],
+        result: "i32",
         locals: ["i32"]
       },
       6
