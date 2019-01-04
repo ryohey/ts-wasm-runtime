@@ -54,10 +54,12 @@ describe("compiler", () => {
     const codes = compile(ast)
     assert.deepStrictEqual(codes, [
       [
+        { opcode: "_push", parameters: [2] },
         { opcode: "get_local", parameters: [0] },
         { opcode: "get_local", parameters: [1] },
         { opcode: "i32.add", parameters: [] },
-        { opcode: "return", parameters: [] }
+        { opcode: "_pop", parameters: [1] },
+        { opcode: "_ret", parameters: [] }
       ],
       [
         {

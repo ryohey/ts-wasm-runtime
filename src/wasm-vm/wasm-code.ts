@@ -10,10 +10,8 @@ export interface WASMCode {
 export class WASMContext {
   readonly values = new Stack<number>()
   readonly local: number[]
-  readonly returnAddress: number
 
-  constructor(returnAddress: number, local: number[] = []) {
-    this.returnAddress = returnAddress
+  constructor(local: number[] = []) {
     this.local = local
   }
 }
@@ -34,7 +32,7 @@ export class WASMMemory {
   readonly functions: WASMFunctionTableEntry[]
 
   constructor(functions: WASMFunctionTableEntry[]) {
-    this.callStack.push(new WASMContext(0))
+    this.callStack.push(new WASMContext())
     this.functions = functions
   }
 

@@ -10,6 +10,7 @@ import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { numericInstructionSet } from "./instructions/numeric"
 import { controlInstructionSet } from "./instructions/control"
+import { internalInstructionSet } from "./instructions/internal"
 import { ASTAssertReturn } from "../wasm-parser/assert"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
@@ -20,6 +21,7 @@ const createWASMVM = (): VirtualMachine<WASMCode, WASMMemory> => {
     memoryInstructionSet as WASMInstructionSet,
     variableInstructionSet as WASMInstructionSet,
     numericInstructionSet as WASMInstructionSet,
+    internalInstructionSet as WASMInstructionSet,
     controlInstructionSet
   )
   return new VirtualMachine(instructionSet)
@@ -34,7 +36,7 @@ const mergeInstructionSet = <T, S>(
       return i
     }
   }
-  throw new Error(`There is no instruction for ${code}`)
+  throw new Error(`There is no instruction for ${JSON.stringify(code)}`)
 }
 
 export class WASMVirtualMachine {
@@ -56,13 +58,18 @@ export class WASMVirtualMachine {
   // export された関数を呼ぶ
   callFunction(name: string, ...args: number[]) {
     const fn = this.currentMemory.functions.find(t => t.export === name)
-    const pointer = Number.MAX_SAFE_INTEGER // よろしくないけど適当なポインタで exception を出して止める
-    const ctx = new WASMContext(pointer)
-    this.vm.programCounter = pointer
+
+    // pass parameters
+    const ctx = new WASMContext()
     args.forEach(a => ctx.values.push(a))
+
+    // よろしくないけど適当なポインタに return して止める
+    const retAddr = Number.MAX_SAFE_INTEGER
+    ctx.values.push(retAddr)
+
     this.currentMemory.callStack.push(ctx)
     this.vm.runInstruction({
-      opcode: "call",
+      opcode: "_jump",
       parameters: [fn.pointer]
     })
     this.vm.run(this.vm.programCounter)

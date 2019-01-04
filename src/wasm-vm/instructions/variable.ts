@@ -12,7 +12,7 @@ export const variableInstructionSet: PartialInstructionSet<
       }
     case "set_local":
       return (code, { values, local }) => {
-        local[code.parameters[0]] = values.peek()
+        local[code.parameters[0]] = values.pop()
       }
     case "tee_local":
       // TODO:
@@ -23,7 +23,7 @@ export const variableInstructionSet: PartialInstructionSet<
       }
     case "global.set":
       return (code, { values, global }) => {
-        global[code.parameters[0]] = values.peek()
+        global[code.parameters[0]] = values.pop()
       }
   }
   return null

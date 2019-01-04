@@ -27,28 +27,15 @@ export const controlInstructionSet: PartialInstructionSet<
     case "br_table":
       return null
     case "return":
-      return (_, { callStack, values }, _pc, jump) => {
-        // TODO: check result type
-        const val = values.pop()
-        const { returnAddress } = callStack.peek()
-        callStack.pop()
-        callStack.peek().values.push(val)
-        jump(returnAddress)
+      return () => {
+        // do nothing
+        // the compiler use _pop and _ret
       }
     case "call":
-      return (code, { callStack, values, functions }, pc, jump) => {
+      return (code, { functions, values }, pc, jump) => {
         const fn = functions.find(f => f.pointer === code.parameters[0])
-        const local = []
-
-        // TODO: check parameters
-        fn.parameters.forEach(_ => local.push(values.pop()))
-
-        // initialize local values
-        fn.locals.forEach(_ => local.push(0))
-
-        const ctx = new WASMContext(pc, local)
-        callStack.push(ctx)
-
+        // add the return address to stack
+        values.push(pc)
         jump(fn.pointer)
       }
     case "call_indirect":
