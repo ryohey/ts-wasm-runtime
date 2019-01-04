@@ -11,7 +11,6 @@ import { variableInstructionSet } from "./instructions/variable"
 import { numericInstructionSet } from "./instructions/numeric"
 import { controlInstructionSet } from "./instructions/control"
 import { internalInstructionSet } from "./instructions/internal"
-import { ASTAssertReturn } from "../wasm-parser/assert"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -74,18 +73,5 @@ export class WASMVirtualMachine {
     })
     this.vm.run(this.vm.programCounter)
     return this.currentMemory
-  }
-
-  runTestCase(ast: ASTAssertReturn) {
-    const mem = this.callFunction(
-      ast.invoke,
-      ...ast.args.map(a => a.parameters[0] as number)
-    )
-    for (const exp of ast.expected) {
-      const received = mem.values.pop()
-      if (received !== exp.parameters[0]) {
-        throw new Error(`expected ${exp.parameters} but received ${received}`)
-      }
-    }
   }
 }
