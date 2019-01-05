@@ -70,7 +70,7 @@ export const compile = (
     return {
       export: fn.export,
       identifier: fn.identifier,
-      locals: fn.locals,
+      locals: fn.locals.map(l => l.type),
       parameters: fn.parameters.map(p => p.type),
       pointer
     } as WASMFunctionTableEntry

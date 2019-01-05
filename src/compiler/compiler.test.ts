@@ -17,6 +17,9 @@ describe("compiler", () => {
     const ast: ASTModule = {
       nodeType: "module",
       exports: [],
+      globals: [],
+      memories: [],
+      tables: [],
       functions: [
         {
           nodeType: "func",

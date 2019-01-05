@@ -13,36 +13,38 @@ export interface ASTBlock extends ASTFunctionInstruction {
 
 const instructions = lazy(() => operations)
 
-const blockBody: Parser<atom[], (ASTBlock | ASTFunctionInstruction)[]> = map(
-  seq(
-    keyword("block"),
-    opt(identifier),
-    opt(array(blockType)),
-    opt(many(instructions))
-  ),
-  r => [
-    {
-      opType: "block",
-      identifier: r[1],
-      result: r[2],
-      body: flatten(r[3] || []),
-      parameters: []
-    } as ASTBlock
-  ]
-)
+const makeBlockBody = (
+  word: string
+): Parser<atom[], (ASTBlock | ASTFunctionInstruction)[]> =>
+  map(
+    seq(
+      keyword(word),
+      opt(identifier),
+      opt(array(blockType)),
+      opt(many(instructions))
+    ),
+    r => [
+      {
+        opType: "block",
+        identifier: r[1],
+        result: r[2],
+        body: flatten(r[3] || []),
+        parameters: []
+      } as ASTBlock
+    ]
+  )
 
-export const block: Parser<atom[], ASTFunctionInstruction[]> = map(
-  seq(blockBody, keyword("end")),
-  r => r[0]
-)
+const makePlainBlock = (
+  word: string
+): Parser<atom[], ASTFunctionInstruction[]> =>
+  map(seq(makeBlockBody(word), keyword("end")), r => r[0])
 
-export const block2 = array(blockBody)
+const makeFoldedBlock = (word: string) => array(makeBlockBody(word))
+const makeBlock = (word: string) =>
+  or(makePlainBlock(word), makeFoldedBlock(word))
 
-export const loop: Parser<atom[], any> = seq(
-  keyword("loop"),
-  many(instructions),
-  keyword("end")
-)
+export const block = makeBlock("block")
+export const loop = makeBlock("loop")
 
 export const ifend: Parser<atom[], any> = seq(
   keyword("if"),
@@ -58,4 +60,4 @@ export const ifelse: Parser<atom[], any> = seq(
   keyword("end")
 )
 
-export const blockInstructions = or(block, block2, loop, ifend, ifelse)
+export const blockInstructions = or(block, loop, ifend, ifelse)

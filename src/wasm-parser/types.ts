@@ -5,7 +5,7 @@ export type atom = string | number | AtomArray
 export interface AtomArray extends Array<atom> {}
 
 export const identifier = regexp(
-  /^(\$[a-zA-Z][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*)$/
+  /^(\$[a-zA-Z_][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*)$/
 )
 export const name = regexp(/^([a-zA-Z]+)$/)
 export const string = regexp(/^\"(.+)\"/)

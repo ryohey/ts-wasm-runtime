@@ -25,7 +25,15 @@ const opN = (str: string): Parser<atom[], ASTFunctionInstruction> =>
     parameters: r[1]
   }))
 
+export const constInstructions = or(
+  op1("i32.const"),
+  op1("i64.const"),
+  op1("f32.const"),
+  op1("f64.const")
+)
+
 export const plainInstructions = or(
+  constInstructions,
   op("nop"),
   op("unreachable"),
   op1("br"),
@@ -36,15 +44,15 @@ export const plainInstructions = or(
   op("drop"),
   op("select"),
   op1("get_local"),
+  op1("local.get"),
   op1("set_local"),
+  op1("local.set"),
   op1("tee_local"),
   op1("get_global"),
+  op1("global.get"),
   op1("set_global"),
+  op1("global.set"),
   op("i32.add"),
-  op1("i32.const"),
-  op1("i64.const"),
-  op1("f32.const"),
-  op1("f64.const"),
   op("i32.add"),
   op("i64.add"),
   op("f32.add"),

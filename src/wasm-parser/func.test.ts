@@ -163,7 +163,7 @@ describe("parser", () => {
         nodeType: "func",
         parameters: [],
         result: "i32",
-        locals: ["i32"]
+        locals: [{ type: "i32", identifier: null }]
       },
       6
     ])

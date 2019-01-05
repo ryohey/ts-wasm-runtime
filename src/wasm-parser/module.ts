@@ -1,52 +1,57 @@
 import { ASTFunction, func } from "./func"
 import { seq, or, map, many } from "../parser/parser"
 import { keyword, array } from "./utils"
-import { string, identifier, ASTModuleNode } from "./types"
+import { ASTExport, moduleExport } from "./export"
+import { ASTGlobal, moduleGlobal } from "./global"
+import { moduleMemory, ASTMemory } from "./memory"
+import { ASTTable, moduleTable } from "./table"
 
 export interface ASTModule {
   nodeType: "module"
   functions: ASTFunction[]
   exports: ASTExport[]
+  globals: ASTGlobal[]
+  memories: ASTMemory[]
+  tables: ASTTable[]
   // types
-  // tables
-  // globals
-  // memories
 }
 
-export interface ASTExport extends ASTModuleNode {
-  nodeType: "export"
-  exportType: string
-  identifier: string
-}
+type ASTModuleElement =
+  | ASTFunction
+  | ASTExport
+  | ASTGlobal
+  | ASTMemory
+  | ASTTable
 
-const moduleExport = map(
+const isExport = (x: ASTModuleElement): x is ASTExport =>
+  x.nodeType === "export"
+const isFunc = (x: ASTModuleElement): x is ASTFunction => x.nodeType === "func"
+const isGlobal = (x: ASTModuleElement): x is ASTGlobal =>
+  x.nodeType === "global"
+const isMemory = (x: ASTModuleElement): x is ASTMemory =>
+  x.nodeType === "memory"
+const isTable = (x: ASTModuleElement): x is ASTTable => x.nodeType === "table"
+
+export const moduleParser = map(
   seq(
-    keyword("export"),
-    string,
-    or(
-      array(seq(keyword("func"), identifier)),
-      array(seq(keyword("memory"), identifier))
+    keyword("module"),
+    many(
+      or(
+        array(moduleExport),
+        array(func),
+        array(moduleGlobal),
+        array(moduleMemory),
+        array(moduleTable)
+      )
     )
   ),
   r =>
     ({
-      nodeType: "export",
-      exportType: r[2][0],
-      identifier: r[2][1]
-    } as ASTExport)
-)
-
-const isExport = (x: ASTFunction | ASTExport): x is ASTExport =>
-  x.nodeType === "export"
-const isFunc = (x: ASTFunction | ASTExport): x is ASTFunction =>
-  x.nodeType === "func"
-
-export const moduleParser = map(
-  seq(keyword("module"), many(or(array(moduleExport), array(func)))),
-  r =>
-    ({
       nodeType: "module",
       functions: r[1].filter(isFunc),
-      exports: r[1].filter(isExport)
+      exports: r[1].filter(isExport),
+      globals: r[1].filter(isGlobal),
+      memories: r[1].filter(isMemory),
+      tables: r[1].filter(isTable)
     } as ASTModule)
 )

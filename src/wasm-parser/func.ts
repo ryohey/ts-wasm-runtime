@@ -19,10 +19,14 @@ export interface ASTFunction extends ASTModuleNode {
   parameters: ASTFunctionParameter[]
   result: ValType
   body: ASTFunctionInstruction[]
-  locals: ValType[]
+  locals: ASTFunctionLocal[]
 }
 
 export interface ASTFunctionParameter {
+  identifier: string | null
+  type: ValType
+}
+export interface ASTFunctionLocal {
   identifier: string | null
   type: ValType
 }
@@ -37,6 +41,11 @@ export const param = map(
   r => ({ identifier: r[1], type: r[2] } as ASTFunctionParameter)
 )
 
+export const local = map(
+  seq(keyword("local"), opt(identifier), valType),
+  r => ({ identifier: r[1], type: r[2] } as ASTFunctionLocal)
+)
+
 export const funcBody = map(many(operations), r => flatten(r))
 
 export const func: Parser<atom[], ASTFunction> = map(
@@ -46,7 +55,7 @@ export const func: Parser<atom[], ASTFunction> = map(
     opt(map(array(seq(keyword("export"), string)), r => r[1])),
     opt(many(array(param))),
     opt(array(blockType)),
-    opt(many(map(array(seq(keyword("local"), valType)), r => r[1]))),
+    opt(many(array(local))),
     opt(funcBody)
   ),
   r => {

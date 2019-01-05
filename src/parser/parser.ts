@@ -100,6 +100,15 @@ export function or<T, P0, P1>(
 export function or<T, P0, P1, P2>(
   ...parsers: [Parser<T, P0>, Parser<T, P1>, Parser<T, P2>]
 ): Parser<T, P0 | P1 | P2>
+export function or<T, P0, P1, P2, P3>(
+  ...parsers: [Parser<T, P0>, Parser<T, P1>, Parser<T, P2>, Parser<T, P3>]
+): Parser<T, P0 | P1 | P2 | P3>
+export function or<T, P0, P1, P2, P3, P4>(
+  ...parsers: [Parser<T, P0>, Parser<T, P1>, Parser<T, P2>, Parser<T, P3>, Parser<T, P4>]
+): Parser<T, P0 | P1 | P2 | P3 | P4>
+export function or<T, P0, P1, P2, P3, P4, P5>(
+  ...parsers: [Parser<T, P0>, Parser<T, P1>, Parser<T, P2>, Parser<T, P3>, Parser<T, P4>, Parser<T, P5>]
+): Parser<T, P0 | P1 | P2 | P3 | P4 | P5>
 export function or<T>(...parsers: Parser<T, any>[]): Parser<T, any> {
   return (target, position) => {
     for (let parser of parsers) {

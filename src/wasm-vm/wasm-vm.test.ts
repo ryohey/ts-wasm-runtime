@@ -6,9 +6,9 @@ import { WASMVirtualMachine } from "./wasm-vm"
 
 const wasmTextParser = (text: string) => {
   const sExp = sParser(text, 0)
-  assert(sExp[0])
+  assert(sExp[0], sExp[3])
   const ast = wasmParser(sExp[1], 0)
-  assert(ast[0])
+  assert(ast[0], ast[3])
   return ast[1]
 }
 
