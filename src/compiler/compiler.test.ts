@@ -36,7 +36,7 @@ describe("compiler", () => {
             }
           ],
           locals: [],
-          result: ValType.i32,
+          results: [ValType.i32],
           body: [
             {
               opType: "get_local",
@@ -57,11 +57,9 @@ describe("compiler", () => {
     const codes = compile(ast)
     assert.deepStrictEqual(codes, [
       [
-        { opcode: "_push", parameters: [2] },
         { opcode: "get_local", parameters: [0] },
         { opcode: "get_local", parameters: [1] },
         { opcode: "i32.add", parameters: [] },
-        { opcode: "_pop", parameters: [1] },
         { opcode: "_ret", parameters: [] }
       ],
       [
@@ -70,6 +68,7 @@ describe("compiler", () => {
           locals: [],
           parameters: ["i32", "i32"],
           identifier: null,
+          results: ["i32"],
           pointer: 0
         }
       ]

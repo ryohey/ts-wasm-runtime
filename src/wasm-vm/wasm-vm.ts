@@ -49,7 +49,6 @@ export class WASMVirtualMachine {
     functionTable: WASMFunctionTableEntry[]
   ) {
     // TODO: グローバル変数を用意してメモリを生成する
-    // TODO: コード内の変数名や関数名を index に置換する
     this.currentMemory = new WASMMemory(functionTable)
     this.vm.initialize(program, this.currentMemory)
   }
@@ -58,20 +57,14 @@ export class WASMVirtualMachine {
   callFunction(name: string, ...args: number[]) {
     const fn = this.currentMemory.functions.find(t => t.export === name)
 
-    // pass parameters
-    const ctx = new WASMContext()
-    args.forEach(a => ctx.values.push(a))
-
     // よろしくないけど適当なポインタに return して止める
     const retAddr = Number.MAX_SAFE_INTEGER
-    ctx.values.push(retAddr)
+    this.currentMemory.callStack.push(new WASMContext(retAddr))
 
+    const ctx = new WASMContext(fn.pointer, args)
     this.currentMemory.callStack.push(ctx)
-    this.vm.runInstruction({
-      opcode: "_jump",
-      parameters: [fn.pointer]
-    })
-    this.vm.run(this.vm.programCounter)
+
+    this.vm.run()
     return this.currentMemory
   }
 }

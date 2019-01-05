@@ -3,22 +3,20 @@ export type InstructionSet<Code, Memory> = (
 ) => Instruction<Code, Memory>
 
 // mutates register and memory
-export type Instruction<Code, Memory> = (
-  code: Code,
-  memory: Memory,
-  programCounter: number,
-  jump: (addr: number) => void
-) => void
+export type Instruction<Code, Memory> = (code: Code, memory: Memory) => void
+
+export interface VMMemory {
+  programCounter: number
+}
 
 /**
  * 特定の命令セットやプログラムに依存しない VM の抽象的な実装
  * 利用側が命令セットとプログラムの組み合わせを用意する
  */
-export class VirtualMachine<Code, Memory> {
+export class VirtualMachine<Code, Memory extends VMMemory> {
   public verbose: boolean
   private memory: Memory
   private instructionSet: InstructionSet<Code, Memory>
-  public programCounter: number = 0
   private program: Code[] = []
 
   constructor(instructionSet: InstructionSet<Code, Memory>) {
@@ -30,28 +28,18 @@ export class VirtualMachine<Code, Memory> {
     this.program = program
   }
 
-  public run(addr: number) {
-    this.programCounter = addr
-
-    while (this.programCounter < this.program.length) {
-      const code = this.program[this.programCounter++]
+  public run() {
+    while (this.memory.programCounter < this.program.length) {
+      const code = this.program[this.memory.programCounter++]
+      const instr = this.instructionSet(code)
+      this.log(`[${this.memory.programCounter}] run ${JSON.stringify(code)}`)
       try {
-        this.runInstruction(code)
+        instr(code, this.memory)
       } catch (e) {
         console.error(e.message)
         break
       }
     }
-  }
-
-  public runInstruction(code: Code) {
-    this.log(`[${this.programCounter}] run ${JSON.stringify(code)}`)
-    const instr = this.instructionSet(code)
-    instr(code, this.memory, this.programCounter, this.jump)
-  }
-
-  private jump = (addr: number) => {
-    this.programCounter = addr
   }
 
   private log = (msg: string) => {

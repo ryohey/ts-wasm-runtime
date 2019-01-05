@@ -7,8 +7,7 @@ import { flatten } from "../misc/array"
 
 export interface ASTBlock extends ASTFunctionInstruction {
   identifier: string | null
-  result: ValType
-  body: ASTFunctionInstruction[]
+  results: ValType[]
 }
 
 const instructions = lazy(() => operations)
@@ -27,10 +26,14 @@ const makeBlockBody = (
       {
         opType: "block",
         identifier: r[1],
-        result: r[2],
-        body: flatten(r[3] || []),
+        results: r[2] ? [r[2]] : [],
         parameters: []
-      } as ASTBlock
+      } as ASTBlock,
+      ...flatten(r[3] || []),
+      {
+        opType: "end",
+        parameters: []
+      }
     ]
   )
 

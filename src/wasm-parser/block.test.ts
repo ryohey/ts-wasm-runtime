@@ -10,10 +10,11 @@ describe("block", () => {
         {
           opType: "block",
           identifier: null,
-          result: null,
-          parameters: [],
-          body: [{ opType: "i32.const", parameters: [42] }]
-        }
+          results: [],
+          parameters: []
+        },
+        { opType: "i32.const", parameters: [42] },
+        { opType: "end", parameters: [] }
       ],
       4
     ])
@@ -26,10 +27,11 @@ describe("block", () => {
         {
           opType: "block",
           identifier: "$lbl",
-          result: null,
-          parameters: [],
-          body: [{ opType: "i32.const", parameters: [42] }]
-        }
+          results: [],
+          parameters: []
+        },
+        { opType: "i32.const", parameters: [42] },
+        { opType: "end", parameters: [] }
       ],
       5
     ])
@@ -45,10 +47,11 @@ describe("block", () => {
         {
           opType: "block",
           identifier: null,
-          result: "i32",
-          parameters: [],
-          body: [{ opType: "i32.const", parameters: [42] }]
-        }
+          results: ["i32"],
+          parameters: []
+        },
+        { opType: "i32.const", parameters: [42] },
+        { opType: "end", parameters: [] }
       ],
       1
     ])

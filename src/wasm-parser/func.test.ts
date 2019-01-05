@@ -56,7 +56,7 @@ describe("parser", () => {
           { identifier: "$lhs", type: "i32" },
           { identifier: "$rhs", type: "i32" }
         ],
-        result: "i32",
+        results: ["i32"],
         locals: [],
         body: [
           {
@@ -104,7 +104,7 @@ describe("parser", () => {
           { identifier: "$lhs", type: "i32" },
           { identifier: "$rhs", type: "i32" }
         ],
-        result: "i32",
+        results: ["i32"],
         locals: [],
         body: [
           {
@@ -140,7 +140,7 @@ describe("parser", () => {
         identifier: null,
         nodeType: "func",
         parameters: [],
-        result: "i32",
+        results: ["i32"],
         locals: []
       },
       5
@@ -162,7 +162,7 @@ describe("parser", () => {
         identifier: null,
         nodeType: "func",
         parameters: [],
-        result: "i32",
+        results: ["i32"],
         locals: [{ type: "i32", identifier: null }]
       },
       6

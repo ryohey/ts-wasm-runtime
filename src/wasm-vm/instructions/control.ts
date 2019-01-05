@@ -4,6 +4,7 @@ import {
   WASMMemory,
   WASMContext
 } from "../wasm-code"
+import { range } from "../../misc/array"
 
 export const controlInstructionSet: PartialInstructionSet<
   WASMCode,
@@ -32,11 +33,15 @@ export const controlInstructionSet: PartialInstructionSet<
         // the compiler use _pop and _ret
       }
     case "call":
-      return (code, { functions, values }, pc, jump) => {
+      return (code, memory) => {
+        const { functions, values, callStack } = memory
         const fn = functions.find(f => f.pointer === code.parameters[0])
-        // add the return address to stack
-        values.push(pc)
-        jump(fn.pointer)
+
+        // 指定された数のパラメータを values から pop して新しいスタックに積む
+        const locals = range(0, code.parameters[0]).map(_ => values.pop())
+
+        const ctx = new WASMContext(fn.pointer, locals, fn.results.length)
+        callStack.push(ctx)
       }
     case "call_indirect":
       return null

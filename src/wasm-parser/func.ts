@@ -17,7 +17,7 @@ export interface ASTFunction extends ASTModuleNode {
   identifier: string | null
   export: string | null
   parameters: ASTFunctionParameter[]
-  result: ValType
+  results: ValType[]
   body: ASTFunctionInstruction[]
   locals: ASTFunctionLocal[]
 }
@@ -64,7 +64,7 @@ export const func: Parser<atom[], ASTFunction> = map(
       identifier: r[1],
       export: r[2],
       parameters: r[3] || [],
-      result: r[4],
+      results: r[4] ? [r[4]] : [],
       locals: r[5] || [],
       body: r[6] || []
     } as ASTFunction

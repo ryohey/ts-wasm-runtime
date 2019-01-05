@@ -45,7 +45,7 @@ describe("module parser", () => {
                 type: "i32"
               }
             ],
-            result: "i32",
+            results: ["i32"],
             locals: [],
             body: [
               {
@@ -104,7 +104,7 @@ describe("module parser", () => {
                 type: "i32"
               }
             ],
-            result: "i32",
+            results: ["i32"],
             locals: [],
             body: [
               {
