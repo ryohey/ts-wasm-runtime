@@ -47,7 +47,7 @@ export const func: Parser<atom[], ASTFunction> = map(
     opt(many(array(param))),
     opt(array(blockType)),
     opt(many(map(array(seq(keyword("local"), valType)), r => r[1]))),
-    funcBody
+    opt(funcBody)
   ),
   r => {
     return {
@@ -57,7 +57,7 @@ export const func: Parser<atom[], ASTFunction> = map(
       parameters: r[3] || [],
       result: r[4],
       locals: r[5] || [],
-      body: r[6]
+      body: r[6] || []
     } as ASTFunction
   }
 )

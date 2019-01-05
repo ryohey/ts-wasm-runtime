@@ -25,4 +25,18 @@ describe("assertParser", () => {
       3
     ])
   })
+  it("parses assert_return without parameters", () => {
+    const sExp = sParser(`(assert_return (invoke "empty"))`, 0)
+    const r = assertionParser(sExp[1], 0)
+    assert.deepStrictEqual(r, [
+      true,
+      {
+        nodeType: "assert_return",
+        invoke: "empty",
+        args: [],
+        expected: []
+      },
+      2
+    ])
+  })
 })

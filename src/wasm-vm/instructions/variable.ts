@@ -6,6 +6,10 @@ export const variableInstructionSet: PartialInstructionSet<
   WASMLocalMemory
 > = code => {
   switch (code.opcode) {
+    case "drop":
+      return (_, { values }) => {
+        values.pop()
+      }
     case "get_local":
       return (code, { values, local }) => {
         values.push(local[code.parameters[0]])

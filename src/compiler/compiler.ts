@@ -2,8 +2,22 @@ import { WASMCode, WASMFunctionTableEntry } from "../wasm-vm/wasm-code"
 import { ASTFunction, ASTFunctionInstruction } from "../wasm-parser/func"
 import { ASTModule } from "../wasm-parser/module"
 import { flatten } from "../misc/array"
+import { ASTBlock } from "../wasm-parser/block"
 
 const compileInstruction = (inst: ASTFunctionInstruction): WASMCode[] => {
+  switch (inst.opType) {
+    case "block": {
+      const block = inst as ASTBlock
+      const body = flatten(block.body.map(compileInstruction))
+      return [
+        { opcode: "_push", parameters: [0] },
+        ...body,
+        { opcode: "_pop", parameters: [block.result ? 1 : 0] }
+      ]
+    }
+    default:
+      break
+  }
   return [
     {
       opcode: inst.opType,

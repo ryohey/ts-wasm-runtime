@@ -15,14 +15,14 @@ export const assertionParser = map(
   seq(
     keyword("assert_return"),
     array(seq(keyword("invoke"), string, opt(array(operations)))),
-    array(operations)
+    opt(array(operations))
   ),
   r => {
     return {
       nodeType: "assert_return",
       invoke: r[1][1],
-      args: r[1][2] ? r[1][2] : [],
-      expected: r[2]
+      args: r[1][2] || [],
+      expected: r[2] || []
     } as ASTAssertReturn
   }
 )

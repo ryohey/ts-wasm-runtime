@@ -1,24 +1,34 @@
 import { Parser, seq, many, opt, or, lazy, map } from "../parser/parser"
-import { atom, blockType, identifier } from "./types"
+import { atom, blockType, identifier, ValType } from "./types"
 import { keyword, array } from "./utils"
 import { operations } from "./operations"
 import { ASTFunctionInstruction } from "./func"
 import { flatten } from "../misc/array"
 
+export interface ASTBlock extends ASTFunctionInstruction {
+  identifier: string | null
+  result: ValType
+  body: ASTFunctionInstruction[]
+}
+
 const instructions = lazy(() => operations)
 
-const blockBody: Parser<atom[], ASTFunctionInstruction[]> = map(
+const blockBody: Parser<atom[], (ASTBlock | ASTFunctionInstruction)[]> = map(
   seq(
     keyword("block"),
     opt(identifier),
-    opt(blockType),
+    opt(array(blockType)),
     opt(many(instructions))
   ),
-  r =>
-    [
-      { opType: "block", parameters: [] },
-      ...flatten(r[3])
-    ] as ASTFunctionInstruction[]
+  r => [
+    {
+      opType: "block",
+      identifier: r[1],
+      result: r[2],
+      body: flatten(r[3] || []),
+      parameters: []
+    } as ASTBlock
+  ]
 )
 
 export const block: Parser<atom[], ASTFunctionInstruction[]> = map(

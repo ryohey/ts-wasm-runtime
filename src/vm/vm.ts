@@ -15,6 +15,7 @@ export type Instruction<Code, Memory> = (
  * 利用側が命令セットとプログラムの組み合わせを用意する
  */
 export class VirtualMachine<Code, Memory> {
+  public verbose: boolean
   private memory: Memory
   private instructionSet: InstructionSet<Code, Memory>
   public programCounter: number = 0
@@ -44,12 +45,18 @@ export class VirtualMachine<Code, Memory> {
   }
 
   public runInstruction(code: Code) {
-    console.log(`[${this.programCounter}] run ${JSON.stringify(code)}`)
+    this.log(`[${this.programCounter}] run ${JSON.stringify(code)}`)
     const instr = this.instructionSet(code)
     instr(code, this.memory, this.programCounter, this.jump)
   }
 
   private jump = (addr: number) => {
     this.programCounter = addr
+  }
+
+  private log = (msg: string) => {
+    if (this.verbose) {
+      console.log(msg)
+    }
   }
 }
