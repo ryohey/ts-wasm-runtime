@@ -11,10 +11,9 @@ describe("block", () => {
           opType: "block",
           identifier: null,
           results: [],
-          parameters: []
-        },
-        { opType: "i32.const", parameters: [42] },
-        { opType: "end", parameters: [] }
+          parameters: [],
+          body: [{ opType: "i32.const", parameters: [42] }]
+        }
       ],
       4
     ])
@@ -28,10 +27,9 @@ describe("block", () => {
           opType: "block",
           identifier: "$lbl",
           results: [],
-          parameters: []
-        },
-        { opType: "i32.const", parameters: [42] },
-        { opType: "end", parameters: [] }
+          parameters: [],
+          body: [{ opType: "i32.const", parameters: [42] }]
+        }
       ],
       5
     ])
@@ -48,10 +46,9 @@ describe("block", () => {
           opType: "block",
           identifier: null,
           results: ["i32"],
-          parameters: []
-        },
-        { opType: "i32.const", parameters: [42] },
-        { opType: "end", parameters: [] }
+          parameters: [],
+          body: [{ opType: "i32.const", parameters: [42] }]
+        }
       ],
       1
     ])

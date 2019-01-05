@@ -9,18 +9,18 @@ export interface WASMCode {
 
 export class WASMContext {
   readonly values = new Stack<number>()
-  readonly local: number[]
-  public programCounter: number
+  readonly labelPosition: number
   readonly resultLength: number
+  public programCounter: number
 
   constructor(
     programCounter: number,
-    local: number[] = [],
-    resultLength: number = 0
+    resultLength: number = 0,
+    labelPosition: number = 0
   ) {
     this.programCounter = programCounter
-    this.local = local
     this.resultLength = resultLength
+    this.labelPosition = labelPosition
   }
 }
 
@@ -38,18 +38,19 @@ export class WASMMemory implements VMMemory {
   readonly callStack = new Stack<WASMContext>()
   readonly memory: number[] = []
   readonly global: number[] = []
+  readonly localStack = new Stack<number[]>()
   readonly functions: WASMFunctionTableEntry[]
 
   constructor(functions: WASMFunctionTableEntry[]) {
     this.functions = functions
   }
 
-  get local(): number[] {
-    return this.callStack.peek().local
-  }
-
   get values(): Stack<number> {
     return this.callStack.peek().values
+  }
+
+  get local(): number[] {
+    return this.localStack.peek()
   }
 
   get programCounter(): number {

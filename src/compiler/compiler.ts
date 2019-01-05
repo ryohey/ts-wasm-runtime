@@ -1,7 +1,7 @@
 import { WASMCode, WASMFunctionTableEntry } from "../wasm-vm/wasm-code"
 import { ASTFunction, ASTFunctionInstruction } from "../wasm-parser/func"
 import { ASTModule } from "../wasm-parser/module"
-import { flatten, uniq, fromPairs } from "../misc/array"
+import { flatten, fromPairs } from "../misc/array"
 import { ASTBlock } from "../wasm-parser/block"
 import { isString } from "util"
 
@@ -9,8 +9,16 @@ type IdentifierEntry = { [key: string]: number }
 
 interface IdentifierTables {
   locals: IdentifierEntry
-  labels: IdentifierEntry
   funcs: IdentifierEntry
+}
+
+const indexFromLast = <T>(arr: T[], pred: (item: T) => boolean): number => {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (pred(arr[i])) {
+      return arr.length - i - 1
+    }
+  }
+  return -1
 }
 
 const isIdentifier = (v: string | number): v is string => {
@@ -19,16 +27,15 @@ const isIdentifier = (v: string | number): v is string => {
 
 const compileInstruction = (
   inst: ASTFunctionInstruction,
-  idTables: IdentifierTables
+  idTables: IdentifierTables,
+  labelStack: string[]
 ): WASMCode[] => {
   switch (inst.opType) {
     case "loop":
     case "block": {
       const block = inst as ASTBlock
-      return [{ opcode: "_push", parameters: [block.results.length] }]
+      return compileBlock(block, idTables, labelStack)
     }
-    case "end":
-      return [{ opcode: "_pop", parameters: [] }]
     default:
       break
   }
@@ -41,8 +48,9 @@ const compileInstruction = (
         case "call":
           return idTables.funcs[p]
         case "br":
-        case "br_if":
-          return idTables.labels[p]
+        case "br_if": {
+          return indexFromLast(labelStack, l => l === p)
+        }
         default:
           return idTables.locals[p]
       }
@@ -58,11 +66,27 @@ const compileInstruction = (
   ]
 }
 
-const isBlock = (i: ASTFunctionInstruction): i is ASTBlock => {
-  return i.opType === "block"
+const compileBlock = (
+  block: ASTBlock,
+  idTables: IdentifierTables,
+  labelStack: string[]
+): WASMCode[] => {
+  const labels = [...labelStack, block.identifier]
+
+  const body = flatten(
+    block.body.map(i => compileInstruction(i, idTables, labels))
+  )
+  // block の場合はラベルが指す相対アドレスが末尾
+  const labelPosition = block.opType === "block" ? body.length : 0
+  const prologue = [
+    { opcode: "_push", parameters: [block.results.length, labelPosition + 1] }
+  ]
+  const epilogue = [{ opcode: "_pop", parameters: [] }]
+
+  return [...prologue, ...body, ...epilogue]
 }
 
-const createIdentifierTables = (ast: ASTFunction) => {
+const createLocalTables = (ast: ASTFunction) => {
   const params = fromPairs(
     ast.parameters
       .map((p, i) => [p.identifier, i] as [string, number])
@@ -77,34 +101,24 @@ const createIdentifierTables = (ast: ASTFunction) => {
       .filter(e => e[0])
   )
 
-  const labels = fromPairs(
-    ast.body
-      .filter(isBlock)
-      .map((b, i) => [b.identifier, i] as [string, number])
-      .filter(e => e[0])
-  )
-
-  return {
-    locals: { ...params, ...locals },
-    labels
-  }
+  return { ...params, ...locals }
 }
 
 const compileFunction = (
   ast: ASTFunction,
   funcs: IdentifierEntry
 ): WASMCode[] => {
-  const idTables: IdentifierTables = { ...createIdentifierTables(ast), funcs }
+  const idTables: IdentifierTables = { locals: createLocalTables(ast), funcs }
 
   const prologue: WASMCode[] = flatten(
     // initialize local values
     ast.locals.map((l, i) => [
       { opcode: `${l.type}.const`, parameters: [0] },
-      { opcode: "set_local", parameters: [i] }
+      { opcode: "set_local", parameters: [i + ast.parameters.length] }
     ])
   )
 
-  const body = flatten(ast.body.map(i => compileInstruction(i, idTables)))
+  const body = flatten(ast.body.map(i => compileInstruction(i, idTables, [])))
 
   const epilogue: WASMCode[] = [{ opcode: "_ret", parameters: [] }]
 
@@ -144,8 +158,6 @@ export const compile = (
       pointer
     } as WASMFunctionTableEntry
   })
-
-  // TODO: identifier を function table から pointer に置換
 
   return [flatten(codes), table]
 }

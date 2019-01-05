@@ -5,12 +5,8 @@ import {
   WASMContext
 } from "../wasm-code"
 import { range } from "../../misc/array"
-import { Instruction } from "../../vm/vm"
 
-const popStack: Instruction<WASMCode, WASMMemory> = (
-  _,
-  { callStack, values }
-) => {
+export const popStack = ({ callStack, values }: WASMMemory) => {
   const { resultLength } = callStack.peek()
   // 指定された数の戻り値を pop 後のスタックに積む
   const returnValues = range(0, resultLength).map(_ => values.pop())
@@ -28,14 +24,23 @@ export const internalInstructionSet: PartialInstructionSet<
     case "_push":
       return (code, memory) => {
         const { callStack, programCounter } = memory
-        callStack.push(new WASMContext(programCounter, [], code.parameters[0]))
+
+        // 相対アドレス
+        const labelPosition = programCounter + code.parameters[1]
+
+        callStack.push(
+          new WASMContext(programCounter, code.parameters[0], labelPosition)
+        )
       }
     case "_ret":
-      return popStack
+      return (_, memory) => {
+        popStack(memory)
+        memory.local.pop()
+      }
     case "_pop":
-      return (code, memory) => {
+      return (_, memory) => {
         const pc = memory.programCounter
-        popStack(code, memory)
+        popStack(memory)
         // pop 後に return しないでそのまま次のコードを読み込む
         memory.programCounter = pc
       }

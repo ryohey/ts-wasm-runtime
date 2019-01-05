@@ -14,7 +14,7 @@ export interface VMMemory {
  * 利用側が命令セットとプログラムの組み合わせを用意する
  */
 export class VirtualMachine<Code, Memory extends VMMemory> {
-  public verbose: boolean
+  public verbose: boolean = true
   private memory: Memory
   private instructionSet: InstructionSet<Code, Memory>
   private program: Code[] = []

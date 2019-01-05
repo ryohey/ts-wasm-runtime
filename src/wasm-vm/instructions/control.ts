@@ -5,6 +5,15 @@ import {
   WASMContext
 } from "../wasm-code"
 import { range } from "../../misc/array"
+import { popStack } from "./internal"
+
+const br = ({ parameters: [nestLevel] }: WASMCode, memory: WASMMemory) => {
+  // 指定された回数 pop する
+  range(0, nestLevel).forEach(_ => {
+    popStack(memory)
+  })
+  memory.programCounter = memory.callStack.peek().labelPosition
+}
 
 export const controlInstructionSet: PartialInstructionSet<
   WASMCode,
@@ -22,9 +31,14 @@ export const controlInstructionSet: PartialInstructionSet<
     case "if":
       return null
     case "br":
-      return null
+      return br
     case "br_if":
-      return null
+      return (code, memory) => {
+        const { values } = memory
+        if (values.pop() !== 0) {
+          br(code, memory)
+        }
+      }
     case "br_table":
       return null
     case "return":
@@ -33,14 +47,14 @@ export const controlInstructionSet: PartialInstructionSet<
         // the compiler use _pop and _ret
       }
     case "call":
-      return (code, memory) => {
+      return ({ parameters: [parameterCount] }, memory) => {
         const { functions, values, callStack } = memory
-        const fn = functions[code.parameters[0]]
+        const fn = functions[parameterCount]
 
         // 指定された数のパラメータを values から pop して新しいスタックに積む
-        const locals = range(0, code.parameters[0]).map(_ => values.pop())
+        memory.localStack.push(range(0, parameterCount).map(_ => values.pop()))
 
-        const ctx = new WASMContext(fn.pointer, locals, fn.results.length)
+        const ctx = new WASMContext(fn.pointer, fn.results.length)
         callStack.push(ctx)
       }
     case "call_indirect":
