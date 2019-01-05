@@ -1,9 +1,7 @@
 // Utilities for Parser<atom[]>
 
-import { Parser, seq, many, or, opt, map } from "../parser/parser"
-
-export type atom = string | number | AtomArray
-interface AtomArray extends Array<atom> {}
+import { Parser } from "../parser/parser"
+import { atom } from "./types"
 
 const isString = (x: any): x is string =>
   typeof x === "string" || x instanceof String

@@ -1,7 +1,9 @@
-import { or, seq, many, map, Parser } from "../parser/parser"
-import { keyword, atom } from "./utils"
-import { operand } from "./types"
+import { or, seq, many, map, Parser, lazy, opt } from "../parser/parser"
+import { keyword, array } from "./utils"
+import { operand, atom } from "./types"
 import { ASTFunctionInstruction } from "./func"
+import { blockInstructions } from "./block"
+import { flatten } from "../misc/array"
 
 // operation with no parameters
 const op = (str: string): Parser<atom[], ASTFunctionInstruction> =>
@@ -23,12 +25,9 @@ const opN = (str: string): Parser<atom[], ASTFunctionInstruction> =>
     parameters: r[1]
   }))
 
-export const operations: Parser<atom[], ASTFunctionInstruction> = or(
+export const plainInstructions = or(
   op("nop"),
   op("unreachable"),
-  op("block"),
-  op("loop"),
-  op("if"),
   op1("br"),
   op1("br_if"),
   opN("br_table"),
@@ -233,4 +232,20 @@ export const operations: Parser<atom[], ASTFunctionInstruction> = or(
   op("i64.store8"),
   op("i64.store16"),
   op("i64.store32")
+)
+
+const foldedInstructions = map(
+  array(
+    seq(
+      plainInstructions,
+      opt(map(many(lazy(() => operations)), r => flatten(r)))
+    )
+  ),
+  r => [...(r[1] ? r[1] : []), r[0]]
+)
+
+export const operations: Parser<atom[], ASTFunctionInstruction[]> = or(
+  lazy(() => blockInstructions),
+  map(plainInstructions, r => [r]),
+  foldedInstructions
 )

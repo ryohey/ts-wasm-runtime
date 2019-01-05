@@ -1,4 +1,4 @@
-import { or, Parser } from "../parser/parser"
+import { or, map, seq } from "../parser/parser"
 import { num, regexp, keyword } from "./utils"
 
 export type atom = string | number | AtomArray
@@ -28,3 +28,5 @@ export const valType = or(
   keyword(ValType.f32),
   keyword(ValType.f64)
 )
+
+export const blockType = map(seq(keyword("result"), valType), r => r[1])

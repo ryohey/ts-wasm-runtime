@@ -1,6 +1,6 @@
 import { ASTFunction, func } from "./func"
 import { seq, or, map, many } from "../parser/parser"
-import { keyword, array, atom } from "./utils"
+import { keyword, array } from "./utils"
 import { string, identifier, ASTModuleNode } from "./types"
 
 export interface ASTModule {

@@ -1,9 +1,9 @@
 import * as assert from "assert"
-import { operations } from "./operations"
+import { plainInstructions } from "./operations"
 
-describe("operations", () => {
+describe("plainInstructions", () => {
   it("parses operator get_local with number", () => {
-    const r = operations(["get_local", 0], 0)
+    const r = plainInstructions(["get_local", 0], 0)
     assert.deepEqual(r, [
       true,
       {
@@ -15,7 +15,7 @@ describe("operations", () => {
   })
 
   it("parses operator get_local with identifier", () => {
-    const r = operations(["get_local", "$lhs"], 0)
+    const r = plainInstructions(["get_local", "$lhs"], 0)
     assert.deepEqual(r, [
       true,
       {

@@ -168,4 +168,26 @@ describe("parser", () => {
       6
     ])
   })
+
+  it("parses single folded instruction", () => {
+    const r = funcBody([["get_local", 0]], 0)
+    assert.deepStrictEqual(r, [
+      true,
+      [{ opType: "get_local", parameters: [0] }],
+      1
+    ])
+  })
+
+  it("parses nested folded instruction", () => {
+    const r = funcBody([["i32.add", ["i32.const", 2], ["i32.const", 3]]], 0)
+    assert.deepStrictEqual(r, [
+      true,
+      [
+        { opType: "i32.const", parameters: [2] },
+        { opType: "i32.const", parameters: [3] },
+        { opType: "i32.add", parameters: [] }
+      ],
+      1
+    ])
+  })
 })
