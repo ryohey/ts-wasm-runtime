@@ -8,7 +8,6 @@ import { isString } from "util"
 type IdentifierEntry = { [key: string]: number }
 
 interface IdentifierTables {
-  params: IdentifierEntry
   locals: IdentifierEntry
   labels: IdentifierEntry
   funcs: IdentifierEntry
@@ -23,6 +22,7 @@ const compileInstruction = (
   idTables: IdentifierTables
 ): WASMCode[] => {
   switch (inst.opType) {
+    case "loop":
     case "block": {
       const block = inst as ASTBlock
       return [{ opcode: "_push", parameters: [block.results.length] }]
@@ -44,7 +44,7 @@ const compileInstruction = (
         case "br_if":
           return idTables.labels[p]
         default:
-          return idTables.params[p]
+          return idTables.locals[p]
       }
     }
     return p
@@ -71,7 +71,9 @@ const createIdentifierTables = (ast: ASTFunction) => {
 
   const locals = fromPairs(
     ast.locals
-      .map((p, i) => [p.identifier, i] as [string, number])
+      .map(
+        (p, i) => [p.identifier, ast.parameters.length + i] as [string, number]
+      )
       .filter(e => e[0])
   )
 
@@ -83,8 +85,7 @@ const createIdentifierTables = (ast: ASTFunction) => {
   )
 
   return {
-    params,
-    locals,
+    locals: { ...params, ...locals },
     labels
   }
 }

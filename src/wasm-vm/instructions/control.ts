@@ -35,7 +35,7 @@ export const controlInstructionSet: PartialInstructionSet<
     case "call":
       return (code, memory) => {
         const { functions, values, callStack } = memory
-        const fn = functions.find(f => f.pointer === code.parameters[0])
+        const fn = functions[code.parameters[0]]
 
         // 指定された数のパラメータを values から pop して新しいスタックに積む
         const locals = range(0, code.parameters[0]).map(_ => values.pop())

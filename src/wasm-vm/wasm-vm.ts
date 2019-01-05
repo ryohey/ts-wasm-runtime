@@ -61,7 +61,7 @@ export class WASMVirtualMachine {
     const retAddr = Number.MAX_SAFE_INTEGER
     this.currentMemory.callStack.push(new WASMContext(retAddr))
 
-    const ctx = new WASMContext(fn.pointer, args)
+    const ctx = new WASMContext(fn.pointer, args, fn.results.length)
     this.currentMemory.callStack.push(ctx)
 
     this.vm.run()
