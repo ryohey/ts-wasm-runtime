@@ -79,7 +79,7 @@ const compileBlock = (
   // block の場合はラベルが指す相対アドレスが末尾
   const labelPosition = block.opType === "block" ? body.length : 0
   const prologue = [
-    { opcode: "_push", parameters: [block.results.length, labelPosition + 1] }
+    { opcode: "_push", parameters: [block.results.length, labelPosition] }
   ]
   const epilogue = [{ opcode: "_pop", parameters: [] }]
 
