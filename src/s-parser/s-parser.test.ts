@@ -12,9 +12,14 @@ describe("parser", () => {
     assert.deepEqual(r, [true, 123, 3])
   })
 
-  it("parse number", () => {
+  it("parse float number", () => {
     const r = expression("123.456", 0)
     assert.deepEqual(r, [true, 123.456, 7])
+  })
+
+  it("parse hex number", () => {
+    const r = expression("0x123", 0)
+    assert.deepEqual(r, [true, 291, 5])
   })
 
   it("parse list with single token", () => {
