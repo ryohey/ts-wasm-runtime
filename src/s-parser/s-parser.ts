@@ -5,7 +5,7 @@ export type Element = string | number | ElementArray
 export interface ElementArray extends Array<Element> {}
 
 const number = or(
-  map(regexp(/^-?0x[0-9]+/), r => parseInt(r, 16)),
+  map(regexp(/^-?0x[0-9a-fA-F]+/), r => parseInt(r, 16)),
   map(regexp(/^-?[0-9]+\.?[0-9]*/), parseFloat)
 )
 const text = regexp(/^[a-zA-Z\$][0-9a-zA-Z\._]*/)

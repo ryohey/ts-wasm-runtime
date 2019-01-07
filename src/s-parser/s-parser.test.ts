@@ -18,8 +18,8 @@ describe("parser", () => {
   })
 
   it("parse hex number", () => {
-    const r = expression("0x123", 0)
-    assert.deepEqual(r, [true, 291, 5])
+    const r = expression("0x123F", 0)
+    assert.deepEqual(r, [true, 4671, 6])
   })
 
   it("parse list with single token", () => {
