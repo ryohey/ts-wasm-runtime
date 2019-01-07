@@ -3,8 +3,6 @@ import { compile } from "./compiler"
 import { ASTModule } from "../wat-parser/module"
 import { ValType } from "../wat-parser/types"
 import { watParser } from "../wat-parser"
-import { transform } from "../parser/parser"
-import { parser } from "../s-parser/s-parser"
 
 describe("compiler", () => {
   it("compiles", () => {
@@ -79,7 +77,7 @@ describe("compiler", () => {
     })
   })
   it("replaces identifiers to indices", () => {
-    const ast: ASTModule = transform(parser, watParser)(
+    const ast: ASTModule = watParser(
       `(module
         (func $fib (export "fib") (param $p0 i32) (result i32)
           (local $l0 i32)
