@@ -112,6 +112,7 @@ export const plainInstructions = or(
   op("i64.rot_r"),
   op("f32.rot_r"),
   op("f64.rot_r"),
+  op("i32.eq"),
   op("i64.eq"),
   op("f32.eq"),
   op("f64.eq"),
