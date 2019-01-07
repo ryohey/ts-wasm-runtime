@@ -23,6 +23,7 @@ describe("compiler", () => {
       globals: [],
       memories: [],
       tables: [],
+      types: [],
       functions: [
         {
           nodeType: "func",

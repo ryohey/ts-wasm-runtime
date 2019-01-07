@@ -14,7 +14,7 @@ export interface VMMemory {
  * 利用側が命令セットとプログラムの組み合わせを用意する
  */
 export class VirtualMachine<Code, Memory extends VMMemory> {
-  public verbose: boolean = true
+  public verbose: boolean
   private memory: Memory
   private instructionSet: InstructionSet<Code, Memory>
   private program: Code[] = []
@@ -36,7 +36,11 @@ export class VirtualMachine<Code, Memory extends VMMemory> {
       try {
         instr(code, this.memory)
       } catch (e) {
-        console.error(e.message)
+        console.error(
+          `Exception thrown at ${this.memory.programCounter}: ${
+            e.message
+          } ${JSON.stringify(code)}`
+        )
         break
       }
     }

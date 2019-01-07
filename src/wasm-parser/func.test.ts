@@ -5,12 +5,12 @@ import { parser as sParser } from "../s-parser/s-parser"
 describe("parser", () => {
   it("parse param", () => {
     const r = param(["param", "i32"], 0)
-    assert.deepEqual(r, [true, { identifier: null, type: "i32" }, 2])
+    assert.deepEqual(r, [true, [{ identifier: null, type: "i32" }], 2])
   })
 
   it("parse param with identifier", () => {
     const r = param(["param", "$p2", "f64"], 0)
-    assert.deepEqual(r, [true, { identifier: "$p2", type: "f64" }, 3])
+    assert.deepEqual(r, [true, [{ identifier: "$p2", type: "f64" }], 3])
   })
 
   it("parse function body", () => {
@@ -188,6 +188,73 @@ describe("parser", () => {
         { opType: "i32.add", parameters: [] }
       ],
       1
+    ])
+  })
+
+  it("parses complex function", () => {
+    const sExp = sParser(
+      `(func (export "type-mixed") (param i64 f32 f64 i32 i32)
+      (local f32 i64 i64 f64)
+      (drop (i64.eqz (local.get 0)))
+      (drop (f32.neg (local.get 1)))
+      (drop (f64.neg (local.get 2)))
+      (drop (i32.eqz (local.get 3)))
+      (drop (i32.eqz (local.get 4)))
+      (drop (f32.neg (local.get 5)))
+      (drop (i64.eqz (local.get 6)))
+      (drop (i64.eqz (local.get 7)))
+      (drop (f64.neg (local.get 8)))
+    )`,
+      0
+    )
+    const r = func(sExp[1], 0)
+    assert.deepStrictEqual(r, [
+      true,
+      {
+        body: [
+          { opType: "local.get", parameters: [0] },
+          { opType: "i64.eqz", parameters: [] },
+          { opType: "drop", parameters: [] },
+          { opType: "local.get", parameters: [1] },
+          { opType: "f32.neg", parameters: [] },
+          { opType: "drop", parameters: [] },
+          { opType: "local.get", parameters: [2] },
+          { opType: "f64.neg", parameters: [] },
+          { opType: "drop", parameters: [] },
+          { opType: "drop", parameters: [] },
+          { opType: "drop", parameters: [] },
+          { opType: "local.get", parameters: [5] },
+          { opType: "f32.neg", parameters: [] },
+          { opType: "drop", parameters: [] },
+          { opType: "local.get", parameters: [6] },
+          { opType: "i64.eqz", parameters: [] },
+          { opType: "drop", parameters: [] },
+          { opType: "local.get", parameters: [7] },
+          { opType: "i64.eqz", parameters: [] },
+          { opType: "drop", parameters: [] },
+          { opType: "local.get", parameters: [8] },
+          { opType: "f64.neg", parameters: [] },
+          { opType: "drop", parameters: [] }
+        ],
+        export: "type-mixed",
+        identifier: null,
+        locals: [
+          { identifier: null, type: "f32" },
+          { identifier: null, type: "i64" },
+          { identifier: null, type: "i64" },
+          { identifier: null, type: "f64" }
+        ],
+        nodeType: "func",
+        parameters: [
+          { identifier: null, type: "i64" },
+          { identifier: null, type: "f32" },
+          { identifier: null, type: "f64" },
+          { identifier: null, type: "i32" },
+          { identifier: null, type: "i32" }
+        ],
+        results: []
+      },
+      13
     ])
   })
 })

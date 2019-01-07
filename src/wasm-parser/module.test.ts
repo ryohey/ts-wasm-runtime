@@ -30,6 +30,7 @@ describe("module parser", () => {
         globals: [],
         memories: [],
         tables: [],
+        types: [],
         functions: [
           {
             nodeType: "func",
@@ -89,6 +90,7 @@ describe("module parser", () => {
         globals: [],
         memories: [],
         tables: [],
+        types: [],
         functions: [
           {
             nodeType: "func",
@@ -143,6 +145,64 @@ describe("module parser", () => {
       0
     )
     const r = moduleParser(sExp[1], 0)
-    assert.deepStrictEqual(r, [true])
+    assert.deepStrictEqual(r, [
+      true,
+      {
+        exports: [],
+        functions: [
+          {
+            body: [],
+            export: null,
+            identifier: "$__wasm_call_ctors",
+            locals: [],
+            nodeType: "func",
+            parameters: [],
+            results: []
+          },
+          {
+            body: [],
+            export: "main",
+            identifier: "$main",
+            locals: [],
+            nodeType: "func",
+            parameters: [],
+            results: []
+          }
+        ],
+        globals: [
+          {
+            export: null,
+            identifier: "$g0",
+            mutable: true,
+            nodeType: "global",
+            type: "i32"
+          },
+          {
+            export: "__heap_base",
+            identifier: "$__heap_base",
+            mutable: false,
+            nodeType: "global",
+            type: "i32"
+          },
+          {
+            export: "__data_end",
+            identifier: "$__data_end",
+            mutable: false,
+            nodeType: "global",
+            type: "i32"
+          }
+        ],
+        memories: [
+          { export: "memory", identifier: "$memory", nodeType: "memory" }
+        ],
+        nodeType: "module",
+        tables: [{ export: null, identifier: "$T0", nodeType: "table" }],
+        types: [
+          { identifier: "$t0", nodeType: "type" },
+          { identifier: "$t1", nodeType: "type" }
+        ]
+      },
+      10
+    ])
   })
 })

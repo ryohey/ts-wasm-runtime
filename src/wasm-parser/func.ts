@@ -37,13 +37,13 @@ export interface ASTFunctionInstruction {
 }
 
 export const param = map(
-  seq(keyword("param"), opt(identifier), valType),
-  r => ({ identifier: r[1], type: r[2] } as ASTFunctionParameter)
+  seq(keyword("param"), opt(identifier), many(valType)),
+  r => r[2].map(type => ({ identifier: r[1], type } as ASTFunctionParameter))
 )
 
 export const local = map(
-  seq(keyword("local"), opt(identifier), valType),
-  r => ({ identifier: r[1], type: r[2] } as ASTFunctionLocal)
+  seq(keyword("local"), opt(identifier), many(valType)),
+  r => r[2].map(type => ({ identifier: r[1], type } as ASTFunctionLocal))
 )
 
 export const funcBody = map(many(operations), r => flatten(r))
@@ -63,9 +63,9 @@ export const func: Parser<atom[], ASTFunction> = map(
       nodeType: "func",
       identifier: r[1],
       export: r[2],
-      parameters: r[3] || [],
+      parameters: flatten(r[3] || []),
       results: r[4] ? [r[4]] : [],
-      locals: r[5] || [],
+      locals: flatten(r[5] || []),
       body: r[6] || []
     } as ASTFunction
   }

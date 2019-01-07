@@ -5,6 +5,7 @@ import { ASTExport, moduleExport } from "./export"
 import { ASTGlobal, moduleGlobal } from "./global"
 import { moduleMemory, ASTMemory } from "./memory"
 import { ASTTable, moduleTable } from "./table"
+import { moduleType, ASTType } from "./type"
 
 export interface ASTModule {
   nodeType: "module"
@@ -13,7 +14,7 @@ export interface ASTModule {
   globals: ASTGlobal[]
   memories: ASTMemory[]
   tables: ASTTable[]
-  // types
+  types: ASTType[]
 }
 
 type ASTModuleElement =
@@ -22,6 +23,7 @@ type ASTModuleElement =
   | ASTGlobal
   | ASTMemory
   | ASTTable
+  | ASTType
 
 const isExport = (x: ASTModuleElement): x is ASTExport =>
   x.nodeType === "export"
@@ -31,6 +33,7 @@ const isGlobal = (x: ASTModuleElement): x is ASTGlobal =>
 const isMemory = (x: ASTModuleElement): x is ASTMemory =>
   x.nodeType === "memory"
 const isTable = (x: ASTModuleElement): x is ASTTable => x.nodeType === "table"
+const isType = (x: ASTModuleElement): x is ASTType => x.nodeType === "type"
 
 export const moduleParser = map(
   seq(
@@ -41,7 +44,8 @@ export const moduleParser = map(
         array(func),
         array(moduleGlobal),
         array(moduleMemory),
-        array(moduleTable)
+        array(moduleTable),
+        array(moduleType)
       )
     )
   ),
@@ -52,6 +56,7 @@ export const moduleParser = map(
       exports: r[1].filter(isExport),
       globals: r[1].filter(isGlobal),
       memories: r[1].filter(isMemory),
-      tables: r[1].filter(isTable)
+      tables: r[1].filter(isTable),
+      types: r[1].filter(isType)
     } as ASTModule)
 )

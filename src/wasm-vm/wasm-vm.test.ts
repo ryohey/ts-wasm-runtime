@@ -46,44 +46,4 @@ describe("wasm-vm", () => {
     const memory = vm.callFunction("add", 133, 234)
     assert.deepStrictEqual(memory.values.peek(), 367)
   })
-
-  it("runs fibonacci", () => {
-    const program = wasmTextCompiler(
-      `(module
-        (func $fib (export "fib") (param $p0 i32) (result i32) (local $l0 i32)
-          i32.const 1
-          set_local $l0
-          block $B0
-            get_local $p0
-            i32.const 2
-            i32.lt_u
-            br_if $B0
-            i32.const 1
-            set_local $l0
-            loop $L1
-              get_local $p0
-              i32.const -1
-              i32.add
-              call $fib
-              get_local $l0
-              i32.add
-              set_local $l0
-              get_local $p0
-              i32.const -2
-              i32.add
-              tee_local $p0
-              i32.const 1
-              i32.gt_u
-              br_if $L1
-            end
-          end
-          get_local $l0
-        )
-      )`
-    )
-    const vm = new WASMVirtualMachine()
-    vm.instantiateModule(program[0], program[1])
-    const memory = vm.callFunction("fib", 10)
-    assert.deepStrictEqual(memory.values.peek(), 89)
-  })
 })
