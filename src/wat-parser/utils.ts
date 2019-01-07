@@ -2,9 +2,7 @@
 
 import { Parser } from "../parser/parser"
 import { atom } from "./types"
-
-const isString = (x: any): x is string =>
-  typeof x === "string" || x instanceof String
+import { isString } from "util"
 
 export const keyword = <T extends string>(word: T): Parser<atom[], T> => (
   target,
