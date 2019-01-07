@@ -33,6 +33,11 @@ export type WASMFunctionTableEntry = {
   results: ValType[]
 }
 
+export interface WASMModule {
+  program: WASMCode[]
+  functions: WASMFunctionTableEntry[]
+}
+
 export class WASMMemory implements VMMemory {
   // control instruction のみが直接 stack を触るべき
   readonly callStack = new Stack<WASMContext>()

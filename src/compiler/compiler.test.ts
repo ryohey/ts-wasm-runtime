@@ -58,15 +58,15 @@ describe("compiler", () => {
         }
       ]
     }
-    const codes = compile(ast)
-    assert.deepStrictEqual(codes, [
-      [
+    const module = compile(ast)
+    assert.deepStrictEqual(module, {
+      program: [
         { opcode: "get_local", parameters: [0] },
         { opcode: "get_local", parameters: [1] },
         { opcode: "i32.add", parameters: [] },
         { opcode: "_ret", parameters: [] }
       ],
-      [
+      functions: [
         {
           export: "add",
           locals: [],
@@ -76,7 +76,7 @@ describe("compiler", () => {
           pointer: 0
         }
       ]
-    ])
+    })
   })
   it("replaces identifiers to indices", () => {
     const ast: ASTModule = transform(parser, watParser)(
@@ -114,9 +114,9 @@ describe("compiler", () => {
       `,
       0
     )[1]
-    const codes = compile(ast)
-    assert.deepStrictEqual(codes, [
-      [
+    const module = compile(ast)
+    assert.deepStrictEqual(module, {
+      program: [
         { opcode: "i32.const", parameters: [0] },
         { opcode: "set_local", parameters: [1] },
         { opcode: "i32.const", parameters: [1] },
@@ -148,7 +148,7 @@ describe("compiler", () => {
         { opcode: "get_local", parameters: [1] },
         { opcode: "_ret", parameters: [] }
       ],
-      [
+      functions: [
         {
           export: "fib",
           identifier: "$fib",
@@ -158,6 +158,6 @@ describe("compiler", () => {
           results: ["i32"]
         }
       ]
-    ])
+    })
   })
 })

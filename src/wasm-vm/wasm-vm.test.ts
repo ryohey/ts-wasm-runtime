@@ -18,21 +18,20 @@ const wasmTextCompiler = (text: string) => {
 
 describe("wasm-vm", () => {
   it("hello world", () => {
-    const program = wasmTextCompiler(
+    const module = wasmTextCompiler(
       `(module 
         (func (export "hello") (result i32)
           i32.const 42
         )
       )`
     )
-    const vm = new WASMVirtualMachine()
-    vm.instantiateModule(program[0], program[1])
+    const vm = new WASMVirtualMachine(module)
     const memory = vm.callFunction("hello")
     assert.deepStrictEqual(memory.values.peek(), 42)
   })
 
   it("call add", () => {
-    const program = wasmTextCompiler(
+    const module = wasmTextCompiler(
       `(module 
         (func (export "add") (param i32) (param i32) (result i32)
           get_local 0 
@@ -41,8 +40,7 @@ describe("wasm-vm", () => {
         )
       )`
     )
-    const vm = new WASMVirtualMachine()
-    vm.instantiateModule(program[0], program[1])
+    const vm = new WASMVirtualMachine(module)
     const memory = vm.callFunction("add", 133, 234)
     assert.deepStrictEqual(memory.values.peek(), 367)
   })

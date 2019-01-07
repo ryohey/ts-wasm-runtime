@@ -4,7 +4,8 @@ import {
   WASMMemory,
   PartialInstructionSet,
   WASMContext,
-  WASMFunctionTableEntry
+  WASMFunctionTableEntry,
+  WASMModule
 } from "./wasm-code"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
@@ -40,32 +41,26 @@ const mergeInstructionSet = <T, S>(
 
 export class WASMVirtualMachine {
   private readonly vm = createWASMVM()
-  private currentMemory: WASMMemory
+  private module: WASMModule
 
-  constructor() {}
-
-  instantiateModule(
-    program: WASMCode[],
-    functionTable: WASMFunctionTableEntry[]
-  ) {
-    // TODO: グローバル変数を用意してメモリを生成する
-    this.currentMemory = new WASMMemory(functionTable)
-    this.vm.initialize(program, this.currentMemory)
+  constructor(module: WASMModule) {
+    this.module = module
   }
 
   // export された関数を呼ぶ
   callFunction(name: string, ...args: number[]) {
-    const fn = this.currentMemory.functions.find(t => t.export === name)
+    const memory = new WASMMemory(this.module.functions)
+    const fn = memory.functions.find(t => t.export === name)
 
     // よろしくないけど適当なポインタに return して止める
     const retAddr = Number.MAX_SAFE_INTEGER
-    this.currentMemory.callStack.push(new WASMContext(retAddr))
+    memory.callStack.push(new WASMContext(retAddr))
 
     const ctx = new WASMContext(fn.pointer, fn.results.length)
-    this.currentMemory.callStack.push(ctx)
-    this.currentMemory.localStack.push(args)
+    memory.callStack.push(ctx)
+    memory.localStack.push(args)
 
-    this.vm.run()
-    return this.currentMemory
+    this.vm.run(this.module.program, memory)
+    return memory
   }
 }

@@ -15,29 +15,22 @@ export interface VMMemory {
  */
 export class VirtualMachine<Code, Memory extends VMMemory> {
   public verbose: boolean
-  private memory: Memory
   private instructionSet: InstructionSet<Code, Memory>
-  private program: Code[] = []
 
   constructor(instructionSet: InstructionSet<Code, Memory>) {
     this.instructionSet = instructionSet
   }
 
-  public initialize(program: Code[], memory: Memory) {
-    this.memory = memory
-    this.program = program
-  }
-
-  public run() {
-    while (this.memory.programCounter < this.program.length) {
-      const code = this.program[this.memory.programCounter++]
+  public run(program: Code[], memory: Memory) {
+    while (memory.programCounter < program.length) {
+      const code = program[memory.programCounter++]
       const instr = this.instructionSet(code)
-      this.log(`[${this.memory.programCounter}] run ${JSON.stringify(code)}`)
+      this.log(`[${memory.programCounter}] run ${JSON.stringify(code)}`)
       try {
-        instr(code, this.memory)
+        instr(code, memory)
       } catch (e) {
         console.error(
-          `Exception thrown at ${this.memory.programCounter}: ${
+          `Exception thrown at ${memory.programCounter}: ${
             e.message
           } ${JSON.stringify(code)}`
         )

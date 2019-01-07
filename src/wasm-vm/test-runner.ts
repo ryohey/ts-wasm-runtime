@@ -36,9 +36,8 @@ export const runTests = (code: string) => {
   const testCases = r[1].filter(isAssertReturn)
   const modules = r[1].filter(isModule)
 
-  const vm = new WASMVirtualMachine()
-  const program = compile(modules[0])
-  vm.instantiateModule(program[0], program[1])
+  const module = compile(modules[0])
+  const vm = new WASMVirtualMachine(module)
 
   for (const test of testCases) {
     runTestCase(vm, test)
