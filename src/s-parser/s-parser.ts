@@ -1,14 +1,5 @@
-import {
-  Parser,
-  regexp,
-  or,
-  seq,
-  token,
-  lazy,
-  opt,
-  many,
-  map
-} from "../parser/parser"
+import { Parser, or, seq, lazy, opt, many, map } from "../parser/parser"
+import { regexp, token } from "./util"
 
 export type Element = string | number | ElementArray
 export interface ElementArray extends Array<Element> {}

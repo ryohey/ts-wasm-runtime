@@ -4,22 +4,6 @@ export type Parser<T, S> = (
   position: number
 ) => [boolean, S, number, string?]
 
-export const token = (word: string): Parser<string, string> => (
-  target,
-  position
-) =>
-  target.substr(position, word.length) === word
-    ? [true, word, position + word.length]
-    : [
-        false,
-        null,
-        position,
-        `token@${position}: ${target.substr(
-          position,
-          word.length
-        )} is not ${word}`
-      ]
-
 export function seq<T, P0, P1>(
   ...parsers: [Parser<T, P0>, Parser<T, P1>]
 ): Parser<T, [P0, P1]>
@@ -75,24 +59,6 @@ export function seq<T, S>(...parsers: Parser<T, S>[]): Parser<T, S[]> {
   }
 }
 
-export const regexp = (reg: RegExp): Parser<string, string> => (
-  target,
-  position
-) => {
-  reg.lastIndex = 0
-  const result = reg.exec(target.slice(position))
-  return result
-    ? [true, result[0], position + result[0].length]
-    : [
-        false,
-        null,
-        position,
-        `regexp@${position}: ${target.slice(position)} does not match ${
-          reg.source
-        }`
-      ]
-}
-
 export function or<T, S>(...parsers: Parser<T, S>[]): Parser<T, S>
 export function or<T, P0, P1>(
   ...parsers: [Parser<T, P0>, Parser<T, P1>]
@@ -104,10 +70,23 @@ export function or<T, P0, P1, P2, P3>(
   ...parsers: [Parser<T, P0>, Parser<T, P1>, Parser<T, P2>, Parser<T, P3>]
 ): Parser<T, P0 | P1 | P2 | P3>
 export function or<T, P0, P1, P2, P3, P4>(
-  ...parsers: [Parser<T, P0>, Parser<T, P1>, Parser<T, P2>, Parser<T, P3>, Parser<T, P4>]
+  ...parsers: [
+    Parser<T, P0>,
+    Parser<T, P1>,
+    Parser<T, P2>,
+    Parser<T, P3>,
+    Parser<T, P4>
+  ]
 ): Parser<T, P0 | P1 | P2 | P3 | P4>
 export function or<T, P0, P1, P2, P3, P4, P5>(
-  ...parsers: [Parser<T, P0>, Parser<T, P1>, Parser<T, P2>, Parser<T, P3>, Parser<T, P4>, Parser<T, P5>]
+  ...parsers: [
+    Parser<T, P0>,
+    Parser<T, P1>,
+    Parser<T, P2>,
+    Parser<T, P3>,
+    Parser<T, P4>,
+    Parser<T, P5>
+  ]
 ): Parser<T, P0 | P1 | P2 | P3 | P4 | P5>
 export function or<T>(...parsers: Parser<T, any>[]): Parser<T, any> {
   return (target, position) => {
