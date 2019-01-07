@@ -35,7 +35,7 @@ export const internalInstructionSet: PartialInstructionSet<
     case "_ret":
       return (_, memory) => {
         popStack(memory)
-        memory.local.pop()
+        memory.localStack.pop()
       }
     case "_pop":
       return (_, memory) => {

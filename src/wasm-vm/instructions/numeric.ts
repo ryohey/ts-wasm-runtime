@@ -130,7 +130,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "f32.lt_u":
     case "f64.lt_u":
       return (_, { values }) => {
-        values.push(values.pop() < values.pop() ? 1 : 0)
+        values.push(values.pop() > values.pop() ? 1 : 0)
       }
     case "i32.le_s":
     case "i64.le_s":
@@ -141,7 +141,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "f32.le_u":
     case "f64.le_u":
       return (_, { values }) => {
-        values.push(values.pop() <= values.pop() ? 1 : 0)
+        values.push(values.pop() >= values.pop() ? 1 : 0)
       }
     case "i32.gt_s":
     case "i64.gt_s":
@@ -152,7 +152,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "f32.gt_u":
     case "f64.gt_u":
       return (_, { values }) => {
-        values.push(values.pop() > values.pop() ? 1 : 0)
+        values.push(values.pop() < values.pop() ? 1 : 0)
       }
     case "i32.ge_s":
     case "i64.ge_s":
@@ -163,7 +163,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "f32.ge_u":
     case "f64.ge_u":
       return (_, { values }) => {
-        values.push(values.pop() >= values.pop() ? 1 : 0)
+        values.push(values.pop() <= values.pop() ? 1 : 0)
       }
     case "i32.clz":
     case "i64.clz":

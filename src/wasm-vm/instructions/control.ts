@@ -47,12 +47,14 @@ export const controlInstructionSet: PartialInstructionSet<
         // the compiler use _pop and _ret
       }
     case "call":
-      return ({ parameters: [parameterCount] }, memory) => {
+      return ({ parameters: [funcId] }, memory) => {
         const { functions, values, callStack } = memory
-        const fn = functions[parameterCount]
+        const fn = functions[funcId]
 
         // 指定された数のパラメータを values から pop して新しいスタックに積む
-        memory.localStack.push(range(0, parameterCount).map(_ => values.pop()))
+        memory.localStack.push(
+          range(0, fn.parameters.length).map(_ => values.pop())
+        )
 
         const ctx = new WASMContext(fn.pointer, fn.results.length)
         callStack.push(ctx)
