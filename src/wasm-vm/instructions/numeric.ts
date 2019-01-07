@@ -41,74 +41,52 @@ export const numericInstructionSet: PartialInstructionSet<
       }
     case "i32.div_s":
     case "i64.div_s":
-    case "f32.div_s":
-    case "f64.div_s":
     case "i32.div_u":
     case "i64.div_u":
-    case "f32.div_u":
-    case "f64.div_u":
+    case "f32.div":
+    case "f64.div":
       return (_, { values }) => {
         values.push(values.pop() / values.pop())
       }
     case "i32.rem_s":
     case "i64.rem_s":
-    case "f32.rem_s":
-    case "f64.rem_s":
     case "i32.rem_u":
     case "i64.rem_u":
-    case "f32.rem_u":
-    case "f64.rem_u":
       return (_, { values }) => {
         values.push(values.pop() % values.pop())
       }
     case "i32.and":
     case "i64.and":
-    case "f32.and":
-    case "f64.and":
       return (_, { values }) => {
         values.push(values.pop() & values.pop())
       }
     case "i32.or":
     case "i64.or":
-    case "f32.or":
-    case "f64.or":
       return (_, { values }) => {
         values.push(values.pop() | values.pop())
       }
     case "i32.xor":
     case "i64.xor":
-    case "f32.xor":
-    case "f64.xor":
       return (_, { values }) => {
         values.push(values.pop() ^ values.pop())
       }
     case "i32.shl":
     case "i64.shl":
-    case "f32.shl":
-    case "f64.shl":
       return (_, { values }) => {
         values.push(values.pop() << values.pop())
       }
     case "i32.shr_s":
     case "i64.shr_s":
-    case "f32.shr_s":
-    case "f64.shr_s":
     case "i32.shr_u":
     case "i64.shr_u":
-    case "f32.shr_u":
-    case "f64.shr_u":
       return (_, { values }) => {
         values.push(values.pop() >> values.pop())
       }
     case "i32.rot_l":
     case "i64.rot_l":
-    case "f32.rot_l":
-    case "f64.rot_l":
       throw new Error("not implemented")
     case "i32.rot_r":
     case "i64.rot_r":
-    case "f32.rot_r":
-    case "f64.rot_r":
       throw new Error("not implemented")
     case "i32.eq":
     case "i64.eq":
@@ -126,45 +104,37 @@ export const numericInstructionSet: PartialInstructionSet<
       }
     case "i32.lt_s":
     case "i64.lt_s":
-    case "f32.lt_s":
-    case "f64.lt_s":
     case "i32.lt_u":
     case "i64.lt_u":
-    case "f32.lt_u":
-    case "f64.lt_u":
+    case "f32.lt":
+    case "f64.lt":
       return (_, { values }) => {
         values.push(values.pop() > values.pop() ? 1 : 0)
       }
     case "i32.le_s":
     case "i64.le_s":
-    case "f32.le_s":
-    case "f64.le_s":
     case "i32.le_u":
     case "i64.le_u":
-    case "f32.le_u":
-    case "f64.le_u":
+    case "f32.le":
+    case "f64.le":
       return (_, { values }) => {
         values.push(values.pop() >= values.pop() ? 1 : 0)
       }
     case "i32.gt_s":
     case "i64.gt_s":
-    case "f32.gt_s":
-    case "f64.gt_s":
     case "i32.gt_u":
     case "i64.gt_u":
-    case "f32.gt_u":
-    case "f64.gt_u":
+    case "f32.gt":
+    case "f64.gt":
       return (_, { values }) => {
         values.push(values.pop() < values.pop() ? 1 : 0)
       }
     case "i32.ge_s":
     case "i64.ge_s":
-    case "f32.ge_s":
-    case "f64.ge_s":
     case "i32.ge_u":
     case "i64.ge_u":
-    case "f32.ge_u":
-    case "f64.ge_u":
+    case "f32.ge":
+    case "f64.ge":
       return (_, { values }) => {
         values.push(values.pop() <= values.pop() ? 1 : 0)
       }
@@ -191,8 +161,6 @@ export const numericInstructionSet: PartialInstructionSet<
       }
     case "i32.eqz":
     case "i64.eqz":
-    case "f32.eqz":
-    case "f64.eqz":
       return (_, { values }) => {
         values.push(values.pop() === 0 ? 1 : 0)
       }
