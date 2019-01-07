@@ -66,6 +66,20 @@
     ))
   )
 
+  (func (export "break-inner") (result i32)
+    (local i32)
+    (local.set 0 (i32.const 0))
+    (local.set 0 (i32.add (local.get 0) (block (result i32) (block (result i32) (br 1 (i32.const 1))))))
+    (local.set 0 (i32.add (local.get 0) (block (result i32) (block (br 0)) (i32.const 2))))
+    (local.set 0
+      (i32.add (local.get 0) (block (result i32) (i32.ctz (br 0 (i32.const 4)))))
+    )
+    (local.set 0
+      (i32.add (local.get 0) (block (result i32) (i32.ctz (block (result i32) (br 1 (i32.const 0x8))))))
+    )
+    (local.get 0)
+  )
+
   (func (export "effects") (result i32)
     (local i32)
     (block
@@ -84,5 +98,7 @@
 (assert_return (invoke "multi") (i32.const 8))
 (assert_return (invoke "nested") (i32.const 9))
 (assert_return (invoke "deep") (i32.const 150))
+
+(assert_return (invoke "break-inner") (i32.const 0xf))
 
 (assert_return (invoke "effects") (i32.const 1))
