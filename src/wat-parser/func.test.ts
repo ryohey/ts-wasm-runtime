@@ -191,19 +191,11 @@ describe("parser", () => {
     ])
   })
 
-  it("parses complex function", () => {
+  it("parses function with abbreviated parameters", () => {
     const sExp = sParser(
       `(func (export "type-mixed") (param i64 f32 f64 i32 i32)
       (local f32 i64 i64 f64)
       (drop (i64.eqz (local.get 0)))
-      (drop (f32.neg (local.get 1)))
-      (drop (f64.neg (local.get 2)))
-      (drop (i32.eqz (local.get 3)))
-      (drop (i32.eqz (local.get 4)))
-      (drop (f32.neg (local.get 5)))
-      (drop (i64.eqz (local.get 6)))
-      (drop (i64.eqz (local.get 7)))
-      (drop (f64.neg (local.get 8)))
     )`,
       0
     )
@@ -214,30 +206,6 @@ describe("parser", () => {
         body: [
           { opType: "local.get", parameters: [0] },
           { opType: "i64.eqz", parameters: [] },
-          { opType: "drop", parameters: [] },
-          { opType: "local.get", parameters: [1] },
-          { opType: "f32.neg", parameters: [] },
-          { opType: "drop", parameters: [] },
-          { opType: "local.get", parameters: [2] },
-          { opType: "f64.neg", parameters: [] },
-          { opType: "drop", parameters: [] },
-          { opType: "local.get", parameters: [3] },
-          { opType: "i32.eqz", parameters: [] },
-          { opType: "drop", parameters: [] },
-          { opType: "local.get", parameters: [4] },
-          { opType: "i32.eqz", parameters: [] },
-          { opType: "drop", parameters: [] },
-          { opType: "local.get", parameters: [5] },
-          { opType: "f32.neg", parameters: [] },
-          { opType: "drop", parameters: [] },
-          { opType: "local.get", parameters: [6] },
-          { opType: "i64.eqz", parameters: [] },
-          { opType: "drop", parameters: [] },
-          { opType: "local.get", parameters: [7] },
-          { opType: "i64.eqz", parameters: [] },
-          { opType: "drop", parameters: [] },
-          { opType: "local.get", parameters: [8] },
-          { opType: "f64.neg", parameters: [] },
           { opType: "drop", parameters: [] }
         ],
         export: "type-mixed",
@@ -258,7 +226,7 @@ describe("parser", () => {
         ],
         results: []
       },
-      13
+      5
     ])
   })
 })
