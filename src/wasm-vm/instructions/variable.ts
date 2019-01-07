@@ -21,6 +21,7 @@ export const variableInstructionSet: PartialInstructionSet<
         local[code.parameters[0]] = values.pop()
       }
     case "tee_local":
+    case "local.tee":
       return (code, { values, local }) => {
         local[code.parameters[0]] = values.peek()
       }
