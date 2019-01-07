@@ -25,7 +25,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "f32.sub":
     case "f64.sub":
       return (_, { values }) => {
-        values.push(values.pop() - values.pop())
+        values.push(-values.pop() + values.pop())
       }
     case "i32.mul":
     case "i64.mul":
