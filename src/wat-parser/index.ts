@@ -1,3 +1,3 @@
 import { moduleParser } from "./module"
 
-export const wasmParser = moduleParser
+export const watParser = moduleParser

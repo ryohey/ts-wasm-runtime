@@ -1,6 +1,6 @@
 import { Instruction, VMMemory } from "../vm/vm"
 import { Stack } from "./stack"
-import { ValType } from "../wasm-parser/types"
+import { ValType } from "../wat-parser/types"
 
 export interface WASMCode {
   readonly opcode: string

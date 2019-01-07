@@ -1,7 +1,7 @@
-import { wastParser } from "../wasm-parser/wast"
-import { ASTModuleNode } from "../wasm-parser/types"
-import { ASTModule } from "../wasm-parser/module"
-import { ASTAssertReturn } from "../wasm-parser/assert"
+import { wastParser } from "../wat-parser/wast"
+import { ASTModuleNode } from "../wat-parser/types"
+import { ASTModule } from "../wat-parser/module"
+import { ASTAssertReturn } from "../wat-parser/assert"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { compile } from "../compiler/compiler"
 
