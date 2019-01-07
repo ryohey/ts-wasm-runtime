@@ -1,4 +1,9 @@
 import { PartialInstructionSet, WASMCode, WASMLocalMemory } from "../wasm-code"
+import {
+  countLeadingZeros,
+  countTrailingZeros,
+  popCount
+} from "../../misc/number"
 
 // https://webassembly.github.io/spec/core/syntax/instructions.html#numeric-instructions
 export const numericInstructionSet: PartialInstructionSet<
@@ -99,14 +104,12 @@ export const numericInstructionSet: PartialInstructionSet<
     case "i64.rot_l":
     case "f32.rot_l":
     case "f64.rot_l":
-      // TODO:
-      return null
+      throw new Error("not implemented")
     case "i32.rot_r":
     case "i64.rot_r":
     case "f32.rot_r":
     case "f64.rot_r":
-      // TODO:
-      return null
+      throw new Error("not implemented")
     case "i32.eq":
     case "i64.eq":
     case "f32.eq":
@@ -166,23 +169,26 @@ export const numericInstructionSet: PartialInstructionSet<
         values.push(values.pop() <= values.pop() ? 1 : 0)
       }
     case "i32.clz":
+      return (_, { values }) => {
+        values.push(countLeadingZeros(values.pop(), 32))
+      }
     case "i64.clz":
-    case "f32.clz":
-    case "f64.clz":
-      // TODO:
-      return null
+      return (_, { values }) => {
+        values.push(countLeadingZeros(values.pop(), 64))
+      }
     case "i32.ctz":
+      return (_, { values }) => {
+        values.push(countTrailingZeros(values.pop(), 32))
+      }
     case "i64.ctz":
-    case "f32.ctz":
-    case "f64.ctz":
-      // TODO:
-      return null
+      return (_, { values }) => {
+        values.push(countTrailingZeros(values.pop(), 64))
+      }
     case "i32.popcnt":
     case "i64.popcnt":
-    case "f32.popcnt":
-    case "f64.popcnt":
-      // TODO:
-      return null
+      return (_, { values }) => {
+        return values.push(popCount(values.pop()))
+      }
     case "i32.eqz":
     case "i64.eqz":
     case "f32.eqz":
@@ -202,8 +208,7 @@ export const numericInstructionSet: PartialInstructionSet<
       }
     case "f32.copysign":
     case "f64.copysign":
-      // TODO:
-      return null
+      throw new Error("not implemented")
     case "f32.ceil":
     case "f64.ceil":
       return (_, { values }) => {
@@ -216,12 +221,10 @@ export const numericInstructionSet: PartialInstructionSet<
       }
     case "f32.trunc":
     case "f64.trunc":
-      // TODO:
-      return null
+      throw new Error("not implemented")
     case "f32.nearest":
     case "f64.nearest":
-      // TODO:
-      return null
+      throw new Error("not implemented")
     case "f32.sqrt":
     case "f64.sqrt":
       return (_, { values }) => {
@@ -262,10 +265,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "f64.convert_u/i32":
     case "f64.convert_u/i64":
     case "f64.reinterpret/i64":
-      return (_, { values }) => {
-        // TODO
-        values.push(values.pop())
-      }
+      throw new Error("not implemented")
   }
   return null
 }

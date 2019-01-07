@@ -23,13 +23,13 @@ export const controlInstructionSet: PartialInstructionSet<
     case "nop":
       return () => {}
     case "unreachable":
-      return null
+      throw new Error("not implemented")
     case "block":
-      return null
+      throw new Error("use _push")
     case "loop":
-      return null
+      throw new Error("use _push")
     case "if":
-      return null
+      throw new Error("not implemented")
     case "br":
       return br
     case "br_if":
@@ -40,12 +40,9 @@ export const controlInstructionSet: PartialInstructionSet<
         }
       }
     case "br_table":
-      return null
+      throw new Error("not implemented")
     case "return":
-      return () => {
-        // do nothing
-        // the compiler use _pop and _ret
-      }
+      throw new Error("use _ret")
     case "call":
       return ({ parameters: [funcId] }, memory) => {
         const { functions, values, callStack } = memory
@@ -60,7 +57,7 @@ export const controlInstructionSet: PartialInstructionSet<
         callStack.push(ctx)
       }
     case "call_indirect":
-      return null
+      throw new Error("not implemented")
   }
   return null
 }

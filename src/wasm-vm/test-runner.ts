@@ -11,6 +11,7 @@ const isAssertReturn = (n: ASTModuleNode): n is ASTAssertReturn =>
 const isModule = (n: ASTModuleNode): n is ASTModule => n.nodeType === "module"
 
 const runTestCase = (vm: WASMVirtualMachine, ast: ASTAssertReturn) => {
+  console.log(`Testing ${ast.invoke}...`)
   const mem = vm.callFunction(
     ast.invoke,
     ...ast.args.map(a => a.parameters[0] as number)
