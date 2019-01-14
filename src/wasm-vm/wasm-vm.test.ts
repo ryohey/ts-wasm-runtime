@@ -17,7 +17,7 @@ describe("wasm-vm", () => {
       )`
     )
     const vm = new WASMVirtualMachine(module)
-    assert.deepStrictEqual(vm.callFunction("hello"), 42)
+    assert.deepStrictEqual(vm.callFunction("hello"), [{ i32: "42" }])
   })
 
   it("call add", () => {
@@ -31,6 +31,9 @@ describe("wasm-vm", () => {
       )`
     )
     const vm = new WASMVirtualMachine(module)
-    assert.deepStrictEqual(vm.callFunction("add", 133, 234), 367)
+    assert.deepStrictEqual(
+      vm.callFunction("add", { i32: "133" }, { i32: "234" }),
+      [{ i32: "367" }]
+    )
   })
 })

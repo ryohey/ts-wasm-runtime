@@ -6,6 +6,7 @@ import {
 } from "../wasm-code"
 import { range } from "../../misc/array"
 import { popStack } from "./internal"
+import { Int32 } from "../../number/Int32"
 
 const br = ({ parameters }: WASMCode, memory: WASMMemory) => {
   const nestLevel = parameters[0] as number
@@ -36,7 +37,7 @@ export const controlInstructionSet: PartialInstructionSet<
     case "br_if":
       return (code, memory) => {
         const { values } = memory
-        if (values.pop() !== 0) {
+        if (!Int32.isZero(values.pop())) {
           br(code, memory)
         }
       }

@@ -19,6 +19,10 @@ export class Int32 {
     return this.value
   }
 
+  toInt(): Int32Value {
+    return { i32: this.toString(10) }
+  }
+
   static int = (value: Int32Value): Int32 =>
     new Int32(parseInt(value.i32, value.isHex ? 16 : 10))
   static hex = (value: string): Int32 => new Int32(parseInt(value, 16))

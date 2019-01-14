@@ -13,6 +13,7 @@ import { numericInstructionSet } from "./instructions/numeric"
 import { controlInstructionSet } from "./instructions/control"
 import { internalInstructionSet } from "./instructions/internal"
 import { Int32 } from "../number/Int32"
+import { Int32Value } from "../wat-parser/types"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -49,7 +50,7 @@ export class WASMVirtualMachine {
   }
 
   // export された関数を呼ぶ
-  callFunction(name: string, ...args: number[]) {
+  callFunction(name: string, ...args: Int32Value[]): Int32Value[] {
     const memory = new WASMMemory(this.module.functions)
     const fn = memory.functions.find(t => t.export === name)
 
@@ -59,13 +60,9 @@ export class WASMVirtualMachine {
 
     const ctx = new WASMContext(fn.pointer, fn.results.length)
     memory.callStack.push(ctx)
-
-    // TODO: convert to function's parameter types
-    memory.localStack.push(args.map(v => new Int32(v)))
+    memory.localStack.push(args.map(v => Int32.int(v)))
 
     this.vm.run(this.module.program, memory)
-
-    const result = fn.results.map(_ => memory.values.pop().toNumber())
-    return result.length === 1 ? result[0] : result
+    return fn.results.map(_ => memory.values.pop().toInt())
   }
 }
