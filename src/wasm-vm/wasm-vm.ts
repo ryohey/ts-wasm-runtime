@@ -4,16 +4,18 @@ import {
   WASMMemory,
   PartialInstructionSet,
   WASMContext,
-  WASMFunctionTableEntry,
   WASMModule
 } from "./wasm-code"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
-import { numericInstructionSet } from "./instructions/numeric"
+import { f64InstructionSet } from "./instructions/f64"
 import { controlInstructionSet } from "./instructions/control"
 import { internalInstructionSet } from "./instructions/internal"
 import { Int32 } from "../number/Int32"
 import { Int32Value } from "../wat-parser/types"
+import { i32InstructionSet } from "./instructions/i32"
+import { i64InstructionSet } from "./instructions/i64"
+import { f32InstructionSet } from "./instructions/f32"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -22,8 +24,11 @@ const createWASMVM = (): VirtualMachine<WASMCode, WASMMemory> => {
   const instructionSet = mergeInstructionSet(
     memoryInstructionSet as WASMInstructionSet,
     variableInstructionSet as WASMInstructionSet,
-    numericInstructionSet as WASMInstructionSet,
-    internalInstructionSet as WASMInstructionSet,
+    i32InstructionSet as WASMInstructionSet,
+    i64InstructionSet as WASMInstructionSet,
+    f32InstructionSet as WASMInstructionSet,
+    f64InstructionSet as WASMInstructionSet,
+    internalInstructionSet,
     controlInstructionSet
   )
   return new VirtualMachine(instructionSet)

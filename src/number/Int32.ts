@@ -18,13 +18,8 @@ export class Int32 {
     return sign + abs.value.toString(radix)
   }
 
-  toNumber() {
-    return this.value
-  }
-
-  toInt(): Int32Value {
-    return { i32: this.toString(10) }
-  }
+  toNumber = () => this.value
+  toInt = (): Int32Value => ({ i32: this.toString(10) })
 
   static int = (value: Int32Value): Int32 =>
     new Int32(parseInt(value.i32, value.isHex ? 16 : 10))
