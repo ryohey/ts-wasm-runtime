@@ -3,7 +3,7 @@ import { plainInstructions } from "./operations"
 
 describe("plainInstructions", () => {
   it("parses operator get_local with number", () => {
-    const r = plainInstructions(["get_local", 0], 0)
+    const r = plainInstructions(["get_local", { int: "0" }], 0)
     assert.deepEqual(r, [
       true,
       {

@@ -1,6 +1,6 @@
 import { map, seq, opt } from "../parser/parser"
-import { ASTModuleNode, string, identifier } from "./types"
-import { keyword, array, num } from "./utils"
+import { ASTModuleNode, string, identifier, num } from "./types"
+import { keyword, array } from "./utils"
 
 export interface ASTMemory extends ASTModuleNode {
   nodeType: "memory"

@@ -9,17 +9,17 @@ describe("parser", () => {
 
   it("parse number", () => {
     const r = expression("123", 0)
-    assert.deepEqual(r, [true, 123, 3])
+    assert.deepEqual(r, [true, { int: "123" }, 3])
   })
 
   it("parse float number", () => {
     const r = expression("123.456", 0)
-    assert.deepEqual(r, [true, 123.456, 7])
+    assert.deepEqual(r, [true, { float: "123.456" }, 7])
   })
 
   it("parse hex number", () => {
     const r = expression("0x123F", 0)
-    assert.deepEqual(r, [true, 4671, 6])
+    assert.deepEqual(r, [true, { hex: "0x123F" }, 6])
   })
 
   it("parse list with single token", () => {
@@ -81,12 +81,17 @@ describe("parser", () => {
     )`,
       0
     )
-
     assert.deepStrictEqual(r, [
       true,
       [
         "module",
-        ["func", ["export", '"hello"'], ["result", "i32"], "i32.const", 42]
+        [
+          "func",
+          ["export", '"hello"'],
+          ["result", "i32"],
+          "i32.const",
+          { int: "42" }
+        ]
       ],
       85
     ])
@@ -99,7 +104,17 @@ describe("parser", () => {
       `,
       0
     )
-
     assert.deepStrictEqual(r, [true, [["aa", "bb"], ["c", "d"]], 26])
+  })
+
+  it("parses with comments", () => {
+    const r = parser(
+      `;; comment
+         (a (b ;;yes (x y)
+          c))
+      `,
+      0
+    )
+    assert.deepEqual(r, [true, ["a", ["b", "c"]], 51])
   })
 })

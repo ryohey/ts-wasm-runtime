@@ -1,4 +1,4 @@
-import { map, seq, opt, Parser, or, many } from "../parser/parser"
+import { map, seq, opt, Parser, many } from "../parser/parser"
 import { keyword, array } from "./utils"
 import {
   valType,
@@ -6,11 +6,23 @@ import {
   identifier,
   string,
   ValType,
-  atom,
-  blockType
+  blockType,
+  Int32Value,
+  Int64Value,
+  Float32Value,
+  Float64Value
 } from "./types"
 import { operations } from "./operations"
 import { flatten } from "../misc/array"
+import { Element } from "../s-parser/s-parser"
+
+export type AnyParameter =
+  | string
+  | number
+  | Int32Value
+  | Int64Value
+  | Float32Value
+  | Float64Value
 
 export interface ASTFunction extends ASTModuleNode {
   nodeType: "func"
@@ -18,7 +30,7 @@ export interface ASTFunction extends ASTModuleNode {
   export: string | null
   parameters: ASTFunctionParameter[]
   results: ValType[]
-  body: ASTFunctionInstruction[]
+  body: ASTFunctionInstruction<AnyParameter>[]
   locals: ASTFunctionLocal[]
 }
 
@@ -31,9 +43,9 @@ export interface ASTFunctionLocal {
   type: ValType
 }
 
-export interface ASTFunctionInstruction {
+export interface ASTFunctionInstruction<T> {
   opType: string
-  parameters: (string | number)[]
+  parameters: T[]
 }
 
 export const param = map(
@@ -48,7 +60,7 @@ export const local = map(
 
 export const funcBody = map(many(operations), r => flatten(r))
 
-export const func: Parser<atom[], ASTFunction> = map(
+export const func: Parser<Element[], ASTFunction> = map(
   seq(
     keyword("func"),
     opt(identifier),

@@ -135,7 +135,12 @@ describe("parser", () => {
     assert.deepStrictEqual(r, [
       true,
       {
-        body: [{ opType: "i32.const", parameters: [42] }],
+        body: [
+          {
+            opType: "i32.const",
+            parameters: [{ i32: "42" }]
+          }
+        ],
         export: "hello",
         identifier: null,
         nodeType: "func",
@@ -170,7 +175,7 @@ describe("parser", () => {
   })
 
   it("parses single folded instruction", () => {
-    const r = funcBody([["get_local", 0]], 0)
+    const r = funcBody([["get_local", { int: "0" }]], 0)
     assert.deepStrictEqual(r, [
       true,
       [{ opType: "get_local", parameters: [0] }],
@@ -179,12 +184,15 @@ describe("parser", () => {
   })
 
   it("parses nested folded instruction", () => {
-    const r = funcBody([["i32.add", ["i32.const", 2], ["i32.const", 3]]], 0)
+    const r = funcBody(
+      [["i32.add", ["i32.const", { int: "2" }], ["i32.const", { int: "3" }]]],
+      0
+    )
     assert.deepStrictEqual(r, [
       true,
       [
-        { opType: "i32.const", parameters: [2] },
-        { opType: "i32.const", parameters: [3] },
+        { opType: "i32.const", parameters: [{ i32: "2" }] },
+        { opType: "i32.const", parameters: [{ i32: "3" }] },
         { opType: "i32.add", parameters: [] }
       ],
       1

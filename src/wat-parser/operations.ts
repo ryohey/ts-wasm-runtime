@@ -1,61 +1,71 @@
 import { or, seq, many, map, Parser, lazy, opt } from "../parser/parser"
 import { keyword, array } from "./utils"
-import { operand, atom } from "./types"
-import { ASTFunctionInstruction } from "./func"
+import { int32, int64, float32, float64, indices } from "./types"
+import { ASTFunctionInstruction, AnyParameter } from "./func"
 import { blockInstructions } from "./block"
 import { flatten } from "../misc/array"
+import { Element } from "../s-parser/s-parser"
 
 // operation with no parameters
-const op = (str: string): Parser<atom[], ASTFunctionInstruction> =>
+const op = (str: string): Parser<Element[], ASTFunctionInstruction<number>> =>
   map(keyword(str), r => ({
     opType: r,
     parameters: []
   }))
 
 // operation with single parameter
-const op1 = (str: string): Parser<atom[], ASTFunctionInstruction> =>
-  map(seq(keyword(str), operand), r => ({
+const op1 = <T>(
+  str: string,
+  parser: Parser<Element[], T>
+): Parser<Element[], ASTFunctionInstruction<T>> =>
+  map(seq(keyword(str), parser), r => ({
     opType: r[0],
     parameters: [r[1]]
   }))
 
-const opN = (str: string): Parser<atom[], ASTFunctionInstruction> =>
-  map(seq(keyword(str), many(operand)), r => ({
+const opN = <T>(
+  str: string,
+  parser: Parser<Element[], T>
+): Parser<Element[], ASTFunctionInstruction<T>> =>
+  map(seq(keyword(str), many(parser)), r => ({
     opType: r[0],
     parameters: r[1]
   }))
 
 export const constInstructions = or(
-  op1("i32.const"),
-  op1("i64.const"),
-  op1("f32.const"),
-  op1("f64.const")
+  op1("i32.const", int32),
+  op1("i64.const", int64),
+  op1("f32.const", float32),
+  op1("f64.const", float64)
 )
 
-export const plainInstructions = or(
+export const plainInstructions = or<
+  Element[],
+  ASTFunctionInstruction<AnyParameter>
+>(
   constInstructions,
   op("nop"),
   op("unreachable"),
-  op1("br"),
-  op1("br_if"),
-  opN("br_table"),
-  op1("call"),
-  op("call_indirect"),
+  op1("br", indices),
+  op1("br_if", indices),
+  opN("br_table", indices),
+  op1("call", indices),
+  op1("call_indirect", indices),
   op("drop"),
   op("select"),
 
-  op1("local.get"),
-  op1("local.set"),
-  op1("get_local"),
-  op1("set_local"),
+  op1("local.get", indices),
+  op1("local.set", indices),
+  op1("get_local", indices),
+  op1("set_local", indices),
 
-  op1("local.tee"),
-  op1("tee_local"),
+  op1("local.tee", indices),
+  op1("tee_local", indices),
 
-  op1("global.get"),
-  op1("global.set"),
-  op1("get_global"),
-  op1("set_global"),
+  op1("global.get", indices),
+  op1("global.set", indices),
+  op1("get_global", indices),
+  op1("set_global", indices),
 
   op("i32.add"),
   op("i64.add"),
@@ -275,7 +285,10 @@ const foldedInstructions = map(
   r => [...(r[1] ? r[1] : []), r[0]]
 )
 
-export const operations: Parser<atom[], ASTFunctionInstruction[]> = or(
+export const operations: Parser<
+  Element[],
+  ASTFunctionInstruction<AnyParameter>[]
+> = or(
   lazy(() => blockInstructions),
   map(plainInstructions, r => [r]),
   foldedInstructions

@@ -3,11 +3,16 @@ import {
   WASMFunctionTableEntry,
   WASMModule
 } from "../wasm-vm/wasm-code"
-import { ASTFunction, ASTFunctionInstruction } from "../wat-parser/func"
+import {
+  ASTFunction,
+  ASTFunctionInstruction,
+  AnyParameter
+} from "../wat-parser/func"
 import { ASTModule } from "../wat-parser/module"
 import { flatten, fromPairs } from "../misc/array"
 import { ASTBlock } from "../wat-parser/block"
 import { isString } from "util"
+import { Int32Value, NumberValue, ValType } from "../wat-parser/types"
 
 type IdentifierEntry = { [key: string]: number }
 
@@ -25,12 +30,12 @@ const indexFromLast = <T>(arr: T[], pred: (item: T) => boolean): number => {
   return -1
 }
 
-const isIdentifier = (v: string | number): v is string => {
+const isIdentifier = (v: AnyParameter): v is string => {
   return isString(v) && v.startsWith("$")
 }
 
 const compileInstruction = (
-  inst: ASTFunctionInstruction,
+  inst: ASTFunctionInstruction<AnyParameter>,
   idTables: IdentifierTables,
   labelStack: string[]
 ): WASMCode[] => {
@@ -108,6 +113,19 @@ const createLocalTables = (ast: ASTFunction) => {
   return { ...params, ...locals }
 }
 
+const numberValue = (type: ValType, value: string): NumberValue => {
+  switch (type) {
+    case ValType.i32:
+      return { [type]: value }
+    case ValType.i64:
+      return { [type]: value }
+    case ValType.f32:
+      return { [type]: value }
+    case ValType.f64:
+      return { [type]: value }
+  }
+}
+
 const compileFunction = (
   ast: ASTFunction,
   funcs: IdentifierEntry
@@ -117,7 +135,10 @@ const compileFunction = (
   const prologue: WASMCode[] = flatten(
     // initialize local values
     ast.locals.map((l, i) => [
-      { opcode: `${l.type}.const`, parameters: [0] },
+      {
+        opcode: `${l.type}.const`,
+        parameters: [numberValue(l.type, "0")]
+      },
       { opcode: "set_local", parameters: [i + ast.parameters.length] }
     ])
   )

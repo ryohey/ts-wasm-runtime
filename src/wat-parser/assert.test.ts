@@ -5,7 +5,7 @@ import { assertionParser } from "./assert"
 describe("assertParser", () => {
   it("parses assert_return", () => {
     const sExp = sParser(
-      `(assert_return (invoke "8u_good1" (i32.const 0)) (i32.const 97))`,
+      `(assert_return (invoke "8u_good1" (i32.const 0) (i32.const 1)) (i32.const 97))`,
       0
     )
     const r = assertionParser(sExp[1], 0)
@@ -17,10 +17,14 @@ describe("assertParser", () => {
         args: [
           {
             opType: "i32.const",
-            parameters: [0]
+            parameters: [{ i32: "0" }]
+          },
+          {
+            opType: "i32.const",
+            parameters: [{ i32: "1" }]
           }
         ],
-        expected: [{ opType: "i32.const", parameters: [97] }]
+        expected: [{ opType: "i32.const", parameters: [{ i32: "97" }] }]
       },
       3
     ])

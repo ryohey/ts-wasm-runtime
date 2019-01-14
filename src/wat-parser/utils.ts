@@ -1,10 +1,15 @@
-// Utilities for Parser<atom[]>
+// Utilities for Parser<Element[]>
 
 import { Parser } from "../parser/parser"
-import { atom } from "./types"
 import { isString } from "util"
+import {
+  IntElement,
+  HexElement,
+  FloatElement,
+  Element
+} from "../s-parser/s-parser"
 
-export const keyword = <T extends string>(word: T): Parser<atom[], T> => (
+export const keyword = <T extends string>(word: T): Parser<Element[], T> => (
   target,
   position
 ) => {
@@ -19,7 +24,7 @@ export const keyword = <T extends string>(word: T): Parser<atom[], T> => (
   ]
 }
 
-export const regexp = (reg: RegExp): Parser<atom[], string> => (
+export const regexp = (reg: RegExp): Parser<Element[], string> => (
   target,
   position
 ) => {
@@ -45,10 +50,9 @@ export const regexp = (reg: RegExp): Parser<atom[], string> => (
 }
 
 // 配列内を渡された parser でパースする
-export const array = <T>(parser: Parser<atom[], T>): Parser<atom[], T> => (
-  target,
-  position
-) => {
+export const array = <T>(
+  parser: Parser<Element[], T>
+): Parser<Element[], T> => (target, position) => {
   const arr = target[position]
   if (!Array.isArray(arr)) {
     return [false, null, position, `array@${position}: ${target} is not array`]
@@ -60,10 +64,22 @@ export const array = <T>(parser: Parser<atom[], T>): Parser<atom[], T> => (
   return [false, null, position, result[3]]
 }
 
-export const num: Parser<atom[], number> = (target, position) => {
+export const isIntElement = (v: any): v is IntElement => {
+  return v instanceof Object && "int" in v
+}
+export const isHexElement = (v: any): v is HexElement => {
+  return v instanceof Object && "hex" in v
+}
+export const isFloatElement = (v: any): v is FloatElement => {
+  return v instanceof Object && "float" in v
+}
+
+export const is = <T extends Element>(
+  fn: (x: Element) => x is T
+): Parser<Element[], T> => (target, position) => {
   const v = target[position]
-  if (typeof v !== "number") {
-    return [false, null, position, `num@${position}: ${target} is not number`]
+  if (fn(v)) {
+    return [true, v, position + 1]
   }
-  return [true, v, position + 1]
+  return [false, null, position]
 }

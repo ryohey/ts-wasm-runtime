@@ -1,6 +1,6 @@
 import { map, seq, opt } from "../parser/parser"
-import { ASTModuleNode, string, identifier, name } from "./types"
-import { keyword, array, num } from "./utils"
+import { ASTModuleNode, string, identifier, name, num } from "./types"
+import { keyword, array } from "./utils"
 
 export interface ASTTable extends ASTModuleNode {
   nodeType: "table"

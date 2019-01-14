@@ -1,15 +1,54 @@
 import { or, map, seq } from "../parser/parser"
-import { num, regexp, keyword } from "./utils"
+import {
+  regexp,
+  keyword,
+  is,
+  isIntElement,
+  isHexElement,
+  isFloatElement
+} from "./utils"
 
-export type atom = string | number | AtomArray
-export interface AtomArray extends Array<atom> {}
+export interface Int32Value {
+  i32: string
+  isHex?: boolean
+}
+export interface Int64Value {
+  i64: string
+  isHex?: boolean
+}
+export interface Float32Value {
+  f32: string
+}
+export interface Float64Value {
+  f64: string
+}
+export type NumberValue = Int32Value | Int64Value | Float32Value | Float64Value
+
+export const int32 = or(
+  map(is(isIntElement), r => ({ i32: r.int } as Int32Value)),
+  map(is(isHexElement), r => ({ i32: r.hex, isHex: true } as Int32Value))
+)
+export const int64 = or(
+  map(is(isIntElement), r => ({ i64: r.int } as Int64Value)),
+  map(is(isHexElement), r => ({ i64: r.hex, isHex: true } as Int64Value))
+)
+export const float32 = map(
+  is(isFloatElement),
+  r => ({ f32: r.float } as Float32Value)
+)
+export const float64 = map(
+  is(isFloatElement),
+  r => ({ f64: r.float } as Float64Value)
+)
 
 export const identifier = regexp(
   /^(\$[a-zA-Z_][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*)$/
 )
 export const name = regexp(/^([a-zA-Z]+)$/)
 export const string = regexp(/^\"(.+)\"/)
-export const operand = or(num, identifier)
+
+export const num = map(is(isIntElement), v => parseInt(v.int))
+export const indices = or(num, identifier)
 
 export interface ASTModuleNode {
   nodeType: string
