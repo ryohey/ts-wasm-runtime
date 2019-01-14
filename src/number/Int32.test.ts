@@ -43,4 +43,14 @@ describe("Int32", () => {
     assert.equal(mul("0x76543210", "0x01234567"), "358e7470")
     assert.equal(mul("0x7fffffff", "0x7fffffff"), "1")
   })
+
+  it("div_s", () => {
+    const div = (a: string, b: string) =>
+      Int32.div_s(Int32.hex(a), Int32.hex(b)).toString(16)
+
+    assert.equal(div("1", "1"), "1")
+    assert.equal(div("2", "1"), "2")
+    assert.equal(div("-1", "-1"), "1")
+    assert.equal(div("0x1000", "0x10000000"), "0")
+  })
 })
