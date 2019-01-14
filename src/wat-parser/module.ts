@@ -6,6 +6,8 @@ import { ASTGlobal, moduleGlobal } from "./global"
 import { moduleMemory, ASTMemory } from "./memory"
 import { ASTTable, moduleTable } from "./table"
 import { moduleType, ASTType } from "./type"
+import { moduleElem, ASTElem } from "./elem"
+import { Element } from "../s-parser/s-parser"
 
 export interface ASTModule {
   nodeType: "module"
@@ -24,6 +26,7 @@ type ASTModuleElement =
   | ASTMemory
   | ASTTable
   | ASTType
+  | ASTElem
 
 const isExport = (x: ASTModuleElement): x is ASTExport =>
   x.nodeType === "export"
@@ -39,13 +42,14 @@ export const moduleParser = map(
   seq(
     keyword("module"),
     many(
-      or(
+      or<Element[], ASTModuleElement>(
         array(moduleExport),
         array(func),
         array(moduleGlobal),
         array(moduleMemory),
         array(moduleTable),
-        array(moduleType)
+        array(moduleType),
+        array(moduleElem)
       )
     )
   ),
