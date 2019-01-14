@@ -1,8 +1,4 @@
-import {
-  WASMCode,
-  WASMFunctionTableEntry,
-  WASMModule
-} from "../wasm-vm/wasm-code"
+import { WASMCode, WASMFunction, WASMModule } from "../wasm-vm/wasm-code"
 import {
   ASTFunction,
   ASTFunctionInstruction,
@@ -12,7 +8,8 @@ import { ASTModule } from "../wat-parser/module"
 import { flatten, fromPairs } from "../misc/array"
 import { ASTBlock } from "../wat-parser/block"
 import { isString } from "util"
-import { Int32Value, NumberValue, ValType } from "../wat-parser/types"
+import { NumberValue, ValType } from "../wat-parser/types"
+import { Int32 } from "../number/Int32"
 
 type IdentifierEntry = { [key: string]: number }
 
@@ -161,7 +158,7 @@ export const compile = (ast: ASTModule): WASMModule => {
   // TODO: functions 以外を実装
   const codes = ast.functions.map(fn => compileFunction(fn, functionIdTable))
 
-  const table = ast.functions.map(fn => {
+  const functions = ast.functions.map(fn => {
     let pointer = 0
     let i = 0
     for (const f of ast.functions) {
@@ -179,11 +176,26 @@ export const compile = (ast: ASTModule): WASMModule => {
       parameters: fn.parameters.map(p => p.type),
       results: fn.results,
       pointer
-    } as WASMFunctionTableEntry
+    } as WASMFunction
+  })
+
+  const table: { [key: number]: number } = {}
+  ast.elems.forEach(e => {
+    const offset = Int32.obj(e.offset).toNumber()
+    e.funcIds.forEach((id, i) => {
+      let funcId: number
+      if (isIdentifier(id)) {
+        funcId = functions.findIndex(f => f.identifier === id)
+      } else {
+        funcId = id as number
+      }
+      table[offset + i] = funcId
+    })
   })
 
   return {
     program: flatten(codes),
-    functions: table
+    functions,
+    table
   }
 }

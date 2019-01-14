@@ -17,6 +17,17 @@ const br = ({ parameters }: WASMCode, memory: WASMMemory) => {
   memory.programCounter = memory.callStack.peek().labelPosition
 }
 
+const callFunc = (memory: WASMMemory, funcId: number) => {
+  const { functions, values, callStack } = memory
+  const fn = functions[funcId]
+
+  // 指定された数のパラメータを values から pop して新しいスタックに積む
+  memory.localStack.push(range(0, fn.parameters.length).map(_ => values.pop()))
+
+  const ctx = new WASMContext(fn.pointer, fn.results.length)
+  callStack.push(ctx)
+}
+
 export const controlInstructionSet: PartialInstructionSet<
   WASMCode,
   WASMMemory
@@ -47,20 +58,15 @@ export const controlInstructionSet: PartialInstructionSet<
       throw new Error("use _ret")
     case "call":
       return ({ parameters }, memory) => {
-        const { functions, values, callStack } = memory
         const funcId = parameters[0] as number
-        const fn = functions[funcId]
-
-        // 指定された数のパラメータを values から pop して新しいスタックに積む
-        memory.localStack.push(
-          range(0, fn.parameters.length).map(_ => values.pop())
-        )
-
-        const ctx = new WASMContext(fn.pointer, fn.results.length)
-        callStack.push(ctx)
+        callFunc(memory, funcId)
       }
     case "call_indirect":
-      throw new Error(`not implemented ${code.opcode}`)
+      return (_, memory) => {
+        const idx = memory.values.pop() as Int32
+        const funcId = memory.table[idx.toNumber()]
+        callFunc(memory, funcId)
+      }
   }
   return null
 }

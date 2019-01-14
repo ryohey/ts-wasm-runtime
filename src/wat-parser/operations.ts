@@ -50,7 +50,7 @@ export const plainInstructions = or<
   op1("br_if", indices),
   opN("br_table", indices),
   op1("call", indices),
-  op1("call_indirect", indices),
+  op("call_indirect"),
   op("drop"),
   op("select"),
 

@@ -39,7 +39,7 @@ export class WASMContext {
   }
 }
 
-export type WASMFunctionTableEntry = {
+export type WASMFunction = {
   export: string
   identifier: string
   pointer: number
@@ -48,9 +48,15 @@ export type WASMFunctionTableEntry = {
   results: ValType[]
 }
 
+export type WASMTable = {
+  // index: funcId
+  [key: number]: number
+}
+
 export interface WASMModule {
   program: WASMCode[]
-  functions: WASMFunctionTableEntry[]
+  functions: WASMFunction[]
+  table: WASMTable
 }
 
 export class WASMMemory implements VMMemory {
@@ -59,10 +65,12 @@ export class WASMMemory implements VMMemory {
   readonly memory: WASMMemoryValue[] = []
   readonly global: WASMMemoryValue[] = []
   readonly localStack = new Stack<WASMMemoryValue[]>()
-  readonly functions: WASMFunctionTableEntry[]
+  readonly functions: WASMFunction[]
+  readonly table: WASMTable
 
-  constructor(functions: WASMFunctionTableEntry[]) {
+  constructor(functions: WASMFunction[], table: WASMTable) {
     this.functions = functions
+    this.table = table
   }
 
   get values(): Stack<WASMMemoryValue> {

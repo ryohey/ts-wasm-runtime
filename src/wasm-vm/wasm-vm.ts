@@ -4,16 +4,14 @@ import {
   WASMMemory,
   PartialInstructionSet,
   WASMContext,
-  WASMModule,
-  WASMMemoryValue
+  WASMModule
 } from "./wasm-code"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { f64InstructionSet } from "./instructions/f64"
 import { controlInstructionSet } from "./instructions/control"
 import { internalInstructionSet } from "./instructions/internal"
-import { Int32 } from "../number/Int32"
-import { Int32Value, NumberValue } from "../wat-parser/types"
+import { NumberValue } from "../wat-parser/types"
 import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
 import { f32InstructionSet } from "./instructions/f32"
@@ -58,7 +56,7 @@ export class WASMVirtualMachine {
 
   // export された関数を呼ぶ
   callFunction(name: string, ...args: NumberValue[]): NumberValue[] {
-    const memory = new WASMMemory(this.module.functions)
+    const memory = new WASMMemory(this.module.functions, this.module.table)
     const fn = memory.functions.find(t => t.export === name)
 
     // よろしくないけど適当なポインタに return して止める

@@ -31,6 +31,7 @@ describe("module parser", () => {
         memories: [],
         tables: [],
         types: [],
+        elems: [],
         functions: [
           {
             nodeType: "func",
@@ -91,6 +92,7 @@ describe("module parser", () => {
         memories: [],
         tables: [],
         types: [],
+        elems: [],
         functions: [
           {
             nodeType: "func",
@@ -149,6 +151,7 @@ describe("module parser", () => {
       true,
       {
         exports: [],
+        elems: [],
         functions: [
           {
             body: [],

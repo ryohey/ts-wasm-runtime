@@ -22,6 +22,7 @@ describe("compiler", () => {
       memories: [],
       tables: [],
       types: [],
+      elems: [],
       functions: [
         {
           nodeType: "func",
@@ -73,7 +74,8 @@ describe("compiler", () => {
           results: ["i32"],
           pointer: 0
         }
-      ]
+      ],
+      table: {}
     })
   })
   it("replaces identifiers to indices", () => {
@@ -155,7 +157,8 @@ describe("compiler", () => {
           pointer: 0,
           results: ["i32"]
         }
-      ]
+      ],
+      table: {}
     })
   })
 })
