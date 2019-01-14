@@ -74,7 +74,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "i32.trunc_u/f32":
     case "i32.trunc_u/f64":
     case "i32.reinterpret/f32":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
 
     // i64
 
@@ -115,7 +115,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "i64.trunc_u/f32":
     case "i64.trunc_u/f64":
     case "i64.reinterpret/f64":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
 
     // f32
 
@@ -176,7 +176,7 @@ export const numericInstructionSet: PartialInstructionSet<
     case "f64.convert_u/i32":
     case "f64.convert_u/i64":
     case "f64.reinterpret/i64":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
   }
   return null
 }

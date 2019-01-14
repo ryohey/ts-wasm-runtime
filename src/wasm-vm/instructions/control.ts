@@ -24,13 +24,13 @@ export const controlInstructionSet: PartialInstructionSet<
     case "nop":
       return () => {}
     case "unreachable":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
     case "block":
       throw new Error("use _push")
     case "loop":
       throw new Error("use _push")
     case "if":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
     case "br":
       return br
     case "br_if":
@@ -41,7 +41,7 @@ export const controlInstructionSet: PartialInstructionSet<
         }
       }
     case "br_table":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
     case "return":
       throw new Error("use _ret")
     case "call":
@@ -59,7 +59,7 @@ export const controlInstructionSet: PartialInstructionSet<
         callStack.push(ctx)
       }
     case "call_indirect":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
   }
   return null
 }

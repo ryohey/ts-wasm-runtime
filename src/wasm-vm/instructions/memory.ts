@@ -26,7 +26,7 @@ export const memoryInstructionSet: PartialInstructionSet<
     case "f64.load8_u":
     case "f64.load16_s":
     case "f64.load16_u":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
     case "i32.store":
     case "i64.store":
     case "f32.store":
@@ -36,7 +36,7 @@ export const memoryInstructionSet: PartialInstructionSet<
     case "i64.store8":
     case "i64.store16":
     case "i64.store32":
-      throw new Error("not implemented")
+      throw new Error(`not implemented ${code.opcode}`)
   }
   return null
 }
