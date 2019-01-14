@@ -13,27 +13,32 @@ export const variableInstructionSet: PartialInstructionSet<
     case "get_local":
     case "local.get":
       return (code, { values, local }) => {
-        values.push(local[code.parameters[0]])
+        const idx = code.parameters[0] as number
+        values.push(local[idx])
       }
     case "set_local":
     case "local.set":
       return (code, { values, local }) => {
-        local[code.parameters[0]] = values.pop()
+        const idx = code.parameters[0] as number
+        local[idx] = values.pop()
       }
     case "tee_local":
     case "local.tee":
       return (code, { values, local }) => {
-        local[code.parameters[0]] = values.peek()
+        const idx = code.parameters[0] as number
+        local[idx] = values.peek()
       }
     case "get_global":
     case "global.get":
       return (code, { values, global }) => {
-        values.push(global[code.parameters[0]])
+        const idx = code.parameters[0] as number
+        values.push(global[idx])
       }
     case "set_global":
     case "global.set":
       return (code, { values, global }) => {
-        global[code.parameters[0]] = values.pop()
+        const idx = code.parameters[0] as number
+        global[idx] = values.pop()
       }
   }
   return null

@@ -17,8 +17,7 @@ describe("wasm-vm", () => {
       )`
     )
     const vm = new WASMVirtualMachine(module)
-    const memory = vm.callFunction("hello")
-    assert.deepStrictEqual(memory.values.peek(), 42)
+    assert.deepStrictEqual(vm.callFunction("hello"), 42)
   })
 
   it("call add", () => {
@@ -32,7 +31,6 @@ describe("wasm-vm", () => {
       )`
     )
     const vm = new WASMVirtualMachine(module)
-    const memory = vm.callFunction("add", 133, 234)
-    assert.deepStrictEqual(memory.values.peek(), 367)
+    assert.deepStrictEqual(vm.callFunction("add", 133, 234), 367)
   })
 })

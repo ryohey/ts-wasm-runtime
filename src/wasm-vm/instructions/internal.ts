@@ -25,11 +25,14 @@ export const internalInstructionSet: PartialInstructionSet<
       return (code, memory) => {
         const { callStack, programCounter } = memory
 
+        const resultLength = code.parameters[0] as number
+        const offset = code.parameters[1] as number
+
         // 相対アドレス
-        const labelPosition = programCounter + code.parameters[1]
+        const labelPosition = programCounter + offset
 
         callStack.push(
-          new WASMContext(programCounter, code.parameters[0], labelPosition)
+          new WASMContext(programCounter, resultLength, labelPosition)
         )
       }
     case "_ret":

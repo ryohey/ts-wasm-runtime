@@ -7,7 +7,8 @@ import {
 import { range } from "../../misc/array"
 import { popStack } from "./internal"
 
-const br = ({ parameters: [nestLevel] }: WASMCode, memory: WASMMemory) => {
+const br = ({ parameters }: WASMCode, memory: WASMMemory) => {
+  const nestLevel = parameters[0] as number
   // 指定された回数 pop する
   range(0, nestLevel).forEach(_ => {
     popStack(memory)
@@ -44,8 +45,9 @@ export const controlInstructionSet: PartialInstructionSet<
     case "return":
       throw new Error("use _ret")
     case "call":
-      return ({ parameters: [funcId] }, memory) => {
+      return ({ parameters }, memory) => {
         const { functions, values, callStack } = memory
+        const funcId = parameters[0] as number
         const fn = functions[funcId]
 
         // 指定された数のパラメータを values から pop して新しいスタックに積む

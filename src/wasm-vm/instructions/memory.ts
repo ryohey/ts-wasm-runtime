@@ -26,11 +26,7 @@ export const memoryInstructionSet: PartialInstructionSet<
     case "f64.load8_u":
     case "f64.load16_s":
     case "f64.load16_u":
-      return (_, { values, memory }) => {
-        // TODO: use offset, align
-        const value = values.pop()
-        memory[values.pop()] = value
-      }
+      throw new Error("not implemented")
     case "i32.store":
     case "i64.store":
     case "f32.store":
@@ -40,10 +36,7 @@ export const memoryInstructionSet: PartialInstructionSet<
     case "i64.store8":
     case "i64.store16":
     case "i64.store32":
-      return (_, { values, memory }) => {
-        // TODO: use offset, align
-        values.push(memory[values.pop()])
-      }
+      throw new Error("not implemented")
   }
   return null
 }

@@ -12,6 +12,7 @@ import { variableInstructionSet } from "./instructions/variable"
 import { numericInstructionSet } from "./instructions/numeric"
 import { controlInstructionSet } from "./instructions/control"
 import { internalInstructionSet } from "./instructions/internal"
+import { Int32 } from "../number/Int32"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -58,9 +59,13 @@ export class WASMVirtualMachine {
 
     const ctx = new WASMContext(fn.pointer, fn.results.length)
     memory.callStack.push(ctx)
-    memory.localStack.push(args)
+
+    // TODO: convert to function's parameter types
+    memory.localStack.push(args.map(v => new Int32(v)))
 
     this.vm.run(this.module.program, memory)
-    return memory
+
+    const result = fn.results.map(_ => memory.values.pop().toNumber())
+    return result.length === 1 ? result[0] : result
   }
 }

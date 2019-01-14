@@ -1,14 +1,28 @@
 import { Instruction, VMMemory } from "../vm/vm"
 import { Stack } from "./stack"
-import { ValType } from "../wat-parser/types"
+import {
+  ValType,
+  Int32Value,
+  Int64Value,
+  Float32Value,
+  Float64Value
+} from "../wat-parser/types"
+import { Int32 } from "../number/Int32"
 
 export interface WASMCode {
   readonly opcode: string
-  readonly parameters: number[]
+  readonly parameters: (
+    | number
+    | Int32Value
+    | Int64Value
+    | Float32Value
+    | Float64Value)[]
 }
 
+export type WASMMemoryValue = Int32
+
 export class WASMContext {
-  readonly values = new Stack<number>()
+  readonly values = new Stack<WASMMemoryValue>()
   readonly labelPosition: number
   readonly resultLength: number
   public programCounter: number
@@ -41,20 +55,20 @@ export interface WASMModule {
 export class WASMMemory implements VMMemory {
   // control instruction のみが直接 stack を触るべき
   readonly callStack = new Stack<WASMContext>()
-  readonly memory: number[] = []
-  readonly global: number[] = []
-  readonly localStack = new Stack<number[]>()
+  readonly memory: WASMMemoryValue[] = []
+  readonly global: WASMMemoryValue[] = []
+  readonly localStack = new Stack<WASMMemoryValue[]>()
   readonly functions: WASMFunctionTableEntry[]
 
   constructor(functions: WASMFunctionTableEntry[]) {
     this.functions = functions
   }
 
-  get values(): Stack<number> {
+  get values(): Stack<WASMMemoryValue> {
     return this.callStack.peek().values
   }
 
-  get local(): number[] {
+  get local(): WASMMemoryValue[] {
     return this.localStack.peek()
   }
 
