@@ -11,17 +11,11 @@ export class Int32 {
     this.value = signed(value)
   }
 
-  toString(radix: number) {
-    const negative = Int32.isNegative(this)
-    const abs = negative ? Int32.neg(this) : this
-    const sign = negative ? "-" : ""
-    return sign + abs.value.toString(radix)
-  }
-
+  toString = (radix: number) => this.value.toString(radix)
   toNumber = () => this.value
-  toInt = (): Int32Value => ({ i32: this.toString(10) })
+  toObject = (): Int32Value => ({ i32: this.toString(10) })
 
-  static int = (value: Int32Value): Int32 =>
+  static obj = (value: Int32Value): Int32 =>
     new Int32(parseInt(value.i32, value.isHex ? 16 : 10))
   static hex = (value: string): Int32 => new Int32(parseInt(value, 16))
   static bool = (value: boolean): Int32 => (value ? Int32.one : Int32.zero)

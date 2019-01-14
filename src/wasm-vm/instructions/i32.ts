@@ -2,38 +2,11 @@ import {
   PartialInstructionSet,
   WASMCode,
   WASMLocalMemory,
-  WASMMemoryValue,
-  WASMMemory
+  WASMMemoryValue
 } from "../wasm-code"
 import { Int32Value } from "../../wat-parser/types"
 import { Int32 } from "../../number/Int32"
-
-const monop = <T extends WASMMemoryValue>(fn: (a: T) => T) => (
-  _: WASMCode,
-  memory: WASMMemory
-) => {
-  const { values } = memory
-  const a = values.pop() as T
-  values.push(fn(a))
-}
-
-const boolToInt = <T extends WASMMemoryValue>(fn: (a: T, b: T) => boolean) => (
-  a: T,
-  b: T
-) => Int32.bool(fn(a, b))
-
-const binop = <T extends WASMMemoryValue>(fn: (a: T, b: T) => T) => (
-  _: WASMCode,
-  memory: WASMMemory
-) => {
-  const { values } = memory
-  const a = values.pop() as T
-  const b = values.pop() as T
-  values.push(fn(b, a))
-}
-
-const boolBinop = <T extends WASMMemoryValue>(fn: (a: T, b: T) => boolean) =>
-  binop(boolToInt(fn))
+import { binop, monop, boolBinop, boolMonop } from "./helpers"
 
 // https://webassembly.github.io/spec/core/syntax/instructions.html#numeric-instructions
 export const i32InstructionSet: PartialInstructionSet<
@@ -44,7 +17,7 @@ export const i32InstructionSet: PartialInstructionSet<
     case "i32.const":
       return (code, { values }) => {
         const a = code.parameters[0] as Int32Value
-        values.push(Int32.int(a))
+        values.push(Int32.obj(a))
       }
     case "i32.add":
       return binop(Int32.add)
@@ -102,7 +75,7 @@ export const i32InstructionSet: PartialInstructionSet<
     case "i32.popcnt":
       return monop(Int32.popcnt)
     case "i32.eqz":
-      return monop(a => Int32.bool(Int32.isZero(a)))
+      return boolMonop(Int32.isZero)
 
     case "i32.wrap/i64":
     case "i32.trunc_s/f32":
@@ -112,4 +85,5 @@ export const i32InstructionSet: PartialInstructionSet<
     case "i32.reinterpret/f32":
       throw new Error(`not implemented ${code.opcode}`)
   }
+  return null
 }

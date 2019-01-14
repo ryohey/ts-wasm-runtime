@@ -8,6 +8,7 @@ import {
   Float64Value
 } from "../wat-parser/types"
 import { Int32 } from "../number/Int32"
+import { Float32 } from "../number/Float32"
 
 export interface WASMCode {
   readonly opcode: string
@@ -19,7 +20,7 @@ export interface WASMCode {
     | Float64Value)[]
 }
 
-export type WASMMemoryValue = Int32
+export type WASMMemoryValue = Int32 | Float32
 
 export class WASMContext {
   readonly values = new Stack<WASMMemoryValue>()

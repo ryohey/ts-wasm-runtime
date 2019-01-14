@@ -1,11 +1,12 @@
 import * as assert from "assert"
 import { wastParser } from "../wat-parser/wast"
-import { ASTModuleNode, Int32Value } from "../wat-parser/types"
+import { ASTModuleNode, Int32Value, NumberValue } from "../wat-parser/types"
 import { ASTModule } from "../wat-parser/module"
 import { ASTAssertReturn } from "../wat-parser/assert"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { compile } from "../compiler/compiler"
 import { Int32 } from "../number/Int32"
+import { convertNumber } from "../number/convert"
 
 const isAssertReturn = (n: ASTModuleNode): n is ASTAssertReturn =>
   n.nodeType === "assert_return"
@@ -20,16 +21,19 @@ const runTestCase = (vm: WASMVirtualMachine, ast: ASTAssertReturn) => {
   )
   for (const exp of ast.expected) {
     for (let i = 0; i < received.length; i++) {
-      assert(
-        Int32.equal(
-          Int32.int(received[i]),
-          Int32.int(exp.parameters[i] as Int32Value)
-        ),
-        `${ast.invoke}(${ast.args
-          .map(a => JSON.stringify(a.parameters[0]))
-          .join(", ")}): expected ${JSON.stringify(exp.parameters[
-          i
-        ] as Int32Value)}. but received ${JSON.stringify(received[i])}`
+      const receivedValue = convertNumber(received[i]).toObject()
+      const expectedValue = convertNumber(exp.parameters[
+        i
+      ] as NumberValue).toObject()
+      const debugName = `${ast.invoke}(${ast.args
+        .map(a => JSON.stringify(a.parameters[0]))
+        .join(", ")})`
+      assert.deepStrictEqual(
+        receivedValue,
+        expectedValue,
+        `${debugName}: expected ${JSON.stringify(
+          exp.parameters[i]
+        )}. but received ${JSON.stringify(received[i])}`
       )
     }
   }

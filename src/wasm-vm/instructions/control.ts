@@ -37,7 +37,7 @@ export const controlInstructionSet: PartialInstructionSet<
     case "br_if":
       return (code, memory) => {
         const { values } = memory
-        if (!Int32.isZero(values.pop())) {
+        if (!Int32.isZero(values.pop() as Int32)) {
           br(code, memory)
         }
       }
