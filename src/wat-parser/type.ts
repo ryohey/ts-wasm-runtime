@@ -1,8 +1,8 @@
 import { map, seq, opt } from "../parser/parser"
-import { ASTModuleNode, identifier, blockType } from "./types"
+import { identifier, blockType } from "./types"
 import { keyword, array } from "./utils"
 
-export interface ASTType extends ASTModuleNode {
+export interface ASTType {
   nodeType: "type"
   identifier: string | null
 }

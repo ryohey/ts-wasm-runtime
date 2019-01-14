@@ -1,9 +1,9 @@
 import { map, seq, many } from "../parser/parser"
-import { ASTModuleNode, identifier, Int32Value } from "./types"
+import { identifier, Int32Value } from "./types"
 import { keyword, array } from "./utils"
 import { constInstructions } from "./operations"
 
-export interface ASTElem extends ASTModuleNode {
+export interface ASTElem {
   nodeType: "elem"
   offset: Int32Value
   funcIds: (number | string)[]

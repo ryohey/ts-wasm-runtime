@@ -1,8 +1,8 @@
 import { map, seq, or } from "../parser/parser"
-import { ASTModuleNode, string, identifier } from "./types"
+import { string, identifier } from "./types"
 import { keyword, array } from "./utils"
 
-export interface ASTExport extends ASTModuleNode {
+export interface ASTExport {
   nodeType: "export"
   exportType: string
   identifier: string

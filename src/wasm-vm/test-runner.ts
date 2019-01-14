@@ -1,17 +1,18 @@
 import * as assert from "assert"
 import { wastParser } from "../wat-parser/wast"
-import { ASTModuleNode, Int32Value, NumberValue } from "../wat-parser/types"
+import { Int32Value, NumberValue } from "../wat-parser/types"
 import { ASTModule } from "../wat-parser/module"
 import { ASTAssertReturn } from "../wat-parser/assert"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { compile } from "../compiler/compiler"
-import { Int32 } from "../number/Int32"
 import { convertNumber } from "../number/convert"
 
-const isAssertReturn = (n: ASTModuleNode): n is ASTAssertReturn =>
+type ASTTopNode = ASTModule | ASTAssertReturn
+
+const isAssertReturn = (n: ASTTopNode): n is ASTAssertReturn =>
   n.nodeType === "assert_return"
 
-const isModule = (n: ASTModuleNode): n is ASTModule => n.nodeType === "module"
+const isModule = (n: ASTTopNode): n is ASTModule => n.nodeType === "module"
 
 const runTestCase = (vm: WASMVirtualMachine, ast: ASTAssertReturn) => {
   console.log(`Testing ${ast.invoke}...`)

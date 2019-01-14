@@ -19,7 +19,7 @@ export interface ASTModule {
   types: ASTType[]
 }
 
-type ASTModuleElement =
+export type ASTModuleNode =
   | ASTFunction
   | ASTExport
   | ASTGlobal
@@ -28,21 +28,18 @@ type ASTModuleElement =
   | ASTType
   | ASTElem
 
-const isExport = (x: ASTModuleElement): x is ASTExport =>
-  x.nodeType === "export"
-const isFunc = (x: ASTModuleElement): x is ASTFunction => x.nodeType === "func"
-const isGlobal = (x: ASTModuleElement): x is ASTGlobal =>
-  x.nodeType === "global"
-const isMemory = (x: ASTModuleElement): x is ASTMemory =>
-  x.nodeType === "memory"
-const isTable = (x: ASTModuleElement): x is ASTTable => x.nodeType === "table"
-const isType = (x: ASTModuleElement): x is ASTType => x.nodeType === "type"
+const isExport = (x: ASTModuleNode): x is ASTExport => x.nodeType === "export"
+const isFunc = (x: ASTModuleNode): x is ASTFunction => x.nodeType === "func"
+const isGlobal = (x: ASTModuleNode): x is ASTGlobal => x.nodeType === "global"
+const isMemory = (x: ASTModuleNode): x is ASTMemory => x.nodeType === "memory"
+const isTable = (x: ASTModuleNode): x is ASTTable => x.nodeType === "table"
+const isType = (x: ASTModuleNode): x is ASTType => x.nodeType === "type"
 
 export const moduleParser = map(
   seq(
     keyword("module"),
     many(
-      or<Element[], ASTModuleElement>(
+      or<Element[], ASTModuleNode>(
         array(moduleExport),
         array(func),
         array(moduleGlobal),

@@ -50,10 +50,6 @@ export const string = regexp(/^\"(.+)\"/)
 export const num = map(is(isIntElement), v => parseInt(v.int))
 export const indices = or(num, identifier)
 
-export interface ASTModuleNode {
-  nodeType: string
-}
-
 export enum ValType {
   i32 = "i32",
   i64 = "i64",

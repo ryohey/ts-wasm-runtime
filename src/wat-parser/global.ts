@@ -1,9 +1,9 @@
 import { map, seq, or, opt } from "../parser/parser"
-import { ASTModuleNode, string, identifier, ValType, valType } from "./types"
+import { string, identifier, ValType, valType } from "./types"
 import { keyword, array } from "./utils"
 import { constInstructions } from "./operations"
 
-export interface ASTGlobal extends ASTModuleNode {
+export interface ASTGlobal {
   nodeType: "global"
   identifier: string | null
   export: string | null

@@ -2,7 +2,6 @@ import { map, seq, opt, Parser, many } from "../parser/parser"
 import { keyword, array } from "./utils"
 import {
   valType,
-  ASTModuleNode,
   identifier,
   string,
   ValType,
@@ -24,7 +23,7 @@ export type AnyParameter =
   | Float32Value
   | Float64Value
 
-export interface ASTFunction extends ASTModuleNode {
+export interface ASTFunction {
   nodeType: "func"
   identifier: string | null
   export: string | null
