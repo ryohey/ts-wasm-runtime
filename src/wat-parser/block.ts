@@ -12,6 +12,12 @@ export interface ASTBlock extends ASTFunctionInstruction<AnyParameter> {
   body: ASTFunctionInstruction<AnyParameter>[]
 }
 
+export const isBlockInstruction = (
+  inst: ASTFunctionInstruction<AnyParameter>
+): inst is ASTBlock => {
+  return inst.opType === "block" || inst.opType === "loop"
+}
+
 const instructions = lazy(() => operations)
 
 const makeBlockBody = (

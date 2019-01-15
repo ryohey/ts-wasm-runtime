@@ -10,14 +10,16 @@ import {
 import { Int32 } from "../number/Int32"
 import { Float32 } from "../number/Float32"
 
+export type WASMCodeParameter =
+  | number
+  | Int32Value
+  | Int64Value
+  | Float32Value
+  | Float64Value
+
 export interface WASMCode {
   readonly opcode: string
-  readonly parameters: (
-    | number
-    | Int32Value
-    | Int64Value
-    | Float32Value
-    | Float64Value)[]
+  readonly parameters: WASMCodeParameter[]
 }
 
 export type WASMMemoryValue = Int32 | Float32
