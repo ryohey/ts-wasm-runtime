@@ -6,7 +6,8 @@ import {
   WASMContext,
   WASMModule,
   WASMFunctionInstance,
-  WASMFunction
+  WASMFunction,
+  WASMTable
 } from "./wasm-code"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
@@ -18,7 +19,6 @@ import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
 import { f32InstructionSet } from "./instructions/f32"
 import { convertNumber } from "../number/convert"
-import { ASTFunction } from "../wat-parser/func"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -50,11 +50,11 @@ const mergeInstructionSet = <T, S>(
 }
 
 export class WASMVirtualMachine {
-  private module: WASMModule
+  private table: WASMTable
   private functions: WASMFunctionInstance[]
 
   constructor(module: WASMModule) {
-    this.module = module
+    this.table = module.table
     this.functions = module.functions.map(this.createFunction)
   }
 
@@ -70,7 +70,7 @@ export class WASMVirtualMachine {
 
   // export された関数を呼ぶ
   callFunction(name: string, ...args: NumberValue[]): NumberValue[] {
-    const memory = new WASMMemory(this.functions, this.module.table)
+    const memory = new WASMMemory(this.functions, this.table)
     const funcId = memory.functions.findIndex(t => t.export === name)
     const fn = memory.functions[funcId]
 
