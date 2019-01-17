@@ -4,7 +4,9 @@ import {
   WASMMemory,
   PartialInstructionSet,
   WASMContext,
-  WASMModule
+  WASMModule,
+  WASMFunctionInstance,
+  WASMFunction
 } from "./wasm-code"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
@@ -16,6 +18,7 @@ import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
 import { f32InstructionSet } from "./instructions/f32"
 import { convertNumber } from "../number/convert"
+import { ASTFunction } from "../wat-parser/func"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -47,27 +50,36 @@ const mergeInstructionSet = <T, S>(
 }
 
 export class WASMVirtualMachine {
-  private readonly vm = createWASMVM()
   private module: WASMModule
+  private functions: WASMFunctionInstance[]
 
   constructor(module: WASMModule) {
     this.module = module
+    this.functions = module.functions.map(this.createFunction)
+  }
+
+  createFunction = (fn: WASMFunction): WASMFunctionInstance => {
+    return {
+      ...fn,
+      call: (memory: WASMMemory) => {
+        const vm = createWASMVM()
+        vm.run(fn.code, memory)
+      }
+    }
   }
 
   // export された関数を呼ぶ
   callFunction(name: string, ...args: NumberValue[]): NumberValue[] {
-    const memory = new WASMMemory(this.module.functions, this.module.table)
-    const fn = memory.functions.find(t => t.export === name)
+    const memory = new WASMMemory(this.functions, this.module.table)
+    const funcId = memory.functions.findIndex(t => t.export === name)
+    const fn = memory.functions[funcId]
 
-    // よろしくないけど適当なポインタに return して止める
-    const retAddr = Number.MAX_SAFE_INTEGER
-    memory.callStack.push(new WASMContext(retAddr))
-
-    const ctx = new WASMContext(fn.pointer, fn.results.length)
+    const ctx = new WASMContext(fn.results.length)
     memory.callStack.push(ctx)
     memory.localStack.push(args.map(convertNumber))
 
-    this.vm.run(this.module.program, memory)
+    this.functions[funcId].call(memory)
+
     return fn.results.map(_ => memory.values.pop().toObject())
   }
 }

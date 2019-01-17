@@ -59,12 +59,6 @@ describe("compiler", () => {
     }
     const module = compile(ast)
     assert.deepStrictEqual(module, {
-      program: [
-        { opcode: "get_local", parameters: [0] },
-        { opcode: "get_local", parameters: [1] },
-        { opcode: "i32.add", parameters: [] },
-        { opcode: "_ret", parameters: [] }
-      ],
       functions: [
         {
           export: "add",
@@ -72,7 +66,11 @@ describe("compiler", () => {
           parameters: ["i32", "i32"],
           identifier: null,
           results: ["i32"],
-          pointer: 0
+          code: [
+            { opcode: "get_local", parameters: [0] },
+            { opcode: "get_local", parameters: [1] },
+            { opcode: "i32.add", parameters: [] }
+          ]
         }
       ],
       table: {}
@@ -116,46 +114,44 @@ describe("compiler", () => {
     )[1]
     const module = compile(ast)
     assert.deepStrictEqual(module, {
-      program: [
-        { opcode: "i32.const", parameters: [{ i32: "0" }] },
-        { opcode: "set_local", parameters: [1] },
-        { opcode: "i32.const", parameters: [{ i32: "1" }] },
-        { opcode: "set_local", parameters: [1] },
-        { opcode: "_push", parameters: [0, 22] },
-        { opcode: "get_local", parameters: [0] },
-        { opcode: "i32.const", parameters: [{ i32: "2" }] },
-        { opcode: "i32.lt_u", parameters: [] },
-        { opcode: "br_if", parameters: [0] },
-        { opcode: "i32.const", parameters: [{ i32: "1" }] },
-        { opcode: "set_local", parameters: [1] },
-        { opcode: "_push", parameters: [0, 0] },
-        { opcode: "get_local", parameters: [0] },
-        { opcode: "i32.const", parameters: [{ i32: "-1" }] },
-        { opcode: "i32.add", parameters: [] },
-        { opcode: "call", parameters: [0] },
-        { opcode: "get_local", parameters: [1] },
-        { opcode: "i32.add", parameters: [] },
-        { opcode: "set_local", parameters: [1] },
-        { opcode: "get_local", parameters: [0] },
-        { opcode: "i32.const", parameters: [{ i32: "-2" }] },
-        { opcode: "i32.add", parameters: [] },
-        { opcode: "tee_local", parameters: [0] },
-        { opcode: "i32.const", parameters: [{ i32: "1" }] },
-        { opcode: "i32.gt_u", parameters: [] },
-        { opcode: "br_if", parameters: [1] },
-        { opcode: "_pop", parameters: [] },
-        { opcode: "_pop", parameters: [] },
-        { opcode: "get_local", parameters: [1] },
-        { opcode: "_ret", parameters: [] }
-      ],
       functions: [
         {
           export: "fib",
           identifier: "$fib",
           locals: ["i32"],
           parameters: ["i32"],
-          pointer: 0,
-          results: ["i32"]
+          results: ["i32"],
+          code: [
+            { opcode: "i32.const", parameters: [{ i32: "0" }] },
+            { opcode: "set_local", parameters: [1] },
+            { opcode: "i32.const", parameters: [{ i32: "1" }] },
+            { opcode: "set_local", parameters: [1] },
+            { opcode: "_push", parameters: [0, 22] },
+            { opcode: "get_local", parameters: [0] },
+            { opcode: "i32.const", parameters: [{ i32: "2" }] },
+            { opcode: "i32.lt_u", parameters: [] },
+            { opcode: "br_if", parameters: [0] },
+            { opcode: "i32.const", parameters: [{ i32: "1" }] },
+            { opcode: "set_local", parameters: [1] },
+            { opcode: "_push", parameters: [0, 0] },
+            { opcode: "get_local", parameters: [0] },
+            { opcode: "i32.const", parameters: [{ i32: "-1" }] },
+            { opcode: "i32.add", parameters: [] },
+            { opcode: "call", parameters: [0] },
+            { opcode: "get_local", parameters: [1] },
+            { opcode: "i32.add", parameters: [] },
+            { opcode: "set_local", parameters: [1] },
+            { opcode: "get_local", parameters: [0] },
+            { opcode: "i32.const", parameters: [{ i32: "-2" }] },
+            { opcode: "i32.add", parameters: [] },
+            { opcode: "tee_local", parameters: [0] },
+            { opcode: "i32.const", parameters: [{ i32: "1" }] },
+            { opcode: "i32.gt_u", parameters: [] },
+            { opcode: "br_if", parameters: [1] },
+            { opcode: "_pop", parameters: [] },
+            { opcode: "_pop", parameters: [] },
+            { opcode: "get_local", parameters: [1] }
+          ]
         }
       ],
       table: {}

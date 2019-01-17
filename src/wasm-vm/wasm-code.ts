@@ -1,4 +1,4 @@
-import { Instruction, VMMemory } from "../vm/vm"
+import { Instruction } from "../vm/vm"
 import { Stack } from "./stack"
 import {
   ValType,
@@ -9,6 +9,7 @@ import {
 } from "../wat-parser/types"
 import { Int32 } from "../number/Int32"
 import { Float32 } from "../number/Float32"
+import { ASTFunction } from "../wat-parser/func"
 
 export type WASMCodeParameter =
   | number
@@ -28,14 +29,8 @@ export class WASMContext {
   readonly values = new Stack<WASMMemoryValue>()
   readonly labelPosition: number
   readonly resultLength: number
-  public programCounter: number
 
-  constructor(
-    programCounter: number,
-    resultLength: number = 0,
-    labelPosition: number = 0
-  ) {
-    this.programCounter = programCounter
+  constructor(resultLength: number = 0, labelPosition: number = 0) {
     this.resultLength = resultLength
     this.labelPosition = labelPosition
   }
@@ -44,10 +39,14 @@ export class WASMContext {
 export type WASMFunction = {
   export: string
   identifier: string
-  pointer: number
   parameters: ValType[]
   locals: ValType[]
   results: ValType[]
+  code: WASMCode[]
+}
+
+export interface WASMFunctionInstance extends WASMFunction {
+  call: (memory: WASMMemory) => void
 }
 
 export type WASMTable = {
@@ -56,21 +55,20 @@ export type WASMTable = {
 }
 
 export interface WASMModule {
-  program: WASMCode[]
   functions: WASMFunction[]
   table: WASMTable
 }
 
-export class WASMMemory implements VMMemory {
+export class WASMMemory {
   // control instruction のみが直接 stack を触るべき
   readonly callStack = new Stack<WASMContext>()
   readonly memory: WASMMemoryValue[] = []
   readonly global: WASMMemoryValue[] = []
   readonly localStack = new Stack<WASMMemoryValue[]>()
-  readonly functions: WASMFunction[]
+  readonly functions: WASMFunctionInstance[]
   readonly table: WASMTable
 
-  constructor(functions: WASMFunction[], table: WASMTable) {
+  constructor(functions: WASMFunctionInstance[], table: WASMTable) {
     this.functions = functions
     this.table = table
   }
@@ -81,14 +79,6 @@ export class WASMMemory implements VMMemory {
 
   get local(): WASMMemoryValue[] {
     return this.localStack.peek()
-  }
-
-  get programCounter(): number {
-    return this.callStack.peek().programCounter
-  }
-
-  set programCounter(val: number) {
-    this.callStack.peek().programCounter = val
   }
 }
 

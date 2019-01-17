@@ -3,17 +3,21 @@ export type InstructionSet<Code, Memory> = (
 ) => Instruction<Code, Memory>
 
 // mutates register and memory
-export type Instruction<Code, Memory> = (code: Code, memory: Memory) => void
+export type Instruction<Code, Memory> = (
+  code: Code,
+  memory: Memory,
+  programCounter: Ref<number>
+) => void
 
-export interface VMMemory {
-  programCounter: number
+export interface Ref<T> {
+  value: T
 }
 
 /**
  * 特定の命令セットやプログラムに依存しない VM の抽象的な実装
  * 利用側が命令セットとプログラムの組み合わせを用意する
  */
-export class VirtualMachine<Code, Memory extends VMMemory> {
+export class VirtualMachine<Code, Memory> {
   public verbose: boolean
   private instructionSet: InstructionSet<Code, Memory>
 
@@ -22,15 +26,17 @@ export class VirtualMachine<Code, Memory extends VMMemory> {
   }
 
   public run(program: Code[], memory: Memory) {
-    while (memory.programCounter < program.length) {
-      const code = program[memory.programCounter++]
+    const programCounter = { value: 0 }
+
+    while (programCounter.value < program.length) {
+      const code = program[programCounter.value++]
       const instr = this.instructionSet(code)
-      this.log(`[${memory.programCounter}] run ${JSON.stringify(code)}`)
+      this.log(`[${programCounter.value}] run ${JSON.stringify(code)}`)
       try {
-        instr(code, memory)
+        instr(code, memory, programCounter)
       } catch (e) {
         console.error(
-          `Exception thrown at ${memory.programCounter}: ${
+          `Exception thrown at ${programCounter.value}: ${
             e.message
           } ${JSON.stringify(code)}`
         )

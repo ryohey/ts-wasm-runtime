@@ -22,30 +22,20 @@ export const internalInstructionSet: PartialInstructionSet<
 > = code => {
   switch (code.opcode) {
     case "_push":
-      return (code, memory) => {
-        const { callStack, programCounter } = memory
+      return (code, memory, programCounter) => {
+        const { callStack } = memory
 
         const resultLength = code.parameters[0] as number
         const offset = code.parameters[1] as number
 
         // 相対アドレス
-        const labelPosition = programCounter + offset
+        const labelPosition = programCounter.value + offset
 
-        callStack.push(
-          new WASMContext(programCounter, resultLength, labelPosition)
-        )
-      }
-    case "_ret":
-      return (_, memory) => {
-        popStack(memory)
-        memory.localStack.pop()
+        callStack.push(new WASMContext(resultLength, labelPosition))
       }
     case "_pop":
       return (_, memory) => {
-        const pc = memory.programCounter
         popStack(memory)
-        // pop 後に return しないでそのまま次のコードを読み込む
-        memory.programCounter = pc
       }
   }
   return null
