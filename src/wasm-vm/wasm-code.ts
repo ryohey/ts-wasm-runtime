@@ -9,7 +9,7 @@ import {
 } from "../wat-parser/types"
 import { Int32 } from "../number/Int32"
 import { Float32 } from "../number/Float32"
-import { ASTFunction } from "../wat-parser/func"
+import { Int64 } from "../number/Int64"
 
 export type WASMCodeParameter =
   | number
@@ -23,7 +23,7 @@ export interface WASMCode {
   readonly parameters: WASMCodeParameter[]
 }
 
-export type WASMMemoryValue = Int32 | Float32
+export type WASMMemoryValue = Int32 | Int64 | Float32
 
 export class WASMContext {
   readonly values = new Stack<WASMMemoryValue>()
