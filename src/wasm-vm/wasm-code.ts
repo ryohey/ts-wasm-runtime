@@ -10,6 +10,7 @@ import {
 import { Int32 } from "../number/Int32"
 import { Float32 } from "../number/Float32"
 import { Int64 } from "../number/Int64"
+import { Float64 } from "../number/Float64"
 
 export type WASMCodeParameter =
   | number
@@ -23,7 +24,7 @@ export interface WASMCode {
   readonly parameters: WASMCodeParameter[]
 }
 
-export type WASMMemoryValue = Int32 | Int64 | Float32
+export type WASMMemoryValue = Int32 | Int64 | Float32 | Float64
 
 export class WASMContext {
   readonly values = new Stack<WASMMemoryValue>()
