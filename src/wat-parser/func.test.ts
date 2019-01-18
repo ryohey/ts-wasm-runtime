@@ -237,4 +237,52 @@ describe("parser", () => {
       5
     ])
   })
+
+  it("block", () => {
+    const sExp = sParser(
+      `(func (export "as-compare-operand") (result i32)
+        (f32.gt
+          (block (result f32) (call $dummy) (f32.const 3))
+          (block (result f32) (call $dummy) (f32.const 3))
+        )
+      )`,
+      0
+    )
+    const r = func(sExp[1], 0)
+    assert.deepStrictEqual(r, [
+      true,
+      {
+        body: [
+          {
+            body: [
+              { opType: "call", parameters: ["$dummy"] },
+              { opType: "f32.const", parameters: [{ f32: "3" }] }
+            ],
+            identifier: null,
+            opType: "block",
+            parameters: [],
+            results: ["f32"]
+          },
+          {
+            body: [
+              { opType: "call", parameters: ["$dummy"] },
+              { opType: "f32.const", parameters: [{ f32: "3" }] }
+            ],
+            identifier: null,
+            opType: "block",
+            parameters: [],
+            results: ["f32"]
+          },
+          { opType: "f32.gt", parameters: [] }
+        ],
+        export: "as-compare-operand",
+        identifier: null,
+        locals: [],
+        nodeType: "func",
+        parameters: [],
+        results: ["i32"]
+      },
+      4
+    ])
+  })
 })

@@ -32,13 +32,13 @@ export const int64 = or(
   map(is(isIntElement), r => ({ i64: r.int } as Int64Value)),
   map(is(isHexElement), r => ({ i64: r.hex, isHex: true } as Int64Value))
 )
-export const float32 = map(
-  is(isFloatElement),
-  r => ({ f32: r.float } as Float32Value)
+export const float32 = or(
+  map(is(isFloatElement), r => ({ f32: r.float } as Float32Value)),
+  map(is(isIntElement), r => ({ f32: r.int } as Float32Value))
 )
-export const float64 = map(
-  is(isFloatElement),
-  r => ({ f64: r.float } as Float64Value)
+export const float64 = or(
+  map(is(isFloatElement), r => ({ f64: r.float } as Float64Value)),
+  map(is(isIntElement), r => ({ f64: r.int } as Float64Value))
 )
 
 export const identifier = regexp(

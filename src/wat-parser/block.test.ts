@@ -1,5 +1,6 @@
 import * as assert from "assert"
 import { blockInstructions } from "./block"
+import { parser as sParser } from "../s-parser/s-parser"
 
 describe("block", () => {
   it("parses block-end", () => {
@@ -51,6 +52,29 @@ describe("block", () => {
           results: ["i32"],
           parameters: [],
           body: [{ opType: "i32.const", parameters: [{ i32: "42" }] }]
+        }
+      ],
+      1
+    ])
+  })
+  it("parses multiple instructions", () => {
+    const sExp = sParser(
+      `((block (result f32) (call $dummy) (f32.const 3)))`,
+      0
+    )
+    const r = blockInstructions(sExp[1], 0)
+    assert.deepEqual(r, [
+      true,
+      [
+        {
+          body: [
+            { opType: "call", parameters: ["$dummy"] },
+            { opType: "f32.const", parameters: [{ f32: "3" }] }
+          ],
+          identifier: null,
+          opType: "block",
+          parameters: [],
+          results: ["f32"]
         }
       ],
       1
