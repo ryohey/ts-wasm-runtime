@@ -1,29 +1,28 @@
 import { range } from "./array"
 
-export const zeroPad = (i: number, bitWidth: number): string => {
-  const bin = i.toString(2)
+export const zeroPad = (binary: string, bitWidth: number): string => {
   return (
-    range(0, bitWidth - bin.length)
+    range(0, bitWidth - binary.length)
       .map(_ => "0")
-      .join("") + bin
+      .join("") + binary
   )
 }
 
-export const countLeadingZeros = (i: number, bitWidth: number): number => {
-  const bin = zeroPad(i, bitWidth)
+export const countLeadingZeros = (binary: string, bitWidth: number): number => {
+  const bin = zeroPad(binary, bitWidth)
   const index = bin.indexOf("1")
   return index < 0 ? bitWidth : index
 }
 
-export const countTrailingZeros = (i: number, bitWidth: number): number => {
-  const bin = zeroPad(i, bitWidth)
+export const countTrailingZeros = (
+  binary: string,
+  bitWidth: number
+): number => {
+  const bin = zeroPad(binary, bitWidth)
   const index = bin.lastIndexOf("1")
   return index < 0 ? bitWidth : bitWidth - (index + 1)
 }
 
-export const popCount = (i: number): number => {
-  return i
-    .toString(2)
-    .split("")
-    .filter(s => s === "1").length
+export const popCount = (binary: string): number => {
+  return binary.split("").filter(s => s === "1").length
 }

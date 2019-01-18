@@ -24,7 +24,7 @@ export class Int32 {
   static zero: Int32 = new Int32(0)
 
   static not = (a: Int32): Int32 => new Int32(~a.value)
-  static neg = (a: Int32): Int32 => new Int32(-a)
+  static neg = (a: Int32): Int32 => new Int32(-a.value)
   static and = (a: Int32, b: Int32): Int32 => new Int32(a.value & b.value)
   static or = (a: Int32, b: Int32): Int32 => new Int32(a.value | b.value)
   static xor = (a: Int32, b: Int32): Int32 => new Int32(a.value ^ b.value)
@@ -103,7 +103,9 @@ export class Int32 {
   static lessThanOrEqual_u = (a: Int32, b: Int32): boolean =>
     unsigned(a.value) <= unsigned(b.value)
 
-  static ctz = (a: Int32): Int32 => new Int32(countTrailingZeros(a.value, 32))
-  static clz = (a: Int32): Int32 => new Int32(countLeadingZeros(a.value, 32))
-  static popcnt = (a: Int32): Int32 => new Int32(popCount(a.value))
+  static ctz = (a: Int32): Int32 =>
+    new Int32(countTrailingZeros(a.value.toString(2), 32))
+  static clz = (a: Int32): Int32 =>
+    new Int32(countLeadingZeros(a.value.toString(2), 32))
+  static popcnt = (a: Int32): Int32 => new Int32(popCount(a.value.toString(2)))
 }
