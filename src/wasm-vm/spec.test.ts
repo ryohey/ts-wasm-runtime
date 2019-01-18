@@ -13,6 +13,7 @@ describe("spec test", () => {
   files.forEach(file => {
     it(`${file}`, () => {
       const code = fs.readFileSync(file, "utf8")
+      console.log(`Testing ${file}:`)
       runTests(code)
     })
   })
