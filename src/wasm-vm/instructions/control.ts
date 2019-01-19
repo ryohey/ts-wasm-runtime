@@ -43,7 +43,8 @@ const runBlock = (
 ) => {
   const newMemory = {
     ...memory,
-    values: new Stack<WASMMemoryValue>()
+    values: new Stack<WASMMemoryValue>(),
+    programCounter: 0
   }
 
   const vm = createWASMVM()
@@ -68,23 +69,23 @@ export const controlInstructionSet: PartialInstructionSet<
     case "unreachable":
       throw new Error(`not implemented ${code.opType}`)
     case "block":
-      return (code, memory, _, break_) => {
+      return (code, memory, break_) => {
         const block = code as ASTBlock
         runBlock(memory, block.body, block.results, BreakPosition.tail, break_)
       }
     case "loop":
-      return (code, memory, _, break_) => {
+      return (code, memory, break_) => {
         const block = code as ASTBlock
         runBlock(memory, block.body, block.results, BreakPosition.head, break_)
       }
     case "if":
       throw new Error(`not implemented ${code.opType}`)
     case "br":
-      return (code, _memory, _pc, break_) => {
+      return (code, _memory, break_) => {
         break_(code.parameters[0] as number)
       }
     case "br_if":
-      return (code, memory, _pc, break_) => {
+      return (code, memory, break_) => {
         const { values } = memory
         if (!Int32.isZero(values.pop() as Int32)) {
           break_(code.parameters[0] as number)
@@ -93,16 +94,14 @@ export const controlInstructionSet: PartialInstructionSet<
     case "br_table":
       throw new Error(`not implemented ${code.opType}`)
     case "return":
-      return (_, _memory, _pc, br) => {
-        br(0)
-      }
+      return (_, _memory, br) => br(0)
     case "call":
-      return ({ parameters }, memory, _, br) => {
+      return ({ parameters }, memory, br) => {
         const funcId = parameters[0] as number
         callFunc(memory, funcId, br)
       }
     case "call_indirect":
-      return (_, memory, _pc, br) => {
+      return (_, memory, br) => {
         const idx = memory.values.pop() as Int32
         const funcId = memory.table[idx.toNumber()]
         callFunc(memory, funcId, br)

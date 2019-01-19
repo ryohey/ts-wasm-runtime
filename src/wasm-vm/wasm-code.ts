@@ -51,6 +51,7 @@ export interface WASMMemory {
   readonly local: WASMMemoryValue[]
   readonly functions: WASMFunction[]
   readonly table: WASMTable
+  readonly programCounter: number
 }
 
 // 通常の instruction が操作できるメモリ

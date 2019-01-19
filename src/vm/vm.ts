@@ -6,12 +6,11 @@ export type InstructionSet<Code, Memory> = (
 export type Instruction<Code, Memory> = (
   code: Code,
   memory: Memory,
-  programCounter: Ref<number>,
   br: BreakFunc
 ) => void
 
-export interface Ref<T> {
-  value: T
+export interface VMMemory {
+  programCounter: number
 }
 
 export enum BreakPosition {
@@ -25,7 +24,7 @@ export type BreakFunc = (level: number) => void
  * 特定の命令セットやプログラムに依存しない VM の抽象的な実装
  * 利用側が命令セットとプログラムの組み合わせを用意する
  */
-export class VirtualMachine<Code, Memory> {
+export class VirtualMachine<Code, Memory extends VMMemory> {
   public verbose: boolean
   private instructionSet: InstructionSet<Code, Memory>
 
@@ -38,10 +37,9 @@ export class VirtualMachine<Code, Memory> {
     memory: Memory,
     breakPosition: BreakPosition = BreakPosition.tail
   ) {
-    const programCounter = { value: 0 }
     let breakLevel = 0
     const break_: BreakFunc = level => {
-      programCounter.value = (() => {
+      memory.programCounter = (() => {
         switch (breakPosition) {
           case BreakPosition.tail:
             return program.length
@@ -52,15 +50,15 @@ export class VirtualMachine<Code, Memory> {
       breakLevel = level
     }
 
-    while (programCounter.value < program.length) {
-      const code = program[programCounter.value++]
+    while (memory.programCounter < program.length) {
+      const code = program[memory.programCounter++]
       const instr = this.instructionSet(code)
-      this.log(`[${programCounter.value}] run ${JSON.stringify(code)}`)
+      this.log(`[${memory.programCounter}] run ${JSON.stringify(code)}`)
       try {
-        instr(code, memory, programCounter, break_)
+        instr(code, memory, break_)
       } catch (e) {
         console.error(
-          `Exception thrown at ${programCounter.value}: ${
+          `Exception thrown at ${memory.programCounter}: ${
             e.message
           } ${JSON.stringify(code)}`
         )

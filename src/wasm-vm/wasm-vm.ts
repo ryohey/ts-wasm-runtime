@@ -67,7 +67,8 @@ export class WASMVirtualMachine {
       values: new Stack<WASMMemoryValue>(),
       memory: [],
       local: [],
-      global: []
+      global: [],
+      programCounter: 0
     }
 
     args
