@@ -52,15 +52,14 @@ describe("module parser", () => {
             body: [
               {
                 opType: "get_local",
-                parameters: [0]
+                parameter: 0
               },
               {
                 opType: "get_local",
-                parameters: [1]
+                parameter: 1
               },
               {
-                opType: "i32.add",
-                parameters: []
+                opType: "i32.add"
               }
             ]
           }
@@ -113,15 +112,14 @@ describe("module parser", () => {
             body: [
               {
                 opType: "get_local",
-                parameters: [0]
+                parameter: 0
               },
               {
                 opType: "get_local",
-                parameters: [1]
+                parameter: 1
               },
               {
-                opType: "i32.add",
-                parameters: []
+                opType: "i32.add"
               }
             ]
           }

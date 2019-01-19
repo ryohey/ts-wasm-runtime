@@ -8,7 +8,7 @@ describe("plainInstructions", () => {
       true,
       {
         opType: "get_local",
-        parameters: [0]
+        parameter: 0
       },
       2
     ])
@@ -20,7 +20,7 @@ describe("plainInstructions", () => {
       true,
       {
         opType: "get_local",
-        parameters: ["$lhs"]
+        parameter: "$lhs"
       },
       2
     ])

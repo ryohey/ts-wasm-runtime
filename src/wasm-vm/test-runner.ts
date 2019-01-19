@@ -18,25 +18,22 @@ const runTestCase = (vm: WASMVirtualMachine, ast: ASTAssertReturn) => {
   console.log(`Testing ${ast.invoke}...`)
   const received = vm.callFunction(
     ast.invoke,
-    ...ast.args.map(a => a.parameters[0] as Int32Value)
+    ...ast.args.map(a => a.parameter)
   )
-  for (const exp of ast.expected) {
-    for (let i = 0; i < received.length; i++) {
-      const receivedValue = convertNumber(received[i]).toObject()
-      const expectedValue = convertNumber(exp.parameters[
-        i
-      ] as NumberValue).toObject()
-      const debugName = `${ast.invoke}(${ast.args
-        .map(a => JSON.stringify(a.parameters[0]))
-        .join(", ")})`
-      assert.deepStrictEqual(
-        receivedValue,
-        expectedValue,
-        `${debugName}: expected ${JSON.stringify(
-          exp.parameters[i]
-        )}. but received ${JSON.stringify(received[i])}`
-      )
-    }
+  for (let i = 0; i < received.length; i++) {
+    const exp = ast.expected[i]
+    const receivedValue = convertNumber(received[i]).toObject()
+    const expectedValue = convertNumber(exp.parameter).toObject()
+    const debugName = `${ast.invoke}(${ast.args
+      .map(a => JSON.stringify(a.parameter))
+      .join(", ")})`
+    assert.deepStrictEqual(
+      receivedValue,
+      expectedValue,
+      `${debugName}: expected ${JSON.stringify(
+        exp.parameter
+      )}. but received ${JSON.stringify(received[i])}`
+    )
   }
   console.log(`PASS: ${ast.invoke}`)
 }

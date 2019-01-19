@@ -1,12 +1,9 @@
 import { ASTModule } from "../wat-parser/module"
-import {
-  ASTFunction,
-  ASTFunctionInstruction,
-  AnyParameter
-} from "../wat-parser/func"
+import { ASTFunction } from "../wat-parser/func"
 import { fromPairs } from "../misc/array"
 import { isString } from "util"
-import { ASTBlock, isBlockInstruction } from "../wat-parser/block"
+import * as Op from "../wat-parser/opdef"
+import { isBlockInstruction } from "../wat-parser/block"
 import { ASTElem } from "../wat-parser/elem"
 
 type IdentifierEntry = { [key: string]: number }
@@ -25,47 +22,69 @@ const indexFromLast = <T>(arr: T[], pred: (item: T) => boolean): number => {
   return -1
 }
 
-const isIdentifier = (v: AnyParameter): v is string => {
+const isIdentifier = (v: any): v is string => {
   return isString(v) && v.startsWith("$")
 }
 
 const processInstruction = (
-  inst: ASTFunctionInstruction<AnyParameter>,
+  inst: Op.Any,
   idTables: IdentifierTables,
   labelStack: string[]
-): ASTFunctionInstruction<AnyParameter> => {
+): Op.Any => {
   if (isBlockInstruction(inst)) {
     return processBlock(inst, idTables, labelStack)
   }
 
   // 変数の identifier を index に置換
-  const parameters = inst.parameters.map(p => {
+  if ("parameter" in inst) {
+    const p = inst.parameter
     if (isIdentifier(p)) {
       switch (inst.opType) {
         case "call":
-          return idTables.funcs[p]
+          return {
+            ...inst,
+            parameter: idTables.funcs[p]
+          }
         case "br":
-        case "br_if": {
-          return indexFromLast(labelStack, l => l === p)
-        }
-        default:
-          return idTables.locals[p]
+        case "br_if":
+          return { ...inst, parameter: indexFromLast(labelStack, l => l === p) }
+        case "local.get":
+        case "local.set":
+        case "local.tee":
+        case "get_local":
+        case "set_local":
+        case "tee_local":
+        case "global.get":
+        case "global.set":
+        case "get_global":
+        case "set_global":
+          return {
+            ...inst,
+            parameter: idTables.locals[p]
+          }
       }
     }
-    return p
-  })
-
-  return {
-    ...inst,
-    parameters
   }
+
+  if ("parameters" in inst) {
+    return {
+      ...inst,
+      parameters: inst.parameters.map(p => {
+        if (isIdentifier(p)) {
+          return idTables.locals[p]
+        }
+      })
+    }
+  }
+
+  return inst
 }
 
 const processBlock = (
-  block: ASTBlock,
+  block: Op.Block | Op.Loop,
   idTables: IdentifierTables,
   labelStack: string[]
-): ASTBlock => {
+): Op.Block | Op.Loop => {
   const labels = [...labelStack, block.identifier]
   const body = block.body.map(i => processInstruction(i, idTables, labels))
 

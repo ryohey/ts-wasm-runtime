@@ -9,9 +9,9 @@ import { Int32 } from "../../number/Int32"
 import { BreakPosition, BreakFunc } from "../../vm/vm"
 import { createWASMVM } from "../wasm-vm"
 import { ValType } from "../../wat-parser/types"
-import { ASTBlock } from "../../wat-parser/block"
 import { convertNumber, numberValue } from "../../number/convert"
 import { Stack } from "../stack"
+import * as Op from "../../wat-parser/opdef"
 
 export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {
   const { functions, values } = memory
@@ -68,39 +68,37 @@ export const controlInstructionSet: PartialInstructionSet<
     case "unreachable":
       throw new Error(`not implemented ${code.opType}`)
     case "block":
-      return (code, memory, break_) => {
-        const block = code as ASTBlock
-        runBlock(memory, block.body, block.results, BreakPosition.tail, break_)
+      return (memory, break_) => {
+        runBlock(memory, code.body, code.results, BreakPosition.tail, break_)
       }
     case "loop":
-      return (code, memory, break_) => {
-        const block = code as ASTBlock
-        runBlock(memory, block.body, block.results, BreakPosition.head, break_)
+      return (memory, break_) => {
+        runBlock(memory, code.body, code.results, BreakPosition.head, break_)
       }
-    case "if":
-      throw new Error(`not implemented ${code.opType}`)
+    // case "if":
+    //   throw new Error(`not implemented ${code.opType}`)
     case "br":
-      return (code, _memory, break_) => {
-        break_(code.parameters[0] as number)
+      return (_, break_) => {
+        break_(code.parameter as number)
       }
     case "br_if":
-      return (code, memory, break_) => {
+      return (memory, break_) => {
         const { values } = memory
         if (!Int32.isZero(values.pop() as Int32)) {
-          break_(code.parameters[0] as number)
+          break_(code.parameter as number)
         }
       }
     case "br_table":
       throw new Error(`not implemented ${code.opType}`)
     case "return":
-      return (_, _memory, br) => br(0)
+      return (_, br) => br(0)
     case "call":
-      return ({ parameters }, memory, br) => {
-        const funcId = parameters[0] as number
+      return (memory, br) => {
+        const funcId = code.parameter as number
         callFunc(memory, funcId, br)
       }
     case "call_indirect":
-      return (_, memory, br) => {
+      return (memory, br) => {
         const idx = memory.values.pop() as Int32
         const funcId = memory.table[idx.toNumber()]
         callFunc(memory, funcId, br)

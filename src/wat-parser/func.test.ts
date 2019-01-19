@@ -20,11 +20,11 @@ describe("parser", () => {
       [
         {
           opType: "get_local",
-          parameters: ["$lhs"]
+          parameter: "$lhs"
         },
         {
           opType: "get_local",
-          parameters: ["$rhs"]
+          parameter: "$rhs"
         }
       ],
       4
@@ -61,15 +61,14 @@ describe("parser", () => {
         body: [
           {
             opType: "get_local",
-            parameters: ["$lhs"]
+            parameter: "$lhs"
           },
           {
             opType: "get_local",
-            parameters: ["$rhs"]
+            parameter: "$rhs"
           },
           {
-            opType: "i32.add",
-            parameters: []
+            opType: "i32.add"
           }
         ]
       },
@@ -109,15 +108,14 @@ describe("parser", () => {
         body: [
           {
             opType: "get_local",
-            parameters: ["$lhs"]
+            parameter: "$lhs"
           },
           {
             opType: "get_local",
-            parameters: ["$rhs"]
+            parameter: "$rhs"
           },
           {
-            opType: "i32.add",
-            parameters: []
+            opType: "i32.add"
           }
         ]
       },
@@ -138,7 +136,7 @@ describe("parser", () => {
         body: [
           {
             opType: "i32.const",
-            parameters: [{ i32: "42" }]
+            parameter: { i32: "42" }
           }
         ],
         export: "hello",
@@ -162,7 +160,7 @@ describe("parser", () => {
     assert.deepStrictEqual(r, [
       true,
       {
-        body: [{ opType: "get_local", parameters: [0] }],
+        body: [{ opType: "get_local", parameter: 0 }],
         export: "hello",
         identifier: null,
         nodeType: "func",
@@ -178,7 +176,7 @@ describe("parser", () => {
     const r = funcBody([["get_local", { int: "0" }]], 0)
     assert.deepStrictEqual(r, [
       true,
-      [{ opType: "get_local", parameters: [0] }],
+      [{ opType: "get_local", parameter: 0 }],
       1
     ])
   })
@@ -191,9 +189,9 @@ describe("parser", () => {
     assert.deepStrictEqual(r, [
       true,
       [
-        { opType: "i32.const", parameters: [{ i32: "2" }] },
-        { opType: "i32.const", parameters: [{ i32: "3" }] },
-        { opType: "i32.add", parameters: [] }
+        { opType: "i32.const", parameter: { i32: "2" } },
+        { opType: "i32.const", parameter: { i32: "3" } },
+        { opType: "i32.add" }
       ],
       1
     ])
@@ -212,9 +210,9 @@ describe("parser", () => {
       true,
       {
         body: [
-          { opType: "local.get", parameters: [0] },
-          { opType: "i64.eqz", parameters: [] },
-          { opType: "drop", parameters: [] }
+          { opType: "local.get", parameter: 0 },
+          { opType: "i64.eqz" },
+          { opType: "drop" }
         ],
         export: "type-mixed",
         identifier: null,
@@ -255,25 +253,23 @@ describe("parser", () => {
         body: [
           {
             body: [
-              { opType: "call", parameters: ["$dummy"] },
-              { opType: "f32.const", parameters: [{ f32: "3" }] }
+              { opType: "call", parameter: "$dummy" },
+              { opType: "f32.const", parameter: { f32: "3" } }
             ],
             identifier: null,
             opType: "block",
-            parameters: [],
             results: ["f32"]
           },
           {
             body: [
-              { opType: "call", parameters: ["$dummy"] },
-              { opType: "f32.const", parameters: [{ f32: "3" }] }
+              { opType: "call", parameter: "$dummy" },
+              { opType: "f32.const", parameter: { f32: "3" } }
             ],
             identifier: null,
             opType: "block",
-            parameters: [],
             results: ["f32"]
           },
-          { opType: "f32.gt", parameters: [] }
+          { opType: "f32.gt" }
         ],
         export: "as-compare-operand",
         identifier: null,

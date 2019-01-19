@@ -3,9 +3,8 @@ import {
   WASMCode,
   WASMLocalMemory
 } from "../wasm-memory"
-import { Float32Value } from "../../wat-parser/types"
 import { Float32 } from "../../number/Float32"
-import { binop, boolMonop, boolBinop, monop } from "./helpers"
+import { binop, boolBinop, monop } from "./helpers"
 
 export const f32InstructionSet: PartialInstructionSet<
   WASMCode,
@@ -13,10 +12,7 @@ export const f32InstructionSet: PartialInstructionSet<
 > = code => {
   switch (code.opType) {
     case "f32.const":
-      return (code, { values }) => {
-        const a = code.parameters[0] as Float32Value
-        values.push(Float32.obj(a))
-      }
+      return ({ values }) => values.push(Float32.obj(code.parameter))
     case "f32.add":
       return binop(Float32.add)
     case "f32.sub":

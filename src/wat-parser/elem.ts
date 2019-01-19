@@ -14,7 +14,7 @@ export const moduleElem = map(
   r =>
     ({
       nodeType: "elem",
-      offset: r[1].parameters[0],
+      offset: r[1].parameter,
       funcIds: r[2]
     } as ASTElem)
 )

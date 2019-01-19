@@ -2,14 +2,14 @@ import { map, seq, opt, many } from "../parser/parser"
 import { keyword, array } from "./utils"
 import { string } from "./types"
 import { operations } from "./operations"
-import { ASTFunctionInstruction, AnyParameter } from "./func"
 import { flatten } from "../misc/array"
+import * as Op from "./opdef"
 
 export interface ASTAssertReturn {
   nodeType: "assert_return"
   invoke: string
-  args: ASTFunctionInstruction<AnyParameter>[]
-  expected: ASTFunctionInstruction<AnyParameter>[]
+  args: Op.Const[]
+  expected: Op.Const[]
 }
 
 export const assertionParser = map(

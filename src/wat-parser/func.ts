@@ -1,27 +1,10 @@
 import { map, seq, opt, Parser, many } from "../parser/parser"
 import { keyword, array } from "./utils"
-import {
-  valType,
-  identifier,
-  string,
-  ValType,
-  blockType,
-  Int32Value,
-  Int64Value,
-  Float32Value,
-  Float64Value
-} from "./types"
+import { valType, identifier, string, ValType, blockType } from "./types"
 import { operations } from "./operations"
 import { flatten } from "../misc/array"
 import { Element } from "../s-parser/s-parser"
-
-export type AnyParameter =
-  | string
-  | number
-  | Int32Value
-  | Int64Value
-  | Float32Value
-  | Float64Value
+import * as Op from "./opdef"
 
 export interface ASTFunction {
   nodeType: "func"
@@ -29,7 +12,7 @@ export interface ASTFunction {
   export: string | null
   parameters: ASTFunctionParameter[]
   results: ValType[]
-  body: ASTFunctionInstruction<AnyParameter>[]
+  body: Op.Any[]
   locals: ASTFunctionLocal[]
 }
 
@@ -40,11 +23,6 @@ export interface ASTFunctionParameter {
 export interface ASTFunctionLocal {
   identifier: string | null
   type: ValType
-}
-
-export interface ASTFunctionInstruction<T> {
-  opType: string
-  parameters: T[]
 }
 
 export const param = map(

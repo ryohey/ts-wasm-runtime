@@ -2,28 +2,16 @@ import { Parser, seq, many, opt, or, lazy, map } from "../parser/parser"
 import { blockType, identifier, ValType } from "./types"
 import { keyword, array } from "./utils"
 import { operations } from "./operations"
-import { ASTFunctionInstruction, AnyParameter } from "./func"
 import { flatten } from "../misc/array"
 import { Element } from "../s-parser/s-parser"
+import * as Op from "./opdef"
 
-export interface ASTBlock extends ASTFunctionInstruction<AnyParameter> {
-  opType: "block"
-  identifier: string | null
-  results: ValType[]
-  body: ASTFunctionInstruction<AnyParameter>[]
-}
-
-export const isBlockInstruction = (
-  inst: ASTFunctionInstruction<AnyParameter>
-): inst is ASTBlock => {
-  return inst.opType === "block" || inst.opType === "loop"
-}
+export const isBlockInstruction = (inst: Op.Any): inst is Op.Block | Op.Loop =>
+  inst.opType === "block" || inst.opType === "loop"
 
 const instructions = lazy(() => operations)
 
-const makeBlockBody = (
-  word: string
-): Parser<Element[], (ASTBlock | ASTFunctionInstruction<AnyParameter>)[]> =>
+const makeBlockBody = (word: string): Parser<Element[], Op.Any[]> =>
   map(
     seq(
       keyword(word),
@@ -36,15 +24,12 @@ const makeBlockBody = (
         opType: word,
         identifier: r[1],
         results: r[2] ? [r[2]] : [],
-        parameters: [],
         body: flatten(r[3] || [])
-      } as ASTBlock
+      } as Op.Block
     ]
   )
 
-const makePlainBlock = (
-  word: string
-): Parser<Element[], ASTFunctionInstruction<AnyParameter>[]> =>
+const makePlainBlock = (word: string): Parser<Element[], Op.Any[]> =>
   map(seq(makeBlockBody(word), keyword("end")), r => r[0])
 
 const makeFoldedBlock = (word: string) => array(makeBlockBody(word))

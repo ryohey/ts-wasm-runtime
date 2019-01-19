@@ -3,7 +3,6 @@ import {
   WASMCode,
   WASMLocalMemory
 } from "../wasm-memory"
-import { Int64Value } from "../../wat-parser/types"
 import { Int64 } from "../../number/Int64"
 import { binop, boolBinop, boolMonop, monop } from "./helpers"
 
@@ -14,10 +13,7 @@ export const i64InstructionSet: PartialInstructionSet<
 > = code => {
   switch (code.opType) {
     case "i64.const":
-      return (code, { values }) => {
-        const a = code.parameters[0] as Int64Value
-        values.push(Int64.obj(a))
-      }
+      return ({ values }) => values.push(Int64.obj(code.parameter))
     case "i64.add":
       return binop(Int64.add)
     case "i64.sub":

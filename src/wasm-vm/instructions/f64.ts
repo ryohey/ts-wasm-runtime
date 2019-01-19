@@ -5,7 +5,6 @@ import {
 } from "../wasm-memory"
 import { binop, monop, boolBinop } from "./helpers"
 import { Float64 } from "../../number/Float64"
-import { Float64Value } from "../../wat-parser/types"
 
 export const f64InstructionSet: PartialInstructionSet<
   WASMCode,
@@ -13,10 +12,7 @@ export const f64InstructionSet: PartialInstructionSet<
 > = code => {
   switch (code.opType) {
     case "f64.const":
-      return (code, { values }) => {
-        const a = code.parameters[0] as Float64Value
-        values.push(Float64.obj(a))
-      }
+      return ({ values }) => values.push(Float64.obj(code.parameter))
     case "f64.add":
       return binop(Float64.add)
     case "f64.sub":

@@ -12,8 +12,7 @@ describe("block", () => {
           opType: "block",
           identifier: null,
           results: [],
-          parameters: [],
-          body: [{ opType: "i32.const", parameters: [{ i32: "42" }] }]
+          body: [{ opType: "i32.const", parameter: { i32: "42" } }]
         }
       ],
       4
@@ -31,8 +30,7 @@ describe("block", () => {
           opType: "block",
           identifier: "$lbl",
           results: [],
-          parameters: [],
-          body: [{ opType: "i32.const", parameters: [{ i32: "42" }] }]
+          body: [{ opType: "i32.const", parameter: { i32: "42" } }]
         }
       ],
       5
@@ -50,8 +48,7 @@ describe("block", () => {
           opType: "block",
           identifier: null,
           results: ["i32"],
-          parameters: [],
-          body: [{ opType: "i32.const", parameters: [{ i32: "42" }] }]
+          body: [{ opType: "i32.const", parameter: { i32: "42" } }]
         }
       ],
       1
@@ -68,12 +65,11 @@ describe("block", () => {
       [
         {
           body: [
-            { opType: "call", parameters: ["$dummy"] },
-            { opType: "f32.const", parameters: [{ f32: "3" }] }
+            { opType: "call", parameter: "$dummy" },
+            { opType: "f32.const", parameter: { f32: "3" } }
           ],
           identifier: null,
           opType: "block",
-          parameters: [],
           results: ["f32"]
         }
       ],

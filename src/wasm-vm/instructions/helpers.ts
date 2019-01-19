@@ -4,7 +4,7 @@ import { Int32 } from "../../number/Int32"
 
 export const monop = <T extends WASMMemoryValue>(
   fn: (a: T) => T
-): Instruction<WASMCode, WASMMemory> => (_, memory) => {
+): Instruction<WASMMemory> => memory => {
   const { values } = memory
   const a = values.pop() as T
   values.push(fn(a))
@@ -12,7 +12,7 @@ export const monop = <T extends WASMMemoryValue>(
 
 export const binop = <T extends WASMMemoryValue>(
   fn: (a: T, b: T) => T
-): Instruction<WASMCode, WASMMemory> => (_, memory) => {
+): Instruction<WASMMemory> => memory => {
   const { values } = memory
   const a = values.pop() as T
   const b = values.pop() as T

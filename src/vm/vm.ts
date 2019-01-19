@@ -1,13 +1,7 @@
-export type InstructionSet<Code, Memory> = (
-  code: Code
-) => Instruction<Code, Memory>
+export type InstructionSet<Code, Memory> = (code: Code) => Instruction<Memory>
 
 // mutates register and memory
-export type Instruction<Code, Memory> = (
-  code: Code,
-  memory: Memory,
-  br: BreakFunc
-) => void
+export type Instruction<Memory> = (memory: Memory, br: BreakFunc) => void
 
 export interface VMMemory {
   programCounter: number
@@ -55,7 +49,7 @@ export class VirtualMachine<Code, Memory extends VMMemory> {
       const instr = this.instructionSet(code)
       this.log(`[${memory.programCounter}] run ${JSON.stringify(code)}`)
       try {
-        instr(code, memory, break_)
+        instr(memory, break_)
       } catch (e) {
         console.error(
           `Exception thrown at ${memory.programCounter}: ${

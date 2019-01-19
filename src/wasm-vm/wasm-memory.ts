@@ -10,11 +10,8 @@ import { Int32 } from "../number/Int32"
 import { Float32 } from "../number/Float32"
 import { Int64 } from "../number/Int64"
 import { Float64 } from "../number/Float64"
-import {
-  ASTFunctionInstruction,
-  AnyParameter,
-  ASTFunction
-} from "../wat-parser/func"
+import * as Op from "../wat-parser/opdef"
+import { ASTFunction } from "../wat-parser/func"
 
 export type WASMCodeParameter =
   | number
@@ -23,7 +20,7 @@ export type WASMCodeParameter =
   | Float32Value
   | Float64Value
 
-export type WASMCode = ASTFunctionInstruction<AnyParameter>
+export type WASMCode = Op.Any
 
 export type WASMMemoryValue = Int32 | Int64 | Float32 | Float64
 
@@ -54,4 +51,4 @@ export type WASMLocalMemory = Pick<
   "values" | "memory" | "global" | "local"
 >
 
-export type PartialInstructionSet<T, S> = (code: T) => Instruction<T, S> | null
+export type PartialInstructionSet<T, S> = (code: T) => Instruction<S> | null
