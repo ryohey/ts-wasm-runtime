@@ -1,4 +1,4 @@
-import { NumberValue } from "../wat-parser/types"
+import { NumberValue, ValType } from "../wat-parser/types"
 import { WASMMemoryValue } from "../wasm-vm/wasm-code"
 import { Float32 } from "./Float32"
 import { Int32 } from "./Int32"
@@ -19,4 +19,17 @@ export const convertNumber = (num: NumberValue): WASMMemoryValue => {
     return Float64.obj(num)
   }
   throw new Error("not supported number type")
+}
+
+export const numberValue = (type: ValType, value: string): NumberValue => {
+  switch (type) {
+    case ValType.i32:
+      return { [type]: value }
+    case ValType.i64:
+      return { [type]: value }
+    case ValType.f32:
+      return { [type]: value }
+    case ValType.f64:
+      return { [type]: value }
+  }
 }

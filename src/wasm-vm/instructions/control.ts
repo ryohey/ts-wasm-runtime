@@ -10,8 +10,7 @@ import { BreakPosition, BreakFunc } from "../../vm/vm"
 import { createWASMVM } from "../wasm-vm"
 import { ValType } from "../../wat-parser/types"
 import { ASTBlock } from "../../wat-parser/block"
-import { convertNumber } from "../../number/convert"
-import { numberValue } from "../../compiler/compiler"
+import { convertNumber, numberValue } from "../../number/convert"
 import { Stack } from "../stack"
 
 export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {

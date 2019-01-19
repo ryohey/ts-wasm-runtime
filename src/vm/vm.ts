@@ -66,6 +66,7 @@ export class VirtualMachine<Code, Memory extends VMMemory> {
       }
     }
 
+    // pass remained break count to break nested call
     return breakLevel
   }
 
