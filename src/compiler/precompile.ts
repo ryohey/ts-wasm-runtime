@@ -2,9 +2,9 @@ import { ASTModule } from "../wat-parser/module"
 import { ASTFunction } from "../wat-parser/func"
 import { fromPairs } from "../misc/array"
 import { isString } from "util"
-import * as Op from "../wat-parser/opdef"
 import { isBlockInstruction } from "../wat-parser/block"
 import { ASTElem } from "../wat-parser/elem"
+import * as Op from "../wat-parser/opdef"
 
 type IdentifierEntry = { [key: string]: number }
 
@@ -26,11 +26,16 @@ const isIdentifier = (v: any): v is string => {
   return isString(v) && v.startsWith("$")
 }
 
+const isIfInstruction = (inst: Op.Any): inst is Op.If => inst.opType === "if"
+
 const processInstruction = (
   inst: Op.Any,
   idTables: IdentifierTables,
   labelStack: string[]
 ): Op.Any => {
+  if (isIfInstruction(inst)) {
+    return processIf(inst, idTables, labelStack)
+  }
   if (isBlockInstruction(inst)) {
     return processBlock(inst, idTables, labelStack)
   }
@@ -91,6 +96,20 @@ const processBlock = (
   return {
     ...block,
     body
+  }
+}
+
+const processIf = (
+  block: Op.If,
+  idTables: IdentifierTables,
+  labelStack: string[]
+): Op.If => {
+  const labels = [...labelStack, block.identifier]
+
+  return {
+    ...block,
+    then: block.then.map(i => processInstruction(i, idTables, labels)),
+    else: block.else.map(i => processInstruction(i, idTables, labels))
   }
 }
 

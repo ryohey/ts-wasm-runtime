@@ -62,6 +62,7 @@ export const plainInstructions = or<Element[], Op.Any>(
   op<Op.CallIndirect>("call_indirect"),
   op<Op.Drop>("drop"),
   op<Op.Select>("select"),
+  op<Op.Return>("return"),
 
   op1<Op.Local_get>("local.get", indices),
   op1<Op.Local_set>("local.set", indices),

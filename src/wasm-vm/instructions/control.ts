@@ -11,7 +11,6 @@ import { createWASMVM } from "../wasm-vm"
 import { ValType } from "../../wat-parser/types"
 import { convertNumber, numberValue } from "../../number/convert"
 import { Stack } from "../stack"
-import * as Op from "../../wat-parser/opdef"
 
 export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {
   const { functions, values } = memory
@@ -75,8 +74,14 @@ export const controlInstructionSet: PartialInstructionSet<
       return (memory, break_) => {
         runBlock(memory, code.body, code.results, BreakPosition.head, break_)
       }
-    // case "if":
-    //   throw new Error(`not implemented ${code.opType}`)
+    case "if":
+      return (memory, break_) => {
+        if (!Int32.isZero(memory.values.pop() as Int32)) {
+          runBlock(memory, code.then, code.results, BreakPosition.tail, break_)
+        } else {
+          runBlock(memory, code.else, code.results, BreakPosition.tail, break_)
+        }
+      }
     case "br":
       return (_, break_) => {
         break_(code.parameter as number)

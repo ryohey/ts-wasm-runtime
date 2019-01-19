@@ -1,6 +1,5 @@
 import * as assert from "assert"
 import { wastParser } from "../wat-parser/wast"
-import { Int32Value, NumberValue } from "../wat-parser/types"
 import { ASTModule } from "../wat-parser/module"
 import { ASTAssertReturn } from "../wat-parser/assert"
 import { WASMVirtualMachine } from "./wasm-vm"
