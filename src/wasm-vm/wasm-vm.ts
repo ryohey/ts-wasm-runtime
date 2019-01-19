@@ -4,7 +4,6 @@ import {
   WASMMemory,
   PartialInstructionSet,
   WASMModule,
-  WASMFunction,
   WASMTable,
   WASMMemoryValue
 } from "./wasm-code"
@@ -18,6 +17,7 @@ import { i64InstructionSet } from "./instructions/i64"
 import { f32InstructionSet } from "./instructions/f32"
 import { convertNumber } from "../number/convert"
 import { Stack } from "./stack"
+import { ASTFunction } from "../wat-parser/func"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -49,7 +49,7 @@ const mergeInstructionSet = <T, S>(
 
 export class WASMVirtualMachine {
   private table: WASMTable
-  private functions: WASMFunction[]
+  private functions: ASTFunction[]
 
   constructor(module: WASMModule) {
     this.table = module.table

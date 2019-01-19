@@ -11,7 +11,11 @@ import { Int32 } from "../number/Int32"
 import { Float32 } from "../number/Float32"
 import { Int64 } from "../number/Int64"
 import { Float64 } from "../number/Float64"
-import { ASTFunctionInstruction, AnyParameter } from "../wat-parser/func"
+import {
+  ASTFunctionInstruction,
+  AnyParameter,
+  ASTFunction
+} from "../wat-parser/func"
 
 export type WASMCodeParameter =
   | number
@@ -24,22 +28,13 @@ export type WASMCode = ASTFunctionInstruction<AnyParameter>
 
 export type WASMMemoryValue = Int32 | Int64 | Float32 | Float64
 
-export type WASMFunction = {
-  export: string
-  identifier: string
-  parameters: ValType[]
-  locals: ValType[]
-  results: ValType[]
-  code: WASMCode[]
-}
-
 export type WASMTable = {
   // index: funcId
   [key: number]: number
 }
 
 export interface WASMModule {
-  functions: WASMFunction[]
+  functions: ASTFunction[]
   table: WASMTable
 }
 
@@ -49,7 +44,7 @@ export interface WASMMemory {
   readonly memory: WASMMemoryValue[]
   readonly global: WASMMemoryValue[]
   readonly local: WASMMemoryValue[]
-  readonly functions: WASMFunction[]
+  readonly functions: ASTFunction[]
   readonly table: WASMTable
   readonly programCounter: number
 }

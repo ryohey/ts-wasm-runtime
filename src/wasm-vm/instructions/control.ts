@@ -25,12 +25,12 @@ export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {
 
       // local を初期化する
       ...fn.locals
-        .map(type => numberValue(type, "0"))
+        .map(l => numberValue(l.type, "0"))
         .map(num => convertNumber(num))
     ]
   }
 
-  runBlock(newMemory, fn.code, fn.results, BreakPosition.tail, br)
+  runBlock(newMemory, fn.body, fn.results, BreakPosition.tail, br)
 }
 
 const runBlock = (

@@ -7,16 +7,7 @@ import { replaceIdentifiers } from "./precompile"
 export const compile = (ast: ASTModule): WASMModule => {
   ast = replaceIdentifiers(ast)
 
-  // TODO: functions 以外を実装
-
-  const functions = ast.functions.map(fn => ({
-    export: fn.export,
-    results: fn.results,
-    identifier: fn.identifier,
-    locals: fn.locals.map(l => l.type),
-    parameters: fn.parameters.map(p => p.type),
-    code: fn.body
-  }))
+  // TODO: functions, table 以外を実装
 
   const table: { [key: number]: number } = {}
   ast.elems.forEach(e => {
@@ -27,7 +18,7 @@ export const compile = (ast: ASTModule): WASMModule => {
   })
 
   return {
-    functions,
+    functions: ast.functions,
     table
   }
 }
