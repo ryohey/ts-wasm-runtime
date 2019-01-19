@@ -5,6 +5,7 @@ import { blockInstructions } from "./block"
 import { flatten } from "../misc/array"
 import { Element } from "../s-parser/s-parser"
 import * as Op from "./opdef"
+import { ifParser } from "./if"
 
 // operation with no parameters
 const op = <T extends Op.Any>(str: string): Parser<Element[], T> =>
@@ -295,6 +296,7 @@ const foldedInstructions = map(
 
 export const operations: Parser<Element[], Op.Any[]> = or(
   lazy(() => blockInstructions),
+  lazy(() => ifParser),
   map(plainInstructions, r => [r]),
   foldedInstructions
 )

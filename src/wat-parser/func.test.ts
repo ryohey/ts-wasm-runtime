@@ -1,6 +1,7 @@
 import * as assert from "assert"
 import { param, funcBody, func } from "./func"
 import { parser as sParser } from "../s-parser/s-parser"
+import { ValType } from "./types"
 
 describe("parser", () => {
   it("parse param", () => {
@@ -279,6 +280,56 @@ describe("parser", () => {
         results: ["i32"]
       },
       4
+    ])
+  })
+
+  it("parses if", () => {
+    const sExp = sParser(
+      `(func (export "singular") (param i32) (result i32)
+        (if (local.get 0) (then (nop)))
+        (if (local.get 0) (then (nop)) (else (nop)))
+        (if (result i32) (local.get 0) (then (i32.const 7)) (else (i32.const 8)))
+      )`,
+      0
+    )
+    const r = func(sExp[1], 0)
+    assert.deepStrictEqual(r, [
+      true,
+      {
+        body: [
+          { opType: "local.get", parameter: 0 },
+          {
+            opType: "if",
+            identifier: null,
+            then: [{ opType: "nop" }],
+            else: [],
+            results: []
+          },
+          { opType: "local.get", parameter: 0 },
+          {
+            opType: "if",
+            identifier: null,
+            then: [{ opType: "nop" }],
+            else: [{ opType: "nop" }],
+            results: []
+          },
+          { opType: "local.get", parameter: 0 },
+          {
+            opType: "if",
+            identifier: null,
+            then: [{ opType: "i32.const", parameter: { i32: "7" } }],
+            else: [{ opType: "i32.const", parameter: { i32: "8" } }],
+            results: [ValType.i32]
+          }
+        ],
+        export: "singular",
+        identifier: null,
+        locals: [],
+        nodeType: "func",
+        parameters: [{ identifier: null, type: "i32" }],
+        results: ["i32"]
+      },
+      7
     ])
   })
 })

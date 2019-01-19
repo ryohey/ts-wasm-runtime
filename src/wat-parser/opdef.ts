@@ -265,6 +265,13 @@ export interface BlockBase<T extends string> extends Base<T> {
 export interface Block extends BlockBase<"block"> {}
 export interface Loop extends BlockBase<"loop"> {}
 
+export interface If extends Base<"if"> {
+  identifier: string | null
+  results: ValType[]
+  then: Any[]
+  else: Any[]
+}
+
 export type Const = I32_const | I64_const | F32_const | F64_const
 
 export type Any =
@@ -278,6 +285,7 @@ export type Any =
   | CallIndirect
   | Block
   | Loop
+  | If
   | Local_get
   | Local_set
   | Get_local
