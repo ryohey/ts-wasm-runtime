@@ -2,7 +2,7 @@ import {
   PartialInstructionSet,
   WASMCode,
   WASMMemory,
-  WASMContext
+  WASMMemoryValue
 } from "../wasm-code"
 import { range } from "../../misc/array"
 import { Int32 } from "../../number/Int32"
@@ -12,24 +12,26 @@ import { ValType } from "../../wat-parser/types"
 import { ASTBlock } from "../../wat-parser/block"
 import { convertNumber } from "../../number/convert"
 import { numberValue } from "../../compiler/compiler"
+import { Stack } from "../stack"
 
 export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {
   const { functions, values } = memory
   const fn = functions[funcId]
 
-  memory.localStack.push([
-    // 指定された数のパラメータを values から pop して新しいスタックに積む
-    ...range(0, fn.parameters.length).map(_ => values.pop()),
+  const newMemory = {
+    ...memory,
+    local: [
+      // 指定された数のパラメータを values から pop して新しいスタックに積む
+      ...range(0, fn.parameters.length).map(_ => values.pop()),
 
-    // local を初期化する
-    ...fn.locals
-      .map(type => numberValue(type, "0"))
-      .map(num => convertNumber(num))
-  ])
+      // local を初期化する
+      ...fn.locals
+        .map(type => numberValue(type, "0"))
+        .map(num => convertNumber(num))
+    ]
+  }
 
-  runBlock(memory, fn.code, fn.results, BreakPosition.tail, br)
-
-  memory.localStack.pop()
+  runBlock(newMemory, fn.code, fn.results, BreakPosition.tail, br)
 }
 
 const runBlock = (
@@ -39,22 +41,21 @@ const runBlock = (
   breakPosition: BreakPosition,
   break_: (level: number) => void
 ) => {
-  const { callStack, values } = memory
-
-  const ctx = new WASMContext()
-  callStack.push(ctx)
+  const newMemory = {
+    ...memory,
+    values: new Stack<WASMMemoryValue>()
+  }
 
   const vm = createWASMVM()
-  const breakLevel = vm.run(codes, memory, breakPosition)
+  const breakLevel = vm.run(codes, newMemory, breakPosition)
   if (breakLevel > 0) {
     break_(breakLevel - 1)
   }
 
-  const returnValues = results.map(_ => ctx.values.pop())
+  const returnValues = results.map(_ => newMemory.values.pop())
 
-  callStack.pop()
   // 指定された数の戻り値を pop 後のスタックに積む
-  returnValues.forEach(values.push)
+  returnValues.forEach(memory.values.push)
 }
 
 export const controlInstructionSet: PartialInstructionSet<

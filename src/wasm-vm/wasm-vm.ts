@@ -3,10 +3,10 @@ import {
   WASMCode,
   WASMMemory,
   PartialInstructionSet,
-  WASMContext,
   WASMModule,
   WASMFunction,
-  WASMTable
+  WASMTable,
+  WASMMemoryValue
 } from "./wasm-code"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
@@ -17,6 +17,7 @@ import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
 import { f32InstructionSet } from "./instructions/f32"
 import { convertNumber } from "../number/convert"
+import { Stack } from "./stack"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -60,8 +61,15 @@ export class WASMVirtualMachine {
     const funcId = this.functions.findIndex(t => t.export === name)
     const fn = this.functions[funcId]
 
-    const memory = new WASMMemory(this.functions, this.table)
-    memory.callStack.push(new WASMContext())
+    const memory: WASMMemory = {
+      functions: this.functions,
+      table: this.table,
+      values: new Stack<WASMMemoryValue>(),
+      memory: [],
+      local: [],
+      global: []
+    }
+
     args
       .map(convertNumber)
       .reverse()

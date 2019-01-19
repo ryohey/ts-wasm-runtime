@@ -24,15 +24,6 @@ export type WASMCode = ASTFunctionInstruction<AnyParameter>
 
 export type WASMMemoryValue = Int32 | Int64 | Float32 | Float64
 
-export class WASMContext {
-  readonly values = new Stack<WASMMemoryValue>()
-  readonly labelPosition: number
-
-  constructor(labelPosition: number = 0) {
-    this.labelPosition = labelPosition
-  }
-}
-
 export type WASMFunction = {
   export: string
   identifier: string
@@ -52,27 +43,14 @@ export interface WASMModule {
   table: WASMTable
 }
 
-export class WASMMemory {
+export interface WASMMemory {
   // control instruction のみが直接 stack を触るべき
-  readonly callStack = new Stack<WASMContext>()
-  readonly memory: WASMMemoryValue[] = []
-  readonly global: WASMMemoryValue[] = []
-  readonly localStack = new Stack<WASMMemoryValue[]>()
+  readonly values: Stack<WASMMemoryValue>
+  readonly memory: WASMMemoryValue[]
+  readonly global: WASMMemoryValue[]
+  readonly local: WASMMemoryValue[]
   readonly functions: WASMFunction[]
   readonly table: WASMTable
-
-  constructor(functions: WASMFunction[], table: WASMTable) {
-    this.functions = functions
-    this.table = table
-  }
-
-  get values(): Stack<WASMMemoryValue> {
-    return this.callStack.peek().values
-  }
-
-  get local(): WASMMemoryValue[] {
-    return this.localStack.peek()
-  }
 }
 
 // 通常の instruction が操作できるメモリ
