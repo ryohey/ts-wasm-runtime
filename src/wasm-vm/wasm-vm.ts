@@ -11,7 +11,7 @@ import {
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { f64InstructionSet } from "./instructions/f64"
-import { controlInstructionSet } from "./instructions/control"
+import { controlInstructionSet, callFunc } from "./instructions/control"
 import { NumberValue } from "../wat-parser/types"
 import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
@@ -57,15 +57,19 @@ export class WASMVirtualMachine {
 
   // export された関数を呼ぶ
   callFunction(name: string, ...args: NumberValue[]): NumberValue[] {
-    const memory = new WASMMemory(this.functions, this.table)
     const funcId = this.functions.findIndex(t => t.export === name)
     const fn = this.functions[funcId]
 
+    const memory = new WASMMemory(this.functions, this.table)
     memory.callStack.push(new WASMContext())
-    memory.localStack.push(args.map(convertNumber))
+    args
+      .map(convertNumber)
+      .reverse()
+      .forEach(memory.values.push)
 
-    const vm = createWASMVM()
-    vm.run(fn.code, memory)
+    callFunc(memory, funcId, () => {
+      throw new Error("invalid break")
+    })
 
     return fn.results.map(_ => memory.values.pop().toObject())
   }

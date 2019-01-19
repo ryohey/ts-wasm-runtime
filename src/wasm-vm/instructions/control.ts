@@ -8,12 +8,12 @@ import { range } from "../../misc/array"
 import { Int32 } from "../../number/Int32"
 import { BreakPosition, BreakFunc } from "../../vm/vm"
 import { createWASMVM } from "../wasm-vm"
-import { ValType, NumberValue } from "../../wat-parser/types"
+import { ValType } from "../../wat-parser/types"
 import { ASTBlock } from "../../wat-parser/block"
 import { convertNumber } from "../../number/convert"
 import { numberValue } from "../../compiler/compiler"
 
-const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {
+export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {
   const { functions, values } = memory
   const fn = functions[funcId]
 
