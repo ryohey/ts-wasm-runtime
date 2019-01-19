@@ -7,7 +7,7 @@ export const f32InstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
 > = code => {
-  switch (code.opcode) {
+  switch (code.opType) {
     case "f32.const":
       return (code, { values }) => {
         const a = code.parameters[0] as Float32Value
@@ -38,7 +38,7 @@ export const f32InstructionSet: PartialInstructionSet<
     case "f32.neg":
       return monop(Float32.neg)
     case "f32.copysign":
-      throw new Error(`not implemented ${code.opcode}`)
+      throw new Error(`not implemented ${code.opType}`)
     case "f32.ceil":
       return monop(Float32.ceil)
     case "f32.floor":
@@ -59,7 +59,7 @@ export const f32InstructionSet: PartialInstructionSet<
     case "f32.convert_u/i32":
     case "f32.convert_u/i64":
     case "f32.reinterpret/i32":
-      throw new Error(`not implemented ${code.opcode}`)
+      throw new Error(`not implemented ${code.opType}`)
   }
   return null
 }

@@ -11,6 +11,7 @@ import { Int32 } from "../number/Int32"
 import { Float32 } from "../number/Float32"
 import { Int64 } from "../number/Int64"
 import { Float64 } from "../number/Float64"
+import { ASTFunctionInstruction, AnyParameter } from "../wat-parser/func"
 
 export type WASMCodeParameter =
   | number
@@ -19,20 +20,15 @@ export type WASMCodeParameter =
   | Float32Value
   | Float64Value
 
-export interface WASMCode {
-  readonly opcode: string
-  readonly parameters: WASMCodeParameter[]
-}
+export type WASMCode = ASTFunctionInstruction<AnyParameter>
 
 export type WASMMemoryValue = Int32 | Int64 | Float32 | Float64
 
 export class WASMContext {
   readonly values = new Stack<WASMMemoryValue>()
   readonly labelPosition: number
-  readonly resultLength: number
 
-  constructor(resultLength: number = 0, labelPosition: number = 0) {
-    this.resultLength = resultLength
+  constructor(labelPosition: number = 0) {
     this.labelPosition = labelPosition
   }
 }
@@ -44,10 +40,6 @@ export type WASMFunction = {
   locals: ValType[]
   results: ValType[]
   code: WASMCode[]
-}
-
-export interface WASMFunctionInstance extends WASMFunction {
-  call: (memory: WASMMemory) => void
 }
 
 export type WASMTable = {
@@ -66,10 +58,10 @@ export class WASMMemory {
   readonly memory: WASMMemoryValue[] = []
   readonly global: WASMMemoryValue[] = []
   readonly localStack = new Stack<WASMMemoryValue[]>()
-  readonly functions: WASMFunctionInstance[]
+  readonly functions: WASMFunction[]
   readonly table: WASMTable
 
-  constructor(functions: WASMFunctionInstance[], table: WASMTable) {
+  constructor(functions: WASMFunction[], table: WASMTable) {
     this.functions = functions
     this.table = table
   }

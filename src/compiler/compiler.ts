@@ -19,27 +19,14 @@ const compileInstruction = (
     return compileBlock(block)
   }
 
-  return [
-    {
-      opcode: inst.opType,
-      parameters: inst.parameters as WASMCodeParameter[]
-    }
-  ]
+  return [inst]
 }
 
 const compileBlock = (block: ASTBlock): WASMCode[] => {
-  const body = flatten(block.body.map(i => compileInstruction(i)))
-  // block の場合はラベルが指す相対アドレスが末尾
-  const labelPosition = block.opType === "block" ? body.length : 0
-  const prologue = [
-    { opcode: "_push", parameters: [block.results.length, labelPosition] }
-  ]
-  const epilogue = [{ opcode: "_pop", parameters: [] }]
-
-  return [...prologue, ...body, ...epilogue]
+  return [block]
 }
 
-const numberValue = (type: ValType, value: string): NumberValue => {
+export const numberValue = (type: ValType, value: string): NumberValue => {
   switch (type) {
     case ValType.i32:
       return { [type]: value }
@@ -57,10 +44,10 @@ const compileFunction = (ast: ASTFunction): WASMCode[] => {
     // initialize local values
     ast.locals.map((l, i) => [
       {
-        opcode: `${l.type}.const`,
+        opType: `${l.type}.const`,
         parameters: [numberValue(l.type, "0")]
       },
-      { opcode: "set_local", parameters: [i + ast.parameters.length] }
+      { opType: "set_local", parameters: [i + ast.parameters.length] }
     ])
   )
 

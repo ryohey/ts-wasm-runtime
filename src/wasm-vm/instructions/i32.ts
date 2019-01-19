@@ -13,7 +13,7 @@ export const i32InstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
 > = code => {
-  switch (code.opcode) {
+  switch (code.opType) {
     case "i32.const":
       return (code, { values }) => {
         const a = code.parameters[0] as Int32Value
@@ -51,7 +51,7 @@ export const i32InstructionSet: PartialInstructionSet<
       return binop(Int32.shiftRight_s)
     case "i32.rot_l":
     case "i32.rot_r":
-      throw new Error(`not implemented ${code.opcode}`)
+      throw new Error(`not implemented ${code.opType}`)
     case "i32.lt_s":
       return boolBinop(Int32.lessThan_s)
     case "i32.lt_u":
@@ -83,7 +83,7 @@ export const i32InstructionSet: PartialInstructionSet<
     case "i32.trunc_u/f32":
     case "i32.trunc_u/f64":
     case "i32.reinterpret/f32":
-      throw new Error(`not implemented ${code.opcode}`)
+      throw new Error(`not implemented ${code.opType}`)
   }
   return null
 }

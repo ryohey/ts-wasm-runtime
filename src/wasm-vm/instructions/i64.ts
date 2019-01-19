@@ -8,7 +8,7 @@ export const i64InstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
 > = code => {
-  switch (code.opcode) {
+  switch (code.opType) {
     case "i64.const":
       return (code, { values }) => {
         const a = code.parameters[0] as Int64Value
@@ -46,7 +46,7 @@ export const i64InstructionSet: PartialInstructionSet<
       return binop(Int64.shiftRight_s)
     case "i64.rot_l":
     case "i64.rot_r":
-      throw new Error(`not implemented ${code.opcode}`)
+      throw new Error(`not implemented ${code.opType}`)
     case "i64.lt_s":
       return boolBinop(Int64.lessThan_s)
     case "i64.lt_u":
@@ -79,7 +79,7 @@ export const i64InstructionSet: PartialInstructionSet<
     case "i64.trunc_u/f32":
     case "i64.trunc_u/f64":
     case "i64.reinterpret/f64":
-      throw new Error(`not implemented ${code.opcode}`)
+      throw new Error(`not implemented ${code.opType}`)
   }
   return null
 }

@@ -7,7 +7,7 @@ export const f64InstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
 > = code => {
-  switch (code.opcode) {
+  switch (code.opType) {
     case "f64.const":
       return (code, { values }) => {
         const a = code.parameters[0] as Float64Value
@@ -38,7 +38,7 @@ export const f64InstructionSet: PartialInstructionSet<
     case "f64.neg":
       return monop(Float64.neg)
     case "f64.copysign":
-      throw new Error(`not implemented ${code.opcode}`)
+      throw new Error(`not implemented ${code.opType}`)
     case "f64.ceil":
       return monop(Float64.ceil)
     case "f64.floor":
@@ -60,7 +60,7 @@ export const f64InstructionSet: PartialInstructionSet<
     case "f64.convert_u/i32":
     case "f64.convert_u/i64":
     case "f64.reinterpret/i64":
-      throw new Error(`not implemented ${code.opcode}`)
+      throw new Error(`not implemented ${code.opType}`)
   }
   return null
 }

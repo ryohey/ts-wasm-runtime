@@ -5,7 +5,7 @@ export const variableInstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
 > = code => {
-  switch (code.opcode) {
+  switch (code.opType) {
     case "drop":
       return (_, { values }) => {
         values.pop()
