@@ -3,7 +3,7 @@ import {
   WASMCode,
   WASMLocalMemory,
   WASMMemoryValue
-} from "../wasm-code"
+} from "../wasm-memory"
 import { Int32Value } from "../../wat-parser/types"
 import { Int32 } from "../../number/Int32"
 import { binop, monop, boolBinop, boolMonop } from "./helpers"

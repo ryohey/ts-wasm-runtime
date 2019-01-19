@@ -3,7 +3,7 @@ import {
   WASMCode,
   WASMMemory,
   WASMMemoryValue
-} from "../wasm-code"
+} from "../wasm-memory"
 import { range } from "../../misc/array"
 import { Int32 } from "../../number/Int32"
 import { BreakPosition, BreakFunc } from "../../vm/vm"

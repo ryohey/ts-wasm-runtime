@@ -1,5 +1,5 @@
 import { NumberValue, ValType } from "../wat-parser/types"
-import { WASMMemoryValue } from "../wasm-vm/wasm-code"
+import { WASMMemoryValue } from "../wasm-vm/wasm-memory"
 import { Float32 } from "./Float32"
 import { Int32 } from "./Int32"
 import { Int64 } from "./Int64"

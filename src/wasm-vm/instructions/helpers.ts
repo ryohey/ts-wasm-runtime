@@ -1,4 +1,4 @@
-import { WASMMemoryValue, WASMCode, WASMMemory } from "../wasm-code"
+import { WASMMemoryValue, WASMCode, WASMMemory } from "../wasm-memory"
 import { Instruction } from "../../vm/vm"
 import { Int32 } from "../../number/Int32"
 

@@ -1,4 +1,4 @@
-import { WASMModule } from "../wasm-vm/wasm-code"
+import { WASMModule } from "../wasm-vm/wasm-memory"
 import { ASTModule } from "../wat-parser/module"
 import { Int32 } from "../number/Int32"
 import { replaceIdentifiers } from "./precompile"

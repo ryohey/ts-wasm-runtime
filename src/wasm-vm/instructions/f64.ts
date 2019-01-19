@@ -1,4 +1,8 @@
-import { PartialInstructionSet, WASMCode, WASMLocalMemory } from "../wasm-code"
+import {
+  PartialInstructionSet,
+  WASMCode,
+  WASMLocalMemory
+} from "../wasm-memory"
 import { binop, monop, boolBinop } from "./helpers"
 import { Float64 } from "../../number/Float64"
 import { Float64Value } from "../../wat-parser/types"

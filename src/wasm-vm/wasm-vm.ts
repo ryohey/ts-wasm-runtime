@@ -6,7 +6,7 @@ import {
   WASMModule,
   WASMTable,
   WASMMemoryValue
-} from "./wasm-code"
+} from "./wasm-memory"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { f64InstructionSet } from "./instructions/f64"

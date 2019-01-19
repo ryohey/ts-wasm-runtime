@@ -1,7 +1,6 @@
 import { Instruction } from "../vm/vm"
 import { Stack } from "./stack"
 import {
-  ValType,
   Int32Value,
   Int64Value,
   Float32Value,

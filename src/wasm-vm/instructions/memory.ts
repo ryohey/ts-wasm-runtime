@@ -1,4 +1,8 @@
-import { PartialInstructionSet, WASMCode, WASMLocalMemory } from "../wasm-code"
+import {
+  PartialInstructionSet,
+  WASMCode,
+  WASMLocalMemory
+} from "../wasm-memory"
 
 // https://webassembly.github.io/spec/core/text/instructions.html#memory-instructions
 export const memoryInstructionSet: PartialInstructionSet<
