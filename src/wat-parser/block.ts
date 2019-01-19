@@ -7,6 +7,7 @@ import { flatten } from "../misc/array"
 import { Element } from "../s-parser/s-parser"
 
 export interface ASTBlock extends ASTFunctionInstruction<AnyParameter> {
+  opType: "block"
   identifier: string | null
   results: ValType[]
   body: ASTFunctionInstruction<AnyParameter>[]

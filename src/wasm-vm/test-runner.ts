@@ -52,6 +52,10 @@ export const runTests = (code: string) => {
   const module = compile(modules[0])
   const vm = new WASMVirtualMachine(module)
 
+  if (testCases.length === 0) {
+    throw new Error("no test case")
+  }
+
   for (const test of testCases) {
     runTestCase(vm, test)
   }
