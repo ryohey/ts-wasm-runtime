@@ -12,7 +12,7 @@ export interface ASTModule {
   elems: ASTElem[]
 }
 
-export type ASTModuleNode =
+export type ASTSection =
   | ASTFunction
   | ASTExport
   | ASTGlobal

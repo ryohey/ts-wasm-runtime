@@ -9,7 +9,7 @@ import { moduleType } from "./type"
 import { moduleElem } from "./elem"
 import { Element } from "../s-parser/s-parser"
 import {
-  ASTModuleNode,
+  ASTSection,
   ASTModule,
   ASTExport,
   ASTFunction,
@@ -20,19 +20,19 @@ import {
   ASTElem
 } from "../ast/module"
 
-const isExport = (x: ASTModuleNode): x is ASTExport => x.nodeType === "export"
-const isFunc = (x: ASTModuleNode): x is ASTFunction => x.nodeType === "func"
-const isGlobal = (x: ASTModuleNode): x is ASTGlobal => x.nodeType === "global"
-const isMemory = (x: ASTModuleNode): x is ASTMemory => x.nodeType === "memory"
-const isTable = (x: ASTModuleNode): x is ASTTable => x.nodeType === "table"
-const isType = (x: ASTModuleNode): x is ASTType => x.nodeType === "type"
-const isElem = (x: ASTModuleNode): x is ASTElem => x.nodeType === "elem"
+const isExport = (x: ASTSection): x is ASTExport => x.nodeType === "export"
+const isFunc = (x: ASTSection): x is ASTFunction => x.nodeType === "func"
+const isGlobal = (x: ASTSection): x is ASTGlobal => x.nodeType === "global"
+const isMemory = (x: ASTSection): x is ASTMemory => x.nodeType === "memory"
+const isTable = (x: ASTSection): x is ASTTable => x.nodeType === "table"
+const isType = (x: ASTSection): x is ASTType => x.nodeType === "type"
+const isElem = (x: ASTSection): x is ASTElem => x.nodeType === "elem"
 
 export const moduleParser = map(
   seq(
     keyword("module"),
     many(
-      or<Element[], ASTModuleNode>(
+      or<Element[], ASTSection>(
         array(moduleExport),
         array(func),
         array(moduleGlobal),
