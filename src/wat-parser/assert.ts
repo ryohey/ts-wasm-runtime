@@ -3,14 +3,7 @@ import { keyword, array } from "./utils"
 import { string } from "./types"
 import { operations } from "./operations"
 import { flatten } from "../misc/array"
-import * as Op from "./opdef"
-
-export interface ASTAssertReturn {
-  nodeType: "assert_return"
-  invoke: string
-  args: Op.Const[]
-  expected: Op.Const[]
-}
+import { ASTAssertReturn } from "../ast/assert"
 
 export const assertionParser = map(
   seq(

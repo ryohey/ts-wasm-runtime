@@ -1,12 +1,7 @@
 import { map, seq, or } from "../parser/parser"
 import { string, identifier } from "./types"
 import { keyword, array } from "./utils"
-
-export interface ASTExport {
-  nodeType: "export"
-  exportType: string
-  identifier: string
-}
+import { ASTExport } from "../ast/module"
 
 export const moduleExport = map(
   seq(

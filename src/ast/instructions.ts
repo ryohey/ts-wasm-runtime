@@ -4,7 +4,7 @@ import {
   Float32Value,
   Float64Value,
   ValType
-} from "./types"
+} from "../ast/number"
 
 interface Base<T extends string> {
   opType: T
@@ -263,6 +263,7 @@ export interface BlockBase<T extends string> extends Base<T> {
 }
 
 export interface Block extends BlockBase<"block"> {}
+
 export interface Loop extends BlockBase<"loop"> {}
 
 export interface If extends Base<"if"> {

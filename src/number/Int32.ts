@@ -1,4 +1,4 @@
-import { Int32Value } from "../wat-parser/types"
+import { Int32Value } from "../ast/number"
 import { countTrailingZeros, countLeadingZeros, popCount } from "../misc/number"
 
 const unsigned = (a: number): number => a >>> 0

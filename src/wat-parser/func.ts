@@ -1,29 +1,14 @@
 import { map, seq, opt, Parser, many } from "../parser/parser"
 import { keyword, array } from "./utils"
-import { valType, identifier, string, ValType, blockType } from "./types"
+import { valType, identifier, string, blockType } from "./types"
 import { operations } from "./operations"
 import { flatten } from "../misc/array"
 import { Element } from "../s-parser/s-parser"
-import * as Op from "./opdef"
-
-export interface ASTFunction {
-  nodeType: "func"
-  identifier: string | null
-  export: string | null
-  parameters: ASTFunctionParameter[]
-  results: ValType[]
-  body: Op.Any[]
-  locals: ASTFunctionLocal[]
-}
-
-export interface ASTFunctionParameter {
-  identifier: string | null
-  type: ValType
-}
-export interface ASTFunctionLocal {
-  identifier: string | null
-  type: ValType
-}
+import {
+  ASTFunctionParameter,
+  ASTFunctionLocal,
+  ASTFunction
+} from "../ast/module"
 
 export const param = map(
   seq(keyword("param"), opt(identifier), many(valType)),

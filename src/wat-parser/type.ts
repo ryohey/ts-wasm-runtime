@@ -1,11 +1,7 @@
 import { map, seq, opt } from "../parser/parser"
 import { identifier, blockType } from "./types"
 import { keyword, array } from "./utils"
-
-export interface ASTType {
-  nodeType: "type"
-  identifier: string | null
-}
+import { ASTType } from "../ast/module"
 
 const funcDef = seq(keyword("func"), opt(blockType))
 

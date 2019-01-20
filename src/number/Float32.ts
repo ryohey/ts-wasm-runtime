@@ -1,4 +1,4 @@
-import { Float32Value } from "../wat-parser/types"
+import { Float32Value } from "../ast/number"
 
 export class Float32 {
   readonly value: number

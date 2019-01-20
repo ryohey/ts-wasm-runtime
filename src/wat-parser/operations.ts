@@ -1,10 +1,10 @@
 import { or, seq, many, map, Parser, lazy, opt } from "../parser/parser"
 import { keyword, array } from "./utils"
-import { int32, int64, float32, float64, indices, Int32Value } from "./types"
+import { int32, int64, float32, float64, indices } from "./types"
 import { blockInstructions } from "./block"
 import { flatten } from "../misc/array"
 import { Element } from "../s-parser/s-parser"
-import * as Op from "./opdef"
+import * as Op from "../ast/instructions"
 import { ifParser } from "./if"
 
 // operation with no parameters

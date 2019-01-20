@@ -1,33 +1,24 @@
-import { ASTFunction, func } from "./func"
+import { func } from "./func"
 import { seq, or, map, many } from "../parser/parser"
 import { keyword, array } from "./utils"
-import { ASTExport, moduleExport } from "./export"
-import { ASTGlobal, moduleGlobal } from "./global"
-import { moduleMemory, ASTMemory } from "./memory"
-import { ASTTable, moduleTable } from "./table"
-import { moduleType, ASTType } from "./type"
-import { moduleElem, ASTElem } from "./elem"
+import { moduleExport } from "./export"
+import { moduleGlobal } from "./global"
+import { moduleMemory } from "./memory"
+import { moduleTable } from "./table"
+import { moduleType } from "./type"
+import { moduleElem } from "./elem"
 import { Element } from "../s-parser/s-parser"
-
-export interface ASTModule {
-  nodeType: "module"
-  functions: ASTFunction[]
-  exports: ASTExport[]
-  globals: ASTGlobal[]
-  memories: ASTMemory[]
-  tables: ASTTable[]
-  types: ASTType[]
-  elems: ASTElem[]
-}
-
-export type ASTModuleNode =
-  | ASTFunction
-  | ASTExport
-  | ASTGlobal
-  | ASTMemory
-  | ASTTable
-  | ASTType
-  | ASTElem
+import {
+  ASTModuleNode,
+  ASTModule,
+  ASTExport,
+  ASTFunction,
+  ASTGlobal,
+  ASTMemory,
+  ASTTable,
+  ASTType,
+  ASTElem
+} from "../ast/module"
 
 const isExport = (x: ASTModuleNode): x is ASTExport => x.nodeType === "export"
 const isFunc = (x: ASTModuleNode): x is ASTFunction => x.nodeType === "func"

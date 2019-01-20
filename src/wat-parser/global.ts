@@ -1,15 +1,8 @@
 import { map, seq, or, opt } from "../parser/parser"
-import { string, identifier, ValType, valType } from "./types"
+import { string, identifier, valType } from "./types"
 import { keyword, array } from "./utils"
 import { constInstructions } from "./operations"
-
-export interface ASTGlobal {
-  nodeType: "global"
-  identifier: string | null
-  export: string | null
-  type: ValType
-  mutable: boolean
-}
+import { ASTGlobal } from "../ast/module"
 
 export const moduleGlobal = map(
   seq(

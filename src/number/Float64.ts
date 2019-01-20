@@ -1,4 +1,4 @@
-import { Float64Value } from "../wat-parser/types"
+import { Float64Value } from "../ast/number"
 
 // fake f64
 export class Float64 {

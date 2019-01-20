@@ -11,13 +11,13 @@ import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { f64InstructionSet } from "./instructions/f64"
 import { controlInstructionSet, callFunc } from "./instructions/control"
-import { NumberValue } from "../wat-parser/types"
 import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
 import { f32InstructionSet } from "./instructions/f32"
 import { convertNumber } from "../number/convert"
 import { Stack } from "./stack"
-import { ASTFunction } from "../wat-parser/func"
+import { ASTFunction } from "../ast/module"
+import { NumberValue } from "../ast/number"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 

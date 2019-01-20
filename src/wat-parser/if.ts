@@ -3,7 +3,7 @@ import { keyword, array } from "./utils"
 import { operations } from "./operations"
 import { blockType, identifier } from "./types"
 import { flatten } from "../misc/array"
-import * as Op from "../wat-parser/opdef"
+import * as Op from "../ast/instructions"
 
 const instructions = lazy(() => operations)
 

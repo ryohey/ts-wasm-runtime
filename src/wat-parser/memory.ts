@@ -1,12 +1,7 @@
 import { map, seq, opt } from "../parser/parser"
 import { string, identifier, num } from "./types"
 import { keyword, array } from "./utils"
-
-export interface ASTMemory {
-  nodeType: "memory"
-  identifier: string | null
-  export: string | null
-}
+import { ASTMemory } from "../ast/module"
 
 export const moduleMemory = map(
   seq(

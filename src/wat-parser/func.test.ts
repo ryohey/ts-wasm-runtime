@@ -1,7 +1,6 @@
 import * as assert from "assert"
 import { param, funcBody, func } from "./func"
 import { parser as sParser } from "../s-parser/s-parser"
-import { ValType } from "./types"
 
 describe("parser", () => {
   it("parse param", () => {
@@ -319,7 +318,7 @@ describe("parser", () => {
             identifier: null,
             then: [{ opType: "i32.const", parameter: { i32: "7" } }],
             else: [{ opType: "i32.const", parameter: { i32: "8" } }],
-            results: [ValType.i32]
+            results: ["i32"]
           }
         ],
         export: "singular",

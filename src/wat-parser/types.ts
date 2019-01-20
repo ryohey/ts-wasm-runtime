@@ -7,22 +7,13 @@ import {
   isHexElement,
   isFloatElement
 } from "./utils"
-
-export interface Int32Value {
-  i32: string
-  isHex?: boolean
-}
-export interface Int64Value {
-  i64: string
-  isHex?: boolean
-}
-export interface Float32Value {
-  f32: string
-}
-export interface Float64Value {
-  f64: string
-}
-export type NumberValue = Int32Value | Int64Value | Float32Value | Float64Value
+import {
+  Int32Value,
+  Int64Value,
+  Float32Value,
+  Float64Value,
+  ValType
+} from "../ast/number"
 
 export const int32 = or(
   map(is(isIntElement), r => ({ i32: r.int } as Int32Value)),
@@ -49,13 +40,6 @@ export const string = regexp(/^\"(.+)\"/)
 
 export const num = map(is(isIntElement), v => parseInt(v.int))
 export const indices = or(num, identifier)
-
-export enum ValType {
-  i32 = "i32",
-  i64 = "i64",
-  f32 = "f32",
-  f64 = "f64"
-}
 
 export const valType = or(
   keyword(ValType.i32),

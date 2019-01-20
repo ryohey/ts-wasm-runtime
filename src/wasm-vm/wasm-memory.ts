@@ -5,13 +5,13 @@ import {
   Int64Value,
   Float32Value,
   Float64Value
-} from "../wat-parser/types"
+} from "../ast/number"
 import { Int32 } from "../number/Int32"
 import { Float32 } from "../number/Float32"
 import { Int64 } from "../number/Int64"
 import { Float64 } from "../number/Float64"
-import * as Op from "../wat-parser/opdef"
-import { ASTFunction } from "../wat-parser/func"
+import * as Op from "../ast/instructions"
+import { ASTFunction } from "../ast/module"
 
 export type WASMCodeParameter =
   | number

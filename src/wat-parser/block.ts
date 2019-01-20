@@ -1,13 +1,10 @@
 import { Parser, seq, many, opt, or, lazy, map } from "../parser/parser"
-import { blockType, identifier, ValType } from "./types"
+import { blockType, identifier } from "./types"
 import { keyword, array } from "./utils"
 import { operations } from "./operations"
 import { flatten } from "../misc/array"
 import { Element } from "../s-parser/s-parser"
-import * as Op from "./opdef"
-
-export const isBlockInstruction = (inst: Op.Any): inst is Op.Block | Op.Loop =>
-  inst.opType === "block" || inst.opType === "loop"
+import * as Op from "../ast/instructions"
 
 const instructions = lazy(() => operations)
 

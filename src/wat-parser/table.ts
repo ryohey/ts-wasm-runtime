@@ -1,12 +1,7 @@
 import { map, seq, opt } from "../parser/parser"
 import { string, identifier, name, num } from "./types"
 import { keyword, array } from "./utils"
-
-export interface ASTTable {
-  nodeType: "table"
-  identifier: string | null
-  export: string | null
-}
+import { ASTTable } from "../ast/module"
 
 export const moduleTable = map(
   seq(

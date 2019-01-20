@@ -8,7 +8,7 @@ import { range } from "../../misc/array"
 import { Int32 } from "../../number/Int32"
 import { BreakPosition, BreakFunc } from "../../vm/vm"
 import { createWASMVM } from "../wasm-vm"
-import { ValType } from "../../wat-parser/types"
+import { ValType } from "../../ast/number"
 import { convertNumber, numberValue } from "../../number/convert"
 import { Stack } from "../stack"
 

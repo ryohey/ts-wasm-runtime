@@ -1,10 +1,7 @@
-import { ASTModule } from "../wat-parser/module"
-import { ASTFunction } from "../wat-parser/func"
 import { fromPairs } from "../misc/array"
 import { isString } from "util"
-import { isBlockInstruction } from "../wat-parser/block"
-import { ASTElem } from "../wat-parser/elem"
-import * as Op from "../wat-parser/opdef"
+import { ASTFunction, ASTElem, ASTModule } from "../ast/module"
+import * as Op from "../ast/instructions"
 
 type IdentifierEntry = { [key: string]: number }
 
@@ -36,7 +33,7 @@ const processInstruction = (
   if (isIfInstruction(inst)) {
     return processIf(inst, idTables, labelStack)
   }
-  if (isBlockInstruction(inst)) {
+  if (inst.opType === "block" || inst.opType === "loop") {
     return processBlock(inst, idTables, labelStack)
   }
 

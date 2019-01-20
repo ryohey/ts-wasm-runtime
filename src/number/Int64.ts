@@ -1,4 +1,4 @@
-import { Int64Value } from "../wat-parser/types"
+import { Int64Value } from "../ast/number"
 import { countTrailingZeros, countLeadingZeros, popCount } from "../misc/number"
 
 const unsigned = (a: bigint): bigint => BigInt.asUintN(64, a)
