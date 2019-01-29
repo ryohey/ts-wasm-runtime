@@ -43,6 +43,7 @@ export function seq<T, P0, P1, P2, P3, P4, P5, P6>(
     Parser<T, P6>
   ]
 ): Parser<T, [P0, P1, P2, P3, P4, P5, P6]>
+export function seq<T, P0>(...parsers: Parser<T, P0>[]): Parser<T, P0[]>
 export function seq<T, S>(...parsers: Parser<T, S>[]): Parser<T, S[]> {
   return (target, position) => {
     const result = []
@@ -52,7 +53,7 @@ export function seq<T, S>(...parsers: Parser<T, S>[]): Parser<T, S[]> {
         result.push(parsed[1])
         position = parsed[2]
       } else {
-        return [false, null, position]
+        return [false, null, position, `seq@${position}: ${parsed[3]}`]
       }
     }
     return [true, result, position]
@@ -90,19 +91,20 @@ export function or<T, P0, P1, P2, P3, P4, P5>(
 ): Parser<T, P0 | P1 | P2 | P3 | P4 | P5>
 export function or<T>(...parsers: Parser<T, any>[]): Parser<T, any> {
   return (target, position) => {
+    const errors: string[] = []
     for (let parser of parsers) {
       const parsed = parser(target, position)
       if (parsed[0]) {
         return parsed
+      } else {
+        errors.push(parser[2])
       }
     }
     return [
       false,
       null,
       position,
-      `or@${position}: cannot parse ${target} with ${parsers
-        .map(p => p.name)
-        .join(", ")}`
+      `or@${position}: expected ${errors.join(" or ")}`
     ]
   }
 }
@@ -125,7 +127,7 @@ export const opt = <T, S>(parser: Parser<T, S>): Parser<T, S | null> => (
   if (result[0]) {
     return result
   }
-  return [true, null, position]
+  return [true, null, position, `opt@${position}: ${result[3]}`]
 }
 
 export const many = <T, S>(parser: Parser<T, S>): Parser<T, S[]> => (
@@ -156,7 +158,7 @@ export const map = <T, S, U>(
   if (result[0]) {
     return [result[0], transform(result[1]), result[2]]
   } else {
-    return [false, null, result[2]]
+    return [false, null, result[2], `map@${position}: ${result[3]}`]
   }
 }
 
@@ -166,7 +168,42 @@ export const transform = <T, S, U>(
 ): Parser<T, U> => (target, position) => {
   const result = transformParser(target, position)
   if (!result[0]) {
-    return [false, null, result[2]]
+    return [false, null, position, `transform@${position}: ${result[2]}`]
   }
   return parser(result[1], 0)
+}
+
+export const fail: Parser<any, null> = (_: any, position: number) => [
+  false,
+  null,
+  position,
+  `fail@${position}`
+]
+
+export const seqMap = <T, S, R>(
+  parser: Parser<T, S>,
+  next: (value: S) => Parser<T, R>
+): Parser<T, R> => (target, position) => {
+  const result = parser(target, position)
+  if (!result[0]) {
+    return [false, null, position, result[3]]
+  }
+  return next(result[1])(target, result[2])
+}
+
+export const vec = <T, S>(
+  parser: Parser<T, S>,
+  size: number
+): Parser<T, S[]> => (target, position) => {
+  const result = []
+  for (let i = 0; i < size; i++) {
+    const parsed = parser(target, position)
+    if (parsed[0]) {
+      result.push(parsed[1])
+      position = parsed[2]
+    } else {
+      return [false, null, position, `vec@${position}: ${parsed[3]}`]
+    }
+  }
+  return [true, result, position]
 }
