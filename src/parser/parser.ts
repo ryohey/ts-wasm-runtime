@@ -188,7 +188,7 @@ export const seqMap = <T, S, R>(
   if (!result[0]) {
     return [false, null, position, result[3]]
   }
-  return next(result[1])(target, position + 1)
+  return next(result[1])(target, result[2])
 }
 
 export const vec = <T, S>(

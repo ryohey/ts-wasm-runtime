@@ -31,3 +31,4 @@ export const ok: Parser<Bytes, Byte> = (target, position) => {
 }
 
 export const variable = (size: number) => seq(...range(0, size).map(_ => ok))
+export const var1 = ok
