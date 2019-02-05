@@ -82,7 +82,11 @@ const name = seqMap(var1, size =>
   map(variable(size), r => r.map(c => String.fromCharCode(c)).join(""))
 )
 
-const blockType = or(map(byte(0x40), _ => []), map(valType, t => [t]))
+const blockType = or(
+  // void
+  map(byte(0x40), _ => []),
+  map(valType, t => [t])
+)
 
 // https://webassembly.github.io/spec/core/binary/instructions.html#binary-expr
 const instr = lazy(() =>
