@@ -9,7 +9,7 @@ import {
   vec,
   lazy
 } from "../parser/parser"
-import { string, byte, variable, bytes, var1 } from "./utils"
+import { string, byte, variable, bytes, var1, terminate } from "./utils"
 import { Bytes } from "./types"
 import { ValType } from "../ast/number"
 
@@ -17,6 +17,34 @@ import { ValType } from "../ast/number"
 
 const vector = <T>(parser: Parser<Bytes, T>) =>
   seqMap(var1, size => vec(parser, size))
+
+// https://ja.osdn.net/projects/drdeamon64/wiki/LEB128%E3%81%AA%E6%95%B0%E3%81%AE%E8%A1%A8%E7%8F%BE
+
+// returns variable length 7bit array
+export const uLEB128Bytes: Parser<Bytes, Bytes> = seqMap(var1, r => {
+  const isContinue = r >> 7 === 1
+  const num = r & 0b0111_1111
+  return isContinue ? map(uLEB128Bytes, r => [num, ...r]) : terminate([num])
+})
+
+// sums up 7bit array
+export const u32 = map(uLEB128Bytes, r => {
+  // 1 to 4 bytes
+  let num = 0
+  r.forEach(n => {
+    num <<= 7
+    num += n
+  })
+  return num
+})
+
+const typeIdx = u32
+const funcIdx = u32
+const tableIdx = u32
+const memIdx = u32
+const globalIdx = u32
+const localIdx = u32
+const labelIdx = u32
 
 const beginWASM = map(seq(string("\0asm"), var1, bytes([0, 0, 0])), r => ({
   version: r[1]
@@ -29,7 +57,7 @@ interface SectionStart {
 
 const sectionStart = (id: number) =>
   map(
-    seq(byte(id), var1),
+    seq(byte(id), u32),
     r =>
       ({
         id,
@@ -37,12 +65,14 @@ const sectionStart = (id: number) =>
       } as SectionStart)
   )
 
-const section = <T>(id: number, body: Parser<Bytes, T>) =>
+const section = <T>(id: number, nodeType: string, body: Parser<Bytes, T>) =>
   seqMap(sectionStart(id), (sec: SectionStart) =>
     map(variable(sec.size), r => {
+      const b = body(r, 0)
       return {
+        nodeType,
         ...sec,
-        body: body(r, 0)
+        sections: b ? b[1] : []
       }
     })
   )
@@ -60,7 +90,6 @@ const valType = or(
   map(byte(0x7c), _ => ValType.f64)
 )
 const funcType = map(seq(byte(0x60), vector(valType), vector(valType)), r => ({
-  nodeType: "type",
   parameters: r[1],
   results: r[2]
 }))
@@ -375,13 +404,13 @@ const memarg = map(seq(var1, var1), r => ({ align: r[0], offset: r[1] }))
 
 const importDesc = or(
   // func
-  map(seq(byte(0x00), var1), r => ({ func: r[1] })),
+  map(seq(byte(0x00), typeIdx), r => ({ func: r[1] })),
   // table
-  map(seq(byte(0x01), var1), r => ({ table: r[1] })),
+  map(seq(byte(0x01), tableIdx), r => ({ table: r[1] })),
   // mem
-  map(seq(byte(0x02), var1), r => ({ mem: r[1] })),
+  map(seq(byte(0x02), memIdx), r => ({ mem: r[1] })),
   // global
-  map(seq(byte(0x03), var1), r => ({ global: r[1] }))
+  map(seq(byte(0x03), globalIdx), r => ({ global: r[1] }))
 )
 
 const import_ = map(seq(name, name, importDesc), r => ({
@@ -412,36 +441,41 @@ const export_ = map(seq(name, exportDesc), r => ({
   desc: r[1]
 }))
 
-const start = map(var1, func => ({ func }))
+const start = map(funcIdx, func => ({ func }))
 
-const elem = map(seq(var1, expr, vector(var1)), r => ({
+const elem = map(seq(tableIdx, expr, vector(funcIdx)), r => ({
   table: r[0],
   offset: r[1],
   init: r[2]
 }))
 
-const data = map(seq(var1, expr, vector(var1)), r => ({
+const data = map(seq(memIdx, expr, vector(var1)), r => ({
   data: r[0],
   offset: r[1],
   init: r[2]
 }))
 
-const locals = seq(var1, valType)
+const locals = seq(u32, valType)
 const func = seq(vector(locals), expr)
-const code = seq(var1, func)
+const code = map(seq(u32, func), r => {
+  return {
+    size: r[0],
+    code: r[1]
+  }
+})
 
-const customSection = section(0, _ => null)
-const typeSection = section(1, vector(funcType))
-const importSection = section(2, vector(import_))
-const funcSection = section(3, vector(var1))
-const tableSection = section(4, vector(tableType))
-const memorySection = section(5, vector(memType))
-const globalSection = section(6, vector(global_))
-const exportSection = section(7, vector(export_))
-const startsSection = section(8, vector(start))
-const elemSection = section(9, vector(elem))
-const codeSection = section(10, vector(code))
-const dataSection = section(11, vector(data))
+const customSection = section(0, "custom", _ => null)
+const typeSection = section(1, "type", vector(funcType))
+const importSection = section(2, "import", vector(import_))
+const funcSection = section(3, "func", vector(typeIdx))
+const tableSection = section(4, "table", vector(tableType))
+const memorySection = section(5, "mem", vector(memType))
+const globalSection = section(6, "global", vector(global_))
+const exportSection = section(7, "export", vector(export_))
+const startsSection = section(8, "start", vector(start))
+export const elemSection = section(9, "elem", vector(elem))
+const codeSection = section(10, "code", vector(code))
+const dataSection = section(11, "data", vector(data))
 
 export const moduleParser = map(
   seq<Bytes, any>(

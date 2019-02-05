@@ -30,5 +30,26 @@ export const ok: Parser<Bytes, Byte> = (target, position) => {
   return [true, target[position], position + 1]
 }
 
-export const variable = (size: number) => seq(...range(0, size).map(_ => ok))
-export const var1 = ok
+export const variable = (size: number): Parser<Bytes, Bytes> => (
+  target,
+  position
+) => {
+  if (target.length < position + size) {
+    return [
+      false,
+      target,
+      position,
+      `target is smaller than ${position + size}`
+    ]
+  }
+  return [true, target.slice(position, position + size), position + size]
+}
+
+export const var1: Parser<Bytes, Byte> = (target, position) => {
+  return [true, target[position], position + 1]
+}
+
+// this does not advance the position, but succeeds to parse and returns result
+export const terminate = <S, T>(result: T): Parser<S, T> => (_, position) => {
+  return [true, result, position]
+}
