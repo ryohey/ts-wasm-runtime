@@ -12,31 +12,14 @@ import {
 import { string, byte, variable, bytes, var1, terminate } from "./utils"
 import { Bytes } from "./types"
 import { ValType } from "../ast/number"
+import { u32 } from "./number"
 
 // https://webassembly.github.io/spec/core/binary/index.html
 
 const vector = <T>(parser: Parser<Bytes, T>) =>
   seqMap(var1, size => vec(parser, size))
 
-// https://ja.osdn.net/projects/drdeamon64/wiki/LEB128%E3%81%AA%E6%95%B0%E3%81%AE%E8%A1%A8%E7%8F%BE
-
-// returns variable length 7bit array
-export const uLEB128Bytes: Parser<Bytes, Bytes> = seqMap(var1, r => {
-  const isContinue = r >> 7 === 1
-  const num = r & 0b0111_1111
-  return isContinue ? map(uLEB128Bytes, r => [num, ...r]) : terminate([num])
-})
-
-// sums up 7bit array
-export const u32 = map(uLEB128Bytes, r => {
-  // 1 to 4 bytes
-  let num = 0
-  r.forEach(n => {
-    num <<= 7
-    num += n
-  })
-  return num
-})
+// TODO: sLEB128
 
 const typeIdx = u32
 const funcIdx = u32
@@ -78,7 +61,7 @@ const section = <T>(id: number, nodeType: string, body: Parser<Bytes, T>) =>
   )
 
 // https://webassembly.github.io/spec/core/binary/values.html#binary-int
-const i32 = variable(4)
+const i32 = u32 // TODO: support signed integer
 const i64 = variable(8)
 const f32 = variable(4)
 const f64 = variable(8)
@@ -471,7 +454,7 @@ const funcSection = section(3, "func", vector(typeIdx))
 const tableSection = section(4, "table", vector(tableType))
 const memorySection = section(5, "mem", vector(memType))
 const globalSection = section(6, "global", vector(global_))
-const exportSection = section(7, "export", vector(export_))
+export const exportSection = section(7, "export", vector(export_))
 const startsSection = section(8, "start", vector(start))
 export const elemSection = section(9, "elem", vector(elem))
 const codeSection = section(10, "code", vector(code))
