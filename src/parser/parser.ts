@@ -180,6 +180,9 @@ export const fail: Parser<any, null> = (_: any, position: number) => [
   `fail@${position}`
 ]
 
+export const pass = <T>(target: T[], position: number) =>
+  [true, target[position], position + 1] as ReturnType<Parser<T[], T>>
+
 export const seqMap = <T, S, R>(
   parser: Parser<T, S>,
   next: (value: S) => Parser<T, R>
@@ -207,3 +210,10 @@ export const vec = <T, S>(
   }
   return [true, result, position]
 }
+
+// this does not advance the position, but succeeds to parse and returns result
+export const terminate = <S, T>(result: T): Parser<S, T> => (_, position) => [
+  true,
+  result,
+  position
+]

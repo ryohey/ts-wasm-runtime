@@ -1,6 +1,6 @@
-import { Parser, seqMap, map } from "../parser/parser"
+import { Parser, seqMap, map, terminate } from "../parser/parser"
 import { Bytes } from "./types"
-import { var1, terminate } from "./utils"
+import { var1, variable } from "./utils"
 
 // https://ja.osdn.net/projects/drdeamon64/wiki/LEB128%E3%81%AA%E6%95%B0%E3%81%AE%E8%A1%A8%E7%8F%BE
 
@@ -20,3 +20,11 @@ export const u32 = map(uLEB128Bytes, r => {
   })
   return num
 })
+
+// TODO: Implement sLEB128
+
+// https://webassembly.github.io/spec/core/binary/values.html#binary-int
+export const i32 = u32 // TODO: support signed integer
+export const i64 = variable(8)
+export const f32 = variable(4)
+export const f64 = variable(8)

@@ -1,6 +1,5 @@
-import { Parser, seq } from "../parser/parser"
+import { Parser, seq, seqMap, vec, pass } from "../parser/parser"
 import { Bytes, Byte } from "./types"
-import { range } from "../misc/array"
 
 export const char = (chr: string): Parser<Bytes, Byte> => (
   target,
@@ -26,10 +25,6 @@ export const byte = (num: number): Parser<Bytes, Byte> => (
 
 export const bytes = (data: number[]) => seq(...data.map(byte))
 
-export const ok: Parser<Bytes, Byte> = (target, position) => {
-  return [true, target[position], position + 1]
-}
-
 export const variable = (size: number): Parser<Bytes, Bytes> => (
   target,
   position
@@ -45,11 +40,7 @@ export const variable = (size: number): Parser<Bytes, Bytes> => (
   return [true, target.slice(position, position + size), position + size]
 }
 
-export const var1: Parser<Bytes, Byte> = (target, position) => {
-  return [true, target[position], position + 1]
-}
+export const var1: Parser<Bytes, Byte> = pass
 
-// this does not advance the position, but succeeds to parse and returns result
-export const terminate = <S, T>(result: T): Parser<S, T> => (_, position) => {
-  return [true, result, position]
-}
+export const vector = <T>(parser: Parser<Bytes, T>) =>
+  seqMap(var1, size => vec(parser, size))
