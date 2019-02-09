@@ -3,6 +3,9 @@ import { u32 } from "./number"
 import { expr } from "./operations"
 import { Bytes, valType } from "./types"
 import { byte, bytes, string, var1, variable, vector } from "./utils"
+import { ASTFunction, ASTFunctionLocal } from "../ast/module"
+import { range, flatten } from "../misc/array"
+import * as Op from "../ast/instructions"
 
 // https://webassembly.github.io/spec/core/binary/index.html
 
@@ -108,13 +111,20 @@ const data = map(seq(memIdx, expr, vector(var1)), r => ({
   init: r[2]
 }))
 
-const locals = seq(u32, valType)
-const func = seq(vector(locals), expr)
+type ASTCode = Pick<ASTFunction, "body" | "locals">
+
+const locals = map(seq(u32, valType), r =>
+  range(0, r[0]).map(_ => ({ type: r[1] } as ASTFunctionLocal))
+)
+const func = map(seq(vector(locals), expr), r => ({
+  locals: flatten(r[0]),
+  body: r[1] as Op.Any[]
+}))
 const code = map(seq(u32, func), r => {
   return {
     size: r[0],
-    code: r[1]
-  }
+    ...r[1]
+  } as ASTCode
 })
 
 const customSection = section(0, "custom", _ => null)

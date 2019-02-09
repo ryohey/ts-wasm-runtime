@@ -197,7 +197,7 @@ describe("module", () => {
                 offset: [
                   {
                     opType: "i32.const",
-                    parameter: 0
+                    parameter: { i32: "0x0" }
                   }
                 ],
                 table: 0
@@ -217,7 +217,7 @@ describe("module", () => {
                   [
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x1" }
                     }
                   ]
                 ],
@@ -229,7 +229,7 @@ describe("module", () => {
                   [
                     {
                       opType: "i32.const",
-                      parameter: 0
+                      parameter: { i32: "0x0" }
                     }
                   ]
                 ],
@@ -241,7 +241,7 @@ describe("module", () => {
                   [
                     {
                       opType: "i32.const",
-                      parameter: 200
+                      parameter: { i32: "0xc8" }
                     },
                     {
                       opType: "local.get",
@@ -252,7 +252,8 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 4
+
+                      parameter: { i32: "0x4" }
                     },
                     {
                       opType: "local.get",
@@ -281,7 +282,7 @@ describe("module", () => {
                       parameter: 1
                     },
                     {
-                      funcIndex: 3,
+                      parameter: 3,
                       opType: "call"
                     },
                     {
@@ -290,10 +291,8 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.store",
-                      parameter: {
-                        align: 2,
-                        offset: 0
-                      }
+                      align: 2,
+                      offset: 0
                     }
                   ]
                 ],
@@ -307,34 +306,34 @@ describe("module", () => {
                       body: [
                         {
                           opType: "i32.const",
-                          parameter: 0
+                          parameter: { i32: "0x0" }
                         },
                         {
                           opType: "i32.const",
-                          parameter: 50
+                          parameter: { i32: "0x32" }
                         },
                         {
                           opType: "local.get",
                           parameter: 0
                         },
                         {
-                          funcIndex: 7,
+                          parameter: 7,
                           opType: "call"
                         },
                         {
                           opType: "i32.const",
-                          parameter: 0
+                          parameter: { i32: "0x0" }
                         },
                         {
                           opType: "i32.const",
-                          parameter: 50
+                          parameter: { i32: "0x32" }
                         },
                         {
                           opType: "local.get",
                           parameter: 1
                         },
                         {
-                          funcIndex: 7,
+                          parameter: 7,
                           opType: "call"
                         },
                         {
@@ -352,18 +351,17 @@ describe("module", () => {
                         },
                         {
                           opType: "local.get",
+
                           parameter: 1
                         },
                         {
-                          funcIndex: 3,
+                          parameter: 3,
                           opType: "call"
                         },
                         {
                           opType: "i32.load8_u",
-                          parameter: {
-                            align: 0,
-                            offset: 0
-                          }
+                          align: 0,
+                          offset: 0
                         }
                       ],
                       opType: "if",
@@ -378,15 +376,13 @@ describe("module", () => {
                           parameter: 1
                         },
                         {
-                          funcIndex: 3,
+                          parameter: 3,
                           opType: "call"
                         },
                         {
                           opType: "i32.load8_u",
-                          parameter: {
-                            align: 0,
-                            offset: 0
-                          }
+                          align: 0,
+                          offset: 0
                         }
                       ]
                     }
@@ -400,7 +396,7 @@ describe("module", () => {
                   [
                     {
                       opType: "i32.const",
-                      parameter: 0
+                      parameter: { i32: "0x0" }
                     },
                     {
                       opType: "local.get",
@@ -408,8 +404,9 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x7f" }
                     },
+
                     {
                       opType: "i32.add"
                     },
@@ -418,7 +415,7 @@ describe("module", () => {
                       parameter: 1
                     },
                     {
-                      funcIndex: 8,
+                      parameter: 8,
                       opType: "call"
                     },
                     {
@@ -430,7 +427,7 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 127
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.add"
@@ -440,87 +437,7 @@ describe("module", () => {
                       parameter: 1
                     },
                     {
-                      funcIndex: 8,
-                      opType: "call"
-                    },
-                    {
-                      opType: "i32.add"
-                    },
-                    {
-                      opType: "local.get",
-                      parameter: 0
-                    },
-                    {
-                      opType: "local.get",
-                      parameter: 1
-                    },
-                    {
-                      opType: "i32.const",
-                      parameter: 127
-                    },
-                    {
-                      opType: "i32.add"
-                    },
-                    {
-                      funcIndex: 8,
-                      opType: "call"
-                    },
-                    {
-                      opType: "i32.add"
-                    },
-                    {
-                      opType: "local.get",
-                      parameter: 0
-                    },
-                    {
-                      opType: "i32.const",
-                      parameter: 127
-                    },
-                    {
-                      opType: "i32.add"
-                    },
-                    {
-                      opType: "local.get",
-                      parameter: 1
-                    },
-                    {
-                      opType: "i32.const",
-                      parameter: 127
-                    },
-                    {
-                      opType: "i32.add"
-                    },
-                    {
-                      funcIndex: 8,
-                      opType: "call"
-                    },
-                    {
-                      opType: "i32.add"
-                    },
-                    {
-                      opType: "local.get",
-                      parameter: 0
-                    },
-                    {
-                      opType: "i32.const",
-                      parameter: 1
-                    },
-                    {
-                      opType: "i32.add"
-                    },
-                    {
-                      opType: "local.get",
-                      parameter: 1
-                    },
-                    {
-                      opType: "i32.const",
-                      parameter: 127
-                    },
-                    {
-                      opType: "i32.add"
-                    },
-                    {
-                      funcIndex: 8,
+                      parameter: 8,
                       opType: "call"
                     },
                     {
@@ -536,13 +453,13 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.add"
                     },
                     {
-                      funcIndex: 8,
+                      parameter: 8,
                       opType: "call"
                     },
                     {
@@ -554,7 +471,7 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 127
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.add"
@@ -565,13 +482,13 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.add"
                     },
                     {
-                      funcIndex: 8,
+                      parameter: 8,
                       opType: "call"
                     },
                     {
@@ -583,7 +500,7 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.add"
@@ -594,13 +511,94 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.add"
                     },
                     {
-                      funcIndex: 8,
+                      parameter: 8,
+                      opType: "call"
+                    },
+                    {
+                      opType: "i32.add"
+                    },
+                    {
+                      opType: "local.get",
+                      parameter: 0
+                    },
+                    {
+                      opType: "local.get",
+                      parameter: 1
+                    },
+                    {
+                      opType: "i32.const",
+                      parameter: { i32: "0x1" }
+                    },
+                    {
+                      opType: "i32.add"
+                    },
+                    {
+                      parameter: 8,
+                      opType: "call"
+                    },
+                    {
+                      opType: "i32.add"
+                    },
+                    {
+                      opType: "local.get",
+                      parameter: 0
+                    },
+                    {
+                      opType: "i32.const",
+                      parameter: { i32: "0x1" }
+                    },
+                    {
+                      opType: "i32.add"
+                    },
+                    {
+                      opType: "local.get",
+                      parameter: 1
+                    },
+                    {
+                      opType: "i32.const",
+                      parameter: { i32: "0x1" }
+                    },
+                    {
+                      opType: "i32.add"
+                    },
+                    {
+                      parameter: 8,
+                      opType: "call"
+                    },
+                    {
+                      opType: "i32.add"
+                    },
+                    {
+                      opType: "local.get",
+                      parameter: 0
+                    },
+                    {
+                      opType: "i32.const",
+
+                      parameter: { i32: "0x1" }
+                    },
+                    {
+                      opType: "i32.add"
+                    },
+                    {
+                      opType: "local.get",
+                      parameter: 1
+                    },
+                    {
+                      opType: "i32.const",
+                      parameter: { i32: "0x1" }
+                    },
+                    {
+                      opType: "i32.add"
+                    },
+                    {
+                      parameter: 8,
                       opType: "call"
                     },
                     {
@@ -656,12 +654,12 @@ describe("module", () => {
                       parameter: 1
                     },
                     {
-                      funcIndex: 5,
+                      parameter: 5,
                       opType: "call"
                     },
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.and"
@@ -691,7 +689,7 @@ describe("module", () => {
                       parameter: 1
                     },
                     {
-                      funcIndex: 8,
+                      parameter: 8,
                       opType: "call"
                     },
                     {
@@ -700,7 +698,7 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.shl"
@@ -709,7 +707,7 @@ describe("module", () => {
                       opType: "i32.or"
                     },
                     {
-                      funcIndex: 4,
+                      parameter: 4,
                       opType: "call"
                     }
                   ]
@@ -730,7 +728,7 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 8
+                      parameter: { i32: "0x8" }
                     },
                     {
                       opType: "local.get",
@@ -741,7 +739,7 @@ describe("module", () => {
                       parameter: 1
                     },
                     {
-                      funcIndex: 8,
+                      parameter: 8,
                       opType: "call"
                     },
                     {
@@ -756,7 +754,7 @@ describe("module", () => {
                       parameter: 1
                     },
                     {
-                      funcIndex: 6,
+                      parameter: 6,
                       opType: "call"
                     },
                     {
@@ -767,7 +765,7 @@ describe("module", () => {
                       typeIndex: 1
                     },
                     {
-                      funcIndex: 9,
+                      parameter: 9,
                       opType: "call"
                     }
                   ]
@@ -784,7 +782,7 @@ describe("module", () => {
                     },
                     {
                       opType: "i32.const",
-                      parameter: 1
+                      parameter: { i32: "0x1" }
                     },
                     {
                       opType: "i32.add"
@@ -799,7 +797,7 @@ describe("module", () => {
                   [
                     {
                       opType: "i32.const",
-                      parameter: 0
+                      parameter: { i32: "0x0" }
                     },
                     {
                       opType: "local.set",
@@ -811,7 +809,7 @@ describe("module", () => {
                           body: [
                             {
                               opType: "i32.const",
-                              parameter: 0
+                              parameter: { i32: "0x0" }
                             },
                             {
                               opType: "local.set",
@@ -830,7 +828,7 @@ describe("module", () => {
                                       parameter: 1
                                     },
                                     {
-                                      funcIndex: 10,
+                                      parameter: 10,
                                       opType: "call"
                                     },
                                     {
@@ -838,7 +836,7 @@ describe("module", () => {
                                       parameter: 0
                                     },
                                     {
-                                      funcIndex: 11,
+                                      parameter: 11,
                                       opType: "call"
                                     },
                                     {
@@ -851,17 +849,17 @@ describe("module", () => {
                                     },
                                     {
                                       opType: "i32.const",
-                                      parameter: 50
+                                      parameter: { i32: "0x32" }
                                     },
                                     {
                                       opType: "i32.eq"
                                     },
                                     {
-                                      label: 1,
+                                      parameter: 1,
                                       opType: "br_if"
                                     },
                                     {
-                                      label: 0,
+                                      parameter: 0,
                                       opType: "br"
                                     }
                                   ],
@@ -877,7 +875,7 @@ describe("module", () => {
                               parameter: 1
                             },
                             {
-                              funcIndex: 11,
+                              parameter: 11,
                               opType: "call"
                             },
                             {
@@ -890,17 +888,17 @@ describe("module", () => {
                             },
                             {
                               opType: "i32.const",
-                              parameter: 50
+                              parameter: { i32: "0x32" }
                             },
                             {
                               opType: "i32.eq"
                             },
                             {
-                              label: 1,
+                              parameter: 1,
                               opType: "br_if"
                             },
                             {
-                              label: 0,
+                              parameter: 0,
                               opType: "br"
                             }
                           ],
@@ -921,7 +919,7 @@ describe("module", () => {
                   [
                     {
                       opType: "i32.const",
-                      parameter: 0
+                      parameter: { i32: "0x0" }
                     },
                     {
                       opType: "local.set",
@@ -933,7 +931,7 @@ describe("module", () => {
                           body: [
                             {
                               opType: "i32.const",
-                              parameter: 0
+                              parameter: { i32: "0x0" }
                             },
                             {
                               opType: "local.set",
@@ -960,18 +958,18 @@ describe("module", () => {
                                       parameter: 1
                                     },
                                     {
-                                      funcIndex: 5,
+                                      parameter: 5,
                                       opType: "call"
                                     },
                                     {
                                       opType: "i32.const",
-                                      parameter: 1
+                                      parameter: { i32: "0x1" }
                                     },
                                     {
                                       opType: "i32.shr_u"
                                     },
                                     {
-                                      funcIndex: 4,
+                                      parameter: 4,
                                       opType: "call"
                                     },
                                     {
@@ -979,7 +977,7 @@ describe("module", () => {
                                       parameter: 0
                                     },
                                     {
-                                      funcIndex: 11,
+                                      parameter: 11,
                                       opType: "call"
                                     },
                                     {
@@ -992,17 +990,17 @@ describe("module", () => {
                                     },
                                     {
                                       opType: "i32.const",
-                                      parameter: 50
+                                      parameter: { i32: "0x32" }
                                     },
                                     {
                                       opType: "i32.eq"
                                     },
                                     {
-                                      label: 1,
+                                      parameter: 1,
                                       opType: "br_if"
                                     },
                                     {
-                                      label: 0,
+                                      parameter: 0,
                                       opType: "br"
                                     }
                                   ],
@@ -1018,7 +1016,7 @@ describe("module", () => {
                               parameter: 1
                             },
                             {
-                              funcIndex: 11,
+                              parameter: 11,
                               opType: "call"
                             },
                             {
@@ -1031,17 +1029,17 @@ describe("module", () => {
                             },
                             {
                               opType: "i32.const",
-                              parameter: 50
+                              parameter: { i32: "0x32" }
                             },
                             {
                               opType: "i32.eq"
                             },
                             {
-                              label: 1,
+                              parameter: 1,
                               opType: "br_if"
                             },
                             {
-                              label: 0,
+                              parameter: 0,
                               opType: "br"
                             }
                           ],
@@ -1061,11 +1059,11 @@ describe("module", () => {
                   [],
                   [
                     {
-                      funcIndex: 12,
+                      parameter: 12,
                       opType: "call"
                     },
                     {
-                      funcIndex: 13,
+                      parameter: 13,
                       opType: "call"
                     }
                   ]
@@ -1128,7 +1126,7 @@ describe("module", () => {
         sections: [
           {
             init: [2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2],
-            offset: [{ opType: "i32.const", parameter: 0 }],
+            offset: [{ opType: "i32.const", parameter: { i32: "0x0" } }],
             table: 0
           }
         ],

@@ -6,13 +6,15 @@ import {
   ValType
 } from "../ast/number"
 
-interface Base<T extends string> {
+export interface Base<T extends string> {
   opType: T
 }
 
 export interface Nop extends Base<"nop"> {}
 export interface Unreachable extends Base<"unreachable"> {}
 export interface Return extends Base<"return"> {}
+export interface Memory_grow extends Base<"memory.grow"> {}
+export interface Memory_size extends Base<"memory.size"> {}
 
 export interface Param1<S extends string, T> extends Base<S> {
   parameter: T
@@ -24,7 +26,10 @@ export interface ParamMany<S extends string, T> extends Base<S> {
 
 export interface Br extends Param1<"br", number | string> {}
 export interface BrIf extends Param1<"br_if", number | string> {}
-export interface BrTable extends ParamMany<"br_table", number | string> {}
+export interface BrTable extends Base<"br_table"> {
+  label: number[]
+  labelIndex: number
+}
 
 export interface Call extends Param1<"call", number | string> {}
 export interface CallIndirect extends Base<"call_indirect"> {}
@@ -97,11 +102,11 @@ export interface I64_shr_s extends Base<"i64.shr_s"> {}
 export interface I32_shr_u extends Base<"i32.shr_u"> {}
 export interface I64_shr_u extends Base<"i64.shr_u"> {}
 
-export interface I32_rot_l extends Base<"i32.rot_l"> {}
-export interface I64_rot_l extends Base<"i64.rot_l"> {}
+export interface I32_rotl extends Base<"i32.rotl"> {}
+export interface I64_rotl extends Base<"i64.rotl"> {}
 
-export interface I32_rot_r extends Base<"i32.rot_r"> {}
-export interface I64_rot_r extends Base<"i64.rot_r"> {}
+export interface I32_rotr extends Base<"i32.rotr"> {}
+export interface I64_rotr extends Base<"i64.rotr"> {}
 
 export interface I32_eq extends Base<"i32.eq"> {}
 export interface I64_eq extends Base<"i64.eq"> {}
@@ -193,18 +198,18 @@ export interface F64_max extends Base<"f64.max"> {}
 
 export interface I32_wrap_i64 extends Base<"i32.wrap/i64"> {}
 
-export interface I32_trunc_s_f32 extends Base<"i32.trunc_s/f32"> {}
-export interface I32_trunc_s_f64 extends Base<"i32.trunc_s/f64"> {}
-export interface I32_trunc_u_f32 extends Base<"i32.trunc_u/f32"> {}
-export interface I32_trunc_u_f64 extends Base<"i32.trunc_u/f64"> {}
+export interface I32_trunc_f32_s extends Base<"i32.trunc_f32_s"> {}
+export interface I32_trunc_f64_s extends Base<"i32.trunc_f64_s"> {}
+export interface I32_trunc_f32_u extends Base<"i32.trunc_f32_u"> {}
+export interface I32_trunc_f64_u extends Base<"i32.trunc_f64_u"> {}
 
-export interface I64_extend_s_i32 extends Base<"i64.extend_s/i32"> {}
-export interface I64_extend_u_i32 extends Base<"i64.extend_u/i32"> {}
+export interface I64_extend_i32_s extends Base<"i64.extend_i32_s"> {}
+export interface I64_extend_i32_u extends Base<"i64.extend_i32_u"> {}
 
-export interface I64_trunc_s_f32 extends Base<"i64.trunc_s/f32"> {}
-export interface I64_trunc_s_f64 extends Base<"i64.trunc_s/f64"> {}
-export interface I64_trunc_u_f32 extends Base<"i64.trunc_u/f32"> {}
-export interface I64_trunc_u_f64 extends Base<"i64.trunc_u/f64"> {}
+export interface I64_trunc_f32_s extends Base<"i64.trunc_f32_s"> {}
+export interface I64_trunc_f64_s extends Base<"i64.trunc_f64_s"> {}
+export interface I64_trunc_f32_u extends Base<"i64.trunc_f32_u"> {}
+export interface I64_trunc_f64_u extends Base<"i64.trunc_f64_u"> {}
 
 export interface I32_reinterpret_f32 extends Base<"i32.reinterpret/f32"> {}
 export interface I64_reinterpret_f64 extends Base<"i64.reinterpret/f64"> {}
@@ -213,22 +218,27 @@ export interface F64_reinterpret_i64 extends Base<"f64.reinterpret/i64"> {}
 
 export interface F32_demote_f64 extends Base<"f32.demote/f64"> {}
 
-export interface F32_convert_s_i32 extends Base<"f32.convert_s/i32"> {}
-export interface F32_convert_s_i64 extends Base<"f32.convert_s/i64"> {}
-export interface F32_convert_u_i32 extends Base<"f32.convert_u/i32"> {}
-export interface F32_convert_u_i64 extends Base<"f32.convert_u/i64"> {}
+export interface F32_convert_i32_s extends Base<"f32.convert_i32_s"> {}
+export interface F32_convert_i64_s extends Base<"f32.convert_i64_s"> {}
+export interface F32_convert_i32_u extends Base<"f32.convert_i32_u"> {}
+export interface F32_convert_i64_u extends Base<"f32.convert_i64_u"> {}
 
 export interface F64_promote_f32 extends Base<"f64.promote/f32"> {}
 
-export interface F64_convert_s_i32 extends Base<"f64.convert_s/i32"> {}
-export interface F64_convert_s_i64 extends Base<"f64.convert_s/i64"> {}
-export interface F64_convert_u_i32 extends Base<"f64.convert_u/i32"> {}
-export interface F64_convert_u_i64 extends Base<"f64.convert_u/i64"> {}
+export interface F64_convert_i32_s extends Base<"f64.convert_i32_s"> {}
+export interface F64_convert_i64_s extends Base<"f64.convert_i64_s"> {}
+export interface F64_convert_i32_u extends Base<"f64.convert_i32_u"> {}
+export interface F64_convert_i64_u extends Base<"f64.convert_i64_u"> {}
 
-export interface I32_load extends Base<"i32.load"> {}
-export interface I64_load extends Base<"i64.load"> {}
-export interface F32_load extends Base<"f32.load"> {}
-export interface F64_load extends Base<"f64.load"> {}
+interface Load<T extends string> extends Base<T> {
+  align: number
+  offset: number
+}
+
+export interface I32_load extends Load<"i32.load"> {}
+export interface I64_load extends Load<"i64.load"> {}
+export interface F32_load extends Load<"f32.load"> {}
+export interface F64_load extends Load<"f64.load"> {}
 
 export interface I32_load8_s extends Base<"i32.load8_s"> {}
 export interface I32_load8_u extends Base<"i32.load8_u"> {}
@@ -238,6 +248,8 @@ export interface I64_load8_s extends Base<"i64.load8_s"> {}
 export interface I64_load8_u extends Base<"i64.load8_u"> {}
 export interface I64_load16_s extends Base<"i64.load16_s"> {}
 export interface I64_load16_u extends Base<"i64.load16_u"> {}
+export interface I64_load32_s extends Base<"i64.load32s"> {}
+export interface I64_load32_u extends Base<"i64.load32_u"> {}
 export interface F32_load8_s extends Base<"f32.load8_s"> {}
 export interface F32_load8_u extends Base<"f32.load8_u"> {}
 export interface F32_load16_s extends Base<"f32.load16_s"> {}
@@ -287,6 +299,8 @@ export type Any =
   | Block
   | Loop
   | If
+  | Memory_grow
+  | Memory_size
   | Local_get
   | Local_set
   | Get_local
@@ -334,10 +348,10 @@ export type Any =
   | I64_shr_s
   | I32_shr_u
   | I64_shr_u
-  | I32_rot_l
-  | I64_rot_l
-  | I32_rot_r
-  | I64_rot_r
+  | I32_rotl
+  | I64_rotl
+  | I32_rotr
+  | I64_rotr
   | I32_eq
   | I64_eq
   | F32_eq
@@ -399,29 +413,29 @@ export type Any =
   | F32_max
   | F64_max
   | I32_wrap_i64
-  | I32_trunc_s_f32
-  | I32_trunc_s_f64
-  | I32_trunc_u_f32
-  | I32_trunc_u_f64
-  | I64_extend_s_i32
-  | I64_extend_u_i32
-  | I64_trunc_s_f32
-  | I64_trunc_s_f64
-  | I64_trunc_u_f32
-  | I64_trunc_u_f64
+  | I32_trunc_f32_s
+  | I32_trunc_f64_s
+  | I32_trunc_f32_u
+  | I32_trunc_f64_u
+  | I64_extend_i32_s
+  | I64_extend_i32_u
+  | I64_trunc_f32_s
+  | I64_trunc_f64_s
+  | I64_trunc_f32_u
+  | I64_trunc_f64_u
   | I32_reinterpret_f32
   | I64_reinterpret_f64
   | F32_reinterpret_i32
   | F64_reinterpret_i64
   | F32_demote_f64
-  | F32_convert_s_i32
-  | F32_convert_s_i64
-  | F32_convert_u_i32
-  | F32_convert_u_i64
-  | F64_convert_s_i32
-  | F64_convert_s_i64
-  | F64_convert_u_i32
-  | F64_convert_u_i64
+  | F32_convert_i32_s
+  | F32_convert_i64_s
+  | F32_convert_i32_u
+  | F32_convert_i64_u
+  | F64_convert_i32_s
+  | F64_convert_i64_s
+  | F64_convert_i32_u
+  | F64_convert_i64_u
   | F64_promote_f32
   | I32_load
   | I64_load
@@ -435,6 +449,8 @@ export type Any =
   | I64_load8_u
   | I64_load16_s
   | I64_load16_u
+  | I64_load32_s
+  | I64_load32_u
   | F32_load8_s
   | F32_load8_u
   | F32_load16_s

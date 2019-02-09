@@ -57,7 +57,7 @@ export const plainInstructions = or<Element[], Op.Any>(
   op<Op.Unreachable>("unreachable"),
   op1<Op.Br>("br", indices),
   op1<Op.BrIf>("br_if", indices),
-  opN<Op.BrTable>("br_table", indices),
+  // opN<Op.BrTable>("br_table", indices),
   op1<Op.Call>("call", indices),
   op<Op.CallIndirect>("call_indirect"),
   op<Op.Drop>("drop"),
@@ -125,11 +125,11 @@ export const plainInstructions = or<Element[], Op.Any>(
   op<Op.I32_shr_u>("i32.shr_u"),
   op<Op.I64_shr_u>("i64.shr_u"),
 
-  op<Op.I32_rot_l>("i32.rot_l"),
-  op<Op.I64_rot_l>("i64.rot_l"),
+  op<Op.I32_rotl>("i32.rotl"),
+  op<Op.I64_rotl>("i64.rotl"),
 
-  op<Op.I32_rot_r>("i32.rot_r"),
-  op<Op.I64_rot_r>("i64.rot_r"),
+  op<Op.I32_rotr>("i32.rotr"),
+  op<Op.I64_rotr>("i64.rotr"),
 
   op<Op.I32_eq>("i32.eq"),
   op<Op.I64_eq>("i64.eq"),
@@ -221,18 +221,18 @@ export const plainInstructions = or<Element[], Op.Any>(
 
   op<Op.I32_wrap_i64>("i32.wrap/i64"),
 
-  op<Op.I32_trunc_s_f32>("i32.trunc_s/f32"),
-  op<Op.I32_trunc_s_f64>("i32.trunc_s/f64"),
-  op<Op.I32_trunc_u_f32>("i32.trunc_u/f32"),
-  op<Op.I32_trunc_u_f64>("i32.trunc_u/f64"),
+  op<Op.I32_trunc_f32_s>("i32.trunc_s/f32"),
+  op<Op.I32_trunc_f64_s>("i32.trunc_s/f64"),
+  op<Op.I32_trunc_f32_u>("i32.trunc_u/f32"),
+  op<Op.I32_trunc_f64_u>("i32.trunc_u/f64"),
 
-  op<Op.I64_extend_s_i32>("i64.extend_s/i32"),
-  op<Op.I64_extend_u_i32>("i64.extend_u/i32"),
+  op<Op.I64_extend_i32_s>("i64.extend_s/i32"),
+  op<Op.I64_extend_i32_u>("i64.extend_u/i32"),
 
-  op<Op.I64_trunc_s_f32>("i64.trunc_s/f32"),
-  op<Op.I64_trunc_s_f64>("i64.trunc_s/f64"),
-  op<Op.I64_trunc_u_f32>("i64.trunc_u/f32"),
-  op<Op.I64_trunc_u_f64>("i64.trunc_u/f64"),
+  op<Op.I64_trunc_f32_s>("i64.trunc_s/f32"),
+  op<Op.I64_trunc_f64_s>("i64.trunc_s/f64"),
+  op<Op.I64_trunc_f32_u>("i64.trunc_u/f32"),
+  op<Op.I64_trunc_f64_u>("i64.trunc_u/f64"),
 
   op<Op.I32_reinterpret_f32>("i32.reinterpret/f32"),
   op<Op.I64_reinterpret_f64>("i64.reinterpret/f64"),
@@ -241,17 +241,17 @@ export const plainInstructions = or<Element[], Op.Any>(
 
   op<Op.F32_demote_f64>("f32.demote/f64"),
 
-  op<Op.F32_convert_s_i32>("f32.convert_s/i32"),
-  op<Op.F32_convert_s_i64>("f32.convert_s/i64"),
-  op<Op.F32_convert_u_i32>("f32.convert_u/i32"),
-  op<Op.F32_convert_u_i64>("f32.convert_u/i64"),
+  op<Op.F32_convert_i32_s>("f32.convert_s/i32"),
+  op<Op.F32_convert_i64_s>("f32.convert_s/i64"),
+  op<Op.F32_convert_i32_u>("f32.convert_u/i32"),
+  op<Op.F32_convert_i64_u>("f32.convert_u/i64"),
 
   op<Op.F64_promote_f32>("f64.promote/f32"),
 
-  op<Op.F64_convert_s_i32>("f64.convert_s/i32"),
-  op<Op.F64_convert_s_i64>("f64.convert_s/i64"),
-  op<Op.F64_convert_u_i32>("f64.convert_u/i32"),
-  op<Op.F64_convert_u_i64>("f64.convert_u/i64"),
+  op<Op.F64_convert_i32_s>("f64.convert_s/i32"),
+  op<Op.F64_convert_i64_s>("f64.convert_s/i64"),
+  op<Op.F64_convert_i32_u>("f64.convert_u/i32"),
+  op<Op.F64_convert_i64_u>("f64.convert_u/i64"),
 
   op<Op.I32_load>("i32.load"),
   op<Op.I64_load>("i64.load"),

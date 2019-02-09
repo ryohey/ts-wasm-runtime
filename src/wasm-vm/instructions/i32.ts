@@ -44,8 +44,8 @@ export const i32InstructionSet: PartialInstructionSet<
       return binop(Int32.shiftRight_u)
     case "i32.shr_s":
       return binop(Int32.shiftRight_s)
-    case "i32.rot_l":
-    case "i32.rot_r":
+    case "i32.rotl":
+    case "i32.rotr":
       throw new Error(`not implemented ${code.opType}`)
     case "i32.lt_s":
       return boolBinop(Int32.lessThan_s)

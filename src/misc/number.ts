@@ -26,3 +26,9 @@ export const countTrailingZeros = (
 export const popCount = (binary: string): number => {
   return binary.split("").filter(s => s === "1").length
 }
+
+export const binToHex = (str: string) =>
+  zeroPad(str, Math.ceil(str.length / 8) * 8)
+    .match(/.{8}/g)
+    .map(n => parseInt(n, 2).toString(16))
+    .join("")

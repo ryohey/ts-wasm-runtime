@@ -44,8 +44,8 @@ export const i64InstructionSet: PartialInstructionSet<
       return binop(Int64.shiftRight_u)
     case "i64.shr_s":
       return binop(Int64.shiftRight_s)
-    case "i64.rot_l":
-    case "i64.rot_r":
+    case "i64.rotl":
+    case "i64.rotr":
       throw new Error(`not implemented ${code.opType}`)
     case "i64.lt_s":
       return boolBinop(Int64.lessThan_s)
