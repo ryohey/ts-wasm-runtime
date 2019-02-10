@@ -1,5 +1,5 @@
 import * as assert from "assert"
-import { parser, multiParser, expression } from "./s-parser"
+import { parser, multiParser, expression } from "./index"
 
 describe("parser", () => {
   it("parse text", () => {

@@ -1,6 +1,6 @@
 import * as assert from "assert"
-import { watParser } from "../wat-parser"
-import { compile } from "../compiler/compiler"
+import { watParser } from "@ryohey/wat-parser"
+import { compile } from "./compiler/compiler"
 import { WASMVirtualMachine } from "./wasm-vm"
 
 const wasmTextCompiler = (text: string) => {

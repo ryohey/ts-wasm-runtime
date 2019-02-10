@@ -1,4 +1,5 @@
 export * from "./assert"
 export * from "./module"
 export * from "./number"
-export * from "./instructions"
+import * as Op from "./instructions"
+export { Op }

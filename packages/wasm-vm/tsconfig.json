@@ -1,10 +1,6 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "allowSyntheticDefaultImports": false,
-    "outDir": "dist",
-    "declaration": true
-  },
-  "exclude": ["node_modules", "**/*.test.ts", "dist"]
+    "outDir": "dist"
+  }
 }

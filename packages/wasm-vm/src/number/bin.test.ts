@@ -1,5 +1,5 @@
 import * as assert from "assert"
-import { countLeadingZeros, countTrailingZeros } from "./number"
+import { countLeadingZeros, countTrailingZeros } from "./bin"
 
 describe("number", () => {
   it("countLeadingZeros", () => {

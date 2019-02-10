@@ -4,7 +4,7 @@ import { moduleParser, elemSection, exportSection } from "./module"
 
 describe("module", () => {
   it("parses file", () => {
-    const wasm = Array.from(fs.readFileSync("./src/wasm-parser/main.wasm"))
+    const wasm = Array.from(fs.readFileSync("./fixtures/main.wasm"))
     const r = moduleParser(wasm, 0)
     assert.deepStrictEqual(r, [
       true,

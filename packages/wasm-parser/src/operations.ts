@@ -1,4 +1,4 @@
-import * as Op from "@ryohey/wasm-ast"
+import { Op } from "@ryohey/wasm-ast"
 import { map, seq, or, many, lazy, opt, Parser } from "@ryohey/fn-parser"
 import { byte, var1, vector } from "./utils"
 import { valType, Bytes } from "./types"

@@ -3,9 +3,8 @@ import { u32 } from "./number"
 import { expr } from "./operations"
 import { Bytes, valType } from "./types"
 import { byte, bytes, string, var1, variable, vector } from "./utils"
-import { ASTFunction, ASTFunctionLocal } from "@ryohey/wasm-ast"
+import { ASTFunction, ASTFunctionLocal, Op } from "@ryohey/wasm-ast"
 import { range, flatten } from "@ryohey/array-helper"
-import * as Op from "@ryohey/wasm-ast"
 
 // https://webassembly.github.io/spec/core/binary/index.html
 
