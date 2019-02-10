@@ -1,0 +1,19 @@
+{
+  "name": "@ryohey/s-parser",
+  "version": "1.0.0",
+  "description": "S-Expression parser",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": "https://github.com/ryohey/ts-wasm-runtime.git",
+  "author": "ryohey",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "3.3.3"
+  },
+  "dependencies": {
+    "@ryohey/fn-parser": "file:../fn-parser"
+  }
+}

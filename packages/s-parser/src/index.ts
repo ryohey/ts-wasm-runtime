@@ -1,4 +1,4 @@
-import { Parser, or, seq, lazy, opt, many, map } from "../parser/parser"
+import { Parser, or, seq, lazy, opt, many, map } from "@ryohey/fn-parser"
 import { regexp, token } from "./util"
 
 export interface FloatElement {
