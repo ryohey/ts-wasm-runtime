@@ -4,7 +4,7 @@ import {
   Float32Value,
   Float64Value,
   ValType
-} from "../ast/number"
+} from "./number"
 
 export interface Base<T extends string> {
   opType: T
