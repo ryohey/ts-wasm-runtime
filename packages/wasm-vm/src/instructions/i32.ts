@@ -3,7 +3,7 @@ import {
   WASMCode,
   WASMLocalMemory
 } from "../wasm-memory"
-import { Int32 } from "../../number/Int32"
+import { Int32 } from "../number"
 import { binop, monop, boolBinop, boolMonop } from "./helpers"
 
 // https://webassembly.github.io/spec/core/syntax/instructions.html#numeric-instructions
@@ -73,10 +73,10 @@ export const i32InstructionSet: PartialInstructionSet<
       return boolMonop(Int32.isZero)
 
     case "i32.wrap/i64":
-    case "i32.trunc_s/f32":
-    case "i32.trunc_s/f64":
-    case "i32.trunc_u/f32":
-    case "i32.trunc_u/f64":
+    case "i32.trunc_f32_s":
+    case "i32.trunc_f64_s":
+    case "i32.trunc_f32_u":
+    case "i32.trunc_f64_u":
     case "i32.reinterpret/f32":
       throw new Error(`not implemented ${code.opType}`)
   }

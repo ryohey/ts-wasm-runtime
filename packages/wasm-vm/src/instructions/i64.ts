@@ -3,7 +3,7 @@ import {
   WASMCode,
   WASMLocalMemory
 } from "../wasm-memory"
-import { Int64 } from "../../number/Int64"
+import { Int64 } from "../number"
 import { binop, boolBinop, boolMonop, monop } from "./helpers"
 
 // https://webassembly.github.io/spec/core/syntax/instructions.html#numeric-instructions
@@ -72,12 +72,12 @@ export const i64InstructionSet: PartialInstructionSet<
     case "i64.eqz":
       return boolMonop(Int64.isZero)
 
-    case "i64.extend_s/i32":
-    case "i64.extend_u/i32":
-    case "i64.trunc_s/f32":
-    case "i64.trunc_s/f64":
-    case "i64.trunc_u/f32":
-    case "i64.trunc_u/f64":
+    case "i64.extend_i32_s":
+    case "i64.extend_i32_u":
+    case "i64.trunc_f32_s":
+    case "i64.trunc_f64_s":
+    case "i64.trunc_f32_u":
+    case "i64.trunc_f64_u":
     case "i64.reinterpret/f64":
       throw new Error(`not implemented ${code.opType}`)
   }

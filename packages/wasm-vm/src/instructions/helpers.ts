@@ -1,6 +1,6 @@
 import { WASMMemoryValue, WASMCode, WASMMemory } from "../wasm-memory"
-import { Instruction } from "../../vm/vm"
-import { Int32 } from "../../number/Int32"
+import { Instruction } from "../vm"
+import { Int32 } from "../number"
 
 export const monop = <T extends WASMMemoryValue>(
   fn: (a: T) => T

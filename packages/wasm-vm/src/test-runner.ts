@@ -1,10 +1,9 @@
 import * as assert from "assert"
-import { wastParser } from "../wat-parser/wast"
+import { wastParser } from "@ryohey/wat-parser"
+import { ASTModule, ASTAssertReturn } from "@ryohey/wasm-ast"
 import { WASMVirtualMachine } from "./wasm-vm"
-import { compile } from "../compiler/compiler"
-import { convertNumber } from "../number/convert"
-import { ASTModule } from "../ast/module"
-import { ASTAssertReturn } from "../ast/assert"
+import { compile } from "./compiler/compiler"
+import { convertNumber } from "./number/convert"
 
 type ASTTopNode = ASTModule | ASTAssertReturn
 

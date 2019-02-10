@@ -1,16 +1,21 @@
 {
-  "name": "ts-wasm-runtime",
+  "name": "@ryohey/wasm-vm",
   "version": "1.0.0",
-  "description": "",
+  "description": "WebAssembly runtime",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "fmt": "prettier",
     "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "@ryohey/wasm-ast": "file:../wasm-ast",
+    "@ryohey/wat-parser": "file:../wat-parser",
+    "@ryohey/array-helper": "file:../array-helper"
+  },
   "devDependencies": {
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.11",

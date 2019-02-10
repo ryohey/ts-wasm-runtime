@@ -1,17 +1,14 @@
-import { Instruction } from "../vm/vm"
+import { Instruction } from "./vm"
 import { Stack } from "./stack"
 import {
   Int32Value,
   Int64Value,
   Float32Value,
-  Float64Value
-} from "../ast/number"
-import { Int32 } from "../number/Int32"
-import { Float32 } from "../number/Float32"
-import { Int64 } from "../number/Int64"
-import { Float64 } from "../number/Float64"
-import * as Op from "../ast/instructions"
-import { ASTFunction } from "../ast/module"
+  Float64Value,
+  ASTFunction,
+  Op
+} from "@ryohey/wasm-ast"
+import { Int32, Float32, Int64, Float64 } from "./number"
 
 export type WASMCodeParameter =
   | number

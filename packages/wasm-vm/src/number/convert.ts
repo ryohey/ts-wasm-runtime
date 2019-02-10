@@ -1,9 +1,9 @@
-import { WASMMemoryValue } from "../wasm-vm/wasm-memory"
+import { WASMMemoryValue } from "../wasm-memory"
 import { Int32 } from "./Int32"
 import { Int64 } from "./Int64"
 import { Float64 } from "./Float64"
 import { Float32 } from "./Float32"
-import { ValType, NumberValue } from "../ast/number"
+import { ValType, NumberValue } from "@ryohey/wasm-ast"
 
 export const convertNumber = (num: NumberValue): WASMMemoryValue => {
   if ("i32" in num) {

@@ -1,7 +1,7 @@
-import { fromPairs } from "../misc/array"
+import { fromPairs } from "./array"
 import { isString } from "util"
-import { ASTFunction, ASTElem, ASTModule } from "../ast/module"
-import * as Op from "../ast/instructions"
+import { ASTFunction, ASTElem, ASTModule } from "@ryohey/wasm-ast"
+import { Op } from "@ryohey/wasm-ast"
 
 type IdentifierEntry = { [key: string]: number }
 

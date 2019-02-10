@@ -3,7 +3,7 @@ import {
   WASMCode,
   WASMLocalMemory
 } from "../wasm-memory"
-import { Float32 } from "../../number/Float32"
+import { Float32 } from "../number"
 import { binop, boolBinop, monop } from "./helpers"
 
 export const f32InstructionSet: PartialInstructionSet<
@@ -54,10 +54,10 @@ export const f32InstructionSet: PartialInstructionSet<
     case "f32.max":
       return binop(Float32.max)
     case "f32.demote/f64":
-    case "f32.convert_s/i32":
-    case "f32.convert_s/i64":
-    case "f32.convert_u/i32":
-    case "f32.convert_u/i64":
+    case "f32.convert_i32_s":
+    case "f32.convert_i64_s":
+    case "f32.convert_i32_u":
+    case "f32.convert_i64_u":
     case "f32.reinterpret/i32":
       throw new Error(`not implemented ${code.opType}`)
   }

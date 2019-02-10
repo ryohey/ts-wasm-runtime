@@ -4,12 +4,12 @@ import {
   WASMMemory,
   WASMMemoryValue
 } from "../wasm-memory"
-import { range } from "../../misc/array"
-import { Int32 } from "../../number/Int32"
-import { BreakPosition, BreakFunc } from "../../vm/vm"
+import { range } from "@ryohey/array-helper"
+import { ValType } from "@ryohey/wasm-ast"
+import { Int32 } from "../number"
+import { convertNumber, numberValue } from "../number/convert"
+import { BreakPosition, BreakFunc } from "../vm"
 import { createWASMVM } from "../wasm-vm"
-import { ValType } from "../../ast/number"
-import { convertNumber, numberValue } from "../../number/convert"
 import { Stack } from "../stack"
 
 export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {

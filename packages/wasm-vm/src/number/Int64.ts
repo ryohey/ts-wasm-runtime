@@ -1,5 +1,5 @@
-import { Int64Value } from "../ast/number"
-import { countTrailingZeros, countLeadingZeros, popCount } from "../misc/number"
+import { Int64Value } from "@ryohey/wasm-ast"
+import { countTrailingZeros, countLeadingZeros, popCount } from "./bin"
 
 const unsigned = (a: bigint): bigint => BigInt.asUintN(64, a)
 const signed = (a: bigint): bigint => BigInt.asIntN(64, a)

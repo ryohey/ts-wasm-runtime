@@ -1,4 +1,4 @@
-import { VirtualMachine, InstructionSet } from "../vm/vm"
+import { VirtualMachine, InstructionSet } from "./vm"
 import {
   WASMCode,
   WASMMemory,
@@ -14,10 +14,10 @@ import { controlInstructionSet, callFunc } from "./instructions/control"
 import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
 import { f32InstructionSet } from "./instructions/f32"
-import { convertNumber } from "../number/convert"
+import { convertNumber } from "./number/convert"
 import { Stack } from "./stack"
-import { ASTFunction } from "../ast/module"
-import { NumberValue } from "../ast/number"
+import { ASTFunction } from "@ryohey/wasm-ast"
+import { NumberValue } from "@ryohey/wasm-ast"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 

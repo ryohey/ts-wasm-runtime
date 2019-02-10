@@ -1,5 +1,5 @@
-import { Int32Value } from "../ast/number"
-import { countTrailingZeros, countLeadingZeros, popCount } from "../misc/number"
+import { Int32Value } from "@ryohey/wasm-ast"
+import { countTrailingZeros, countLeadingZeros, popCount } from "./bin"
 
 const unsigned = (a: number): number => a >>> 0
 const signed = (a: number): number => a >> 0
