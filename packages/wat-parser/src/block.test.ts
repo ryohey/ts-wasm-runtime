@@ -1,6 +1,6 @@
 import * as assert from "assert"
 import { blockInstructions } from "./block"
-import { parser as sParser } from "../s-parser/s-parser"
+import { parser as sParser } from "@ryohey/s-parser"
 
 describe("block", () => {
   it("parses block-end", () => {

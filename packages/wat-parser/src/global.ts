@@ -1,8 +1,8 @@
-import { map, seq, or, opt } from "../parser/parser"
+import { map, seq, or, opt } from "@ryohey/fn-parser"
+import { ASTGlobal } from "@ryohey/wasm-ast"
 import { string, identifier, valType } from "./types"
 import { keyword, array } from "./utils"
 import { constInstructions } from "./operations"
-import { ASTGlobal } from "../ast/module"
 
 export const moduleGlobal = map(
   seq(

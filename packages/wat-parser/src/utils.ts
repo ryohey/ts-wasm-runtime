@@ -1,13 +1,13 @@
 // Utilities for Parser<Element[]>
 
-import { Parser } from "../parser/parser"
-import { isString } from "util"
+import { Parser } from "@ryohey/fn-parser"
 import {
   IntElement,
   HexElement,
   FloatElement,
   Element
-} from "../s-parser/s-parser"
+} from "@ryohey/s-parser"
+import { isString } from "util"
 
 export const keyword = <T extends string>(word: T): Parser<Element[], T> => (
   target,

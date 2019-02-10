@@ -1,4 +1,11 @@
-import { or, map, seq } from "../parser/parser"
+import { or, map, seq } from "@ryohey/fn-parser"
+import {
+  Int32Value,
+  Int64Value,
+  Float32Value,
+  Float64Value,
+  ValType
+} from "@ryohey/wasm-ast"
 import {
   regexp,
   keyword,
@@ -7,13 +14,6 @@ import {
   isHexElement,
   isFloatElement
 } from "./utils"
-import {
-  Int32Value,
-  Int64Value,
-  Float32Value,
-  Float64Value,
-  ValType
-} from "../ast/number"
 
 export const int32 = or(
   map(is(isIntElement), r => ({ i32: r.int } as Int32Value)),

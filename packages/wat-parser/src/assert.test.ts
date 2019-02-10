@@ -1,5 +1,5 @@
 import * as assert from "assert"
-import { parser as sParser } from "../s-parser/s-parser"
+import { parser as sParser } from "@ryohey/s-parser"
 import { assertionParser } from "./assert"
 
 describe("assertParser", () => {

@@ -1,7 +1,7 @@
-import { map, seq, or } from "../parser/parser"
+import { map, seq, or } from "@ryohey/fn-parser"
+import { ASTExport } from "@ryohey/wasm-ast"
 import { string, identifier } from "./types"
 import { keyword, array } from "./utils"
-import { ASTExport } from "../ast/module"
 
 export const moduleExport = map(
   seq(

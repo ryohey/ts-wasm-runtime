@@ -1,13 +1,5 @@
-import { func } from "./func"
-import { seq, or, map, many } from "../parser/parser"
-import { keyword, array } from "./utils"
-import { moduleExport } from "./export"
-import { moduleGlobal } from "./global"
-import { moduleMemory } from "./memory"
-import { moduleTable } from "./table"
-import { moduleType } from "./type"
-import { moduleElem } from "./elem"
-import { Element } from "../s-parser/s-parser"
+import { seq, or, map, many } from "@ryohey/fn-parser"
+import { Element } from "@ryohey/s-parser"
 import {
   ASTSection,
   ASTModule,
@@ -18,7 +10,15 @@ import {
   ASTTable,
   ASTType,
   ASTElem
-} from "../ast/module"
+} from "@ryohey/wasm-ast"
+import { func } from "./func"
+import { keyword, array } from "./utils"
+import { moduleExport } from "./export"
+import { moduleGlobal } from "./global"
+import { moduleMemory } from "./memory"
+import { moduleTable } from "./table"
+import { moduleType } from "./type"
+import { moduleElem } from "./elem"
 
 const isExport = (x: ASTSection): x is ASTExport => x.nodeType === "export"
 const isFunc = (x: ASTSection): x is ASTFunction => x.nodeType === "func"

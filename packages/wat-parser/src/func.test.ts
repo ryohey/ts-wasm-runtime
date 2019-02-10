@@ -1,6 +1,6 @@
 import * as assert from "assert"
 import { param, funcBody, func } from "./func"
-import { parser as sParser } from "../s-parser/s-parser"
+import { parser as sParser } from "@ryohey/s-parser"
 
 describe("parser", () => {
   it("parse param", () => {

@@ -1,7 +1,7 @@
-import { map, seq, opt } from "../parser/parser"
+import { map, seq, opt } from "@ryohey/fn-parser"
+import { ASTMemory } from "@ryohey/wasm-ast"
 import { string, identifier, num } from "./types"
 import { keyword, array } from "./utils"
-import { ASTMemory } from "../ast/module"
 
 export const moduleMemory = map(
   seq(

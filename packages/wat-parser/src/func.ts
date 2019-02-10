@@ -1,14 +1,14 @@
-import { map, seq, opt, Parser, many } from "../parser/parser"
-import { keyword, array } from "./utils"
-import { valType, identifier, string, blockType } from "./types"
-import { operations } from "./operations"
-import { flatten } from "../misc/array"
-import { Element } from "../s-parser/s-parser"
+import { map, seq, opt, Parser, many } from "@ryohey/fn-parser"
+import { Element } from "@ryohey/s-parser"
 import {
   ASTFunctionParameter,
   ASTFunctionLocal,
   ASTFunction
-} from "../ast/module"
+} from "@ryohey/wasm-ast"
+import { keyword, array } from "./utils"
+import { valType, identifier, string, blockType } from "./types"
+import { operations } from "./operations"
+import { flatten } from "@ryohey/array-helper"
 
 export const param = map(
   seq(keyword("param"), opt(identifier), many(valType)),

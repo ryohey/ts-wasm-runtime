@@ -1,8 +1,8 @@
-import { map, seq, many } from "../parser/parser"
+import { map, seq, many } from "@ryohey/fn-parser"
+import { ASTElem } from "@ryohey/wasm-ast"
 import { identifier } from "./types"
 import { keyword, array } from "./utils"
 import { constInstructions } from "./operations"
-import { ASTElem } from "../ast/module"
 
 export const moduleElem = map(
   seq(keyword("elem"), array(constInstructions), many(identifier)),

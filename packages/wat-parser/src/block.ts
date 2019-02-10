@@ -1,10 +1,10 @@
-import { Parser, seq, many, opt, or, lazy, map } from "../parser/parser"
+import { Parser, seq, many, opt, or, lazy, map } from "@ryohey/fn-parser"
+import { Element } from "@ryohey/s-parser"
+import { Op } from "@ryohey/wasm-ast"
 import { blockType, identifier } from "./types"
 import { keyword, array } from "./utils"
 import { operations } from "./operations"
-import { flatten } from "../misc/array"
-import { Element } from "../s-parser/s-parser"
-import * as Op from "../ast/instructions"
+import { flatten } from "@ryohey/array-helper"
 
 const instructions = lazy(() => operations)
 

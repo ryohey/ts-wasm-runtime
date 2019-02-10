@@ -1,5 +1,5 @@
-import { or, many, transform } from "../parser/parser"
-import { multiParser } from "../s-parser/s-parser"
+import { or, many, transform } from "@ryohey/fn-parser"
+import { multiParser } from "@ryohey/s-parser"
 import { moduleParser } from "./module"
 import { assertionParser } from "./assert"
 import { array } from "./utils"

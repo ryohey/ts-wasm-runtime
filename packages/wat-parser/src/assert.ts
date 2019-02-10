@@ -1,9 +1,9 @@
-import { map, seq, opt, many } from "../parser/parser"
+import { map, seq, opt, many } from "@ryohey/fn-parser"
+import { ASTAssertReturn } from "@ryohey/wasm-ast"
 import { keyword, array } from "./utils"
 import { string } from "./types"
 import { operations } from "./operations"
-import { flatten } from "../misc/array"
-import { ASTAssertReturn } from "../ast/assert"
+import { flatten } from "@ryohey/array-helper"
 
 export const assertionParser = map(
   seq(

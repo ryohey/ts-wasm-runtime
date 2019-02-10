@@ -1,7 +1,7 @@
-import { map, seq, opt } from "../parser/parser"
+import { map, seq, opt } from "@ryohey/fn-parser"
+import { ASTType } from "@ryohey/wasm-ast"
 import { identifier, blockType } from "./types"
 import { keyword, array } from "./utils"
-import { ASTType } from "../ast/module"
 
 const funcDef = seq(keyword("func"), opt(blockType))
 
