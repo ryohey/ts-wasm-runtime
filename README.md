@@ -6,10 +6,6 @@ Zero Dependency WebAssembly Parser and Runtime Made with Pure TypeScript.
 
 This is a hobby project for learning about WASM.
 
-### parser.ts
-
-Parser combinator ported from [fnparse.js](https://github.com/anatoo/fnparse.js).
-
 ### s-parser.ts
 
 S-Expression parser based on parser.ts.

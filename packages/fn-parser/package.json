@@ -1,0 +1,16 @@
+{
+  "name": "@ryohey/fn-parser",
+  "version": "1.0.0",
+  "description": "An extremely simple parser combinator for TypeScript",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": "https://github.com/ryohey/ts-wasm-runtime.git",
+  "author": "ryohey",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "3.3.3"
+  }
+}
