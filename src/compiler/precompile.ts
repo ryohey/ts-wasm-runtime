@@ -68,17 +68,6 @@ const processInstruction = (
     }
   }
 
-  if ("parameters" in inst) {
-    return {
-      ...inst,
-      parameters: inst.parameters.map(p => {
-        if (isIdentifier(p)) {
-          return idTables.locals[p]
-        }
-      })
-    }
-  }
-
   return inst
 }
 
