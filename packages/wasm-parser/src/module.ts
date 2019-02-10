@@ -1,11 +1,11 @@
-import { many, map, opt, or, Parser, seq, seqMap } from "../parser/parser"
+import { many, map, opt, or, Parser, seq, seqMap } from "@ryohey/fn-parser"
 import { u32 } from "./number"
 import { expr } from "./operations"
 import { Bytes, valType } from "./types"
 import { byte, bytes, string, var1, variable, vector } from "./utils"
-import { ASTFunction, ASTFunctionLocal } from "../ast/module"
-import { range, flatten } from "../misc/array"
-import * as Op from "../ast/instructions"
+import { ASTFunction, ASTFunctionLocal } from "@ryohey/wasm-ast"
+import { range, flatten } from "@ryohey/array-helper"
+import * as Op from "@ryohey/wasm-ast"
 
 // https://webassembly.github.io/spec/core/binary/index.html
 

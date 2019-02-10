@@ -1,5 +1,5 @@
-import * as Op from "../ast/instructions"
-import { map, seq, or, many, lazy, opt, Parser } from "../parser/parser"
+import * as Op from "@ryohey/wasm-ast"
+import { map, seq, or, many, lazy, opt, Parser } from "@ryohey/fn-parser"
 import { byte, var1, vector } from "./utils"
 import { valType, Bytes } from "./types"
 import { i64, i32, f32, f64, u32 } from "./number"

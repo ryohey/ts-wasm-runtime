@@ -1,6 +1,6 @@
 import { byte } from "./utils"
-import { or, map } from "../parser/parser"
-import { ValType } from "../ast/number"
+import { or, map } from "@ryohey/fn-parser"
+import { ValType } from "@ryohey/wasm-ast"
 
 export type Bytes = number[]
 export type Byte = Bytes[0]

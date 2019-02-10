@@ -1,4 +1,4 @@
-import { Parser, seqMap, map, terminate } from "../parser/parser"
+import { Parser, seqMap, map, terminate } from "@ryohey/fn-parser"
 import { Bytes } from "./types"
 import { var1, variable } from "./utils"
 import {
@@ -6,8 +6,8 @@ import {
   Int64Value,
   Float32Value,
   Float64Value
-} from "../ast/number"
-import { zeroPad, binToHex } from "../misc/number"
+} from "@ryohey/wasm-ast"
+import { zeroPad, binToHex } from "./misc/number"
 
 // https://ja.osdn.net/projects/drdeamon64/wiki/LEB128%E3%81%AA%E6%95%B0%E3%81%AE%E8%A1%A8%E7%8F%BE
 

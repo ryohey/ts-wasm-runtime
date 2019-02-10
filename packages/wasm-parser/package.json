@@ -1,0 +1,24 @@
+{
+  "name": "@ryohey/wat-parser",
+  "version": "1.0.0",
+  "description": "WebAssembly text format parser",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": "https://github.com/ryohey/ts-wasm-runtime.git",
+  "author": "ryohey",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "24.1.0",
+    "typescript": "3.3.3"
+  },
+  "dependencies": {
+    "@ryohey/fn-parser": "file:../fn-parser",
+    "@ryohey/s-parser": "file:../s-parser",
+    "@ryohey/wasm-ast": "file:../wasm-ast",
+    "@ryohey/array-helper": "file:../array-helper"
+  }
+}
