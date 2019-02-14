@@ -8,6 +8,8 @@ import "./style.css"
 
 interface State {
   sParserInput: string
+  consoleInput: string
+  consoleOutput: string[]
 }
 
 let store: (update?: any) => State
@@ -43,13 +45,32 @@ const placeholder = `(module
 )`
 
 const App = () => {
+  const { sParserInput, consoleInput, consoleOutput } = store()
+  const parsedS = sParser(sParserInput, 0)
+  const parsedModule = parsedS[0] ? moduleParser(parsedS[1], 0) : null
+
   const onChangeText = e => {
     store({ sParserInput: e.target.value })
   }
 
-  const value = store().sParserInput
-  const parsedS = sParser(value, 0)
-  const parsedModule = parsedS[0] ? moduleParser(parsedS[1], 0) : null
+  const onChangeConsoleInput = e => {
+    store({ consoleInput: e.target.value })
+  }
+
+  const onKeyPressConsoleInput = e => {
+    if (e.key === "Enter") {
+      const { consoleInput, consoleOutput } = store()
+
+      // TODO: evaluate console input
+
+      const result = "no result"
+
+      store({
+        consoleInput: "",
+        consoleOutput: [...consoleOutput, result]
+      })
+    }
+  }
 
   return html`
     <div class="App">
@@ -58,19 +79,56 @@ const App = () => {
       <div class="sections">
         <section>
           <h2>Input Text</h2>
-          <textarea @input=${onChangeText} .value=${value}></textarea>
+          <textarea @input=${onChangeText} .value=${sParserInput}></textarea>
         </section>
 
         <section>
           <h2>S-Expression Parser</h2>
           ${parsedS[0] ? JSONView(parsedS[1]) : Error(parsedS[3])}
         </section>
+
         <section>
           <h2>WebAssembly Text Format Parser</h2>
           ${parsedModule &&
             (parsedModule[0]
               ? JSONView(parsedModule[1])
               : Error(parsedModule[3]))}
+        </section>
+
+        <section>
+          <h2>Console</h2>
+          <div class="console-content">
+            <div class="input-wrapper">
+              <span class="mark">&#10095;</span>
+              <input
+                type="text" 
+                .value=${consoleInput} 
+                @input=${onChangeConsoleInput}
+                @keypress=${onKeyPressConsoleInput}
+              />
+            </div>
+            <div class="section functions">
+              <p class="title">functions</p>
+              <ul>
+              ${parsedModule[1].functions
+                .filter(fn => fn.export)
+                .map(
+                  fn =>
+                    html`
+                      <li>
+                        ${fn.export}(${fn.parameters
+                          .map(p => p.type)
+                          .join(", ")})
+                      </li>
+                    `
+                )}
+              </ul>
+            </div>
+            <div class="section output">
+              <p class="title">output</p>
+              ${Code(consoleOutput.join("\n"))}
+            </div>
+          </div
         </section>
       </div>
     </div>
@@ -92,6 +150,8 @@ const createStore = <T>(initialState: T) => {
 }
 
 store = createStore({
-  sParserInput: placeholder
+  sParserInput: placeholder,
+  consoleInput: "",
+  consoleOutput: []
 })
 renderApp()

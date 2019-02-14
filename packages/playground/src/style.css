@@ -48,10 +48,6 @@ h1 {
 }
 
 textarea {
-  background: white;
-  border: none;
-  outline-width: 1px;
-  outline-color: blue;
   min-height: 13em;
   box-sizing: border-box;
 }
@@ -91,10 +87,82 @@ pre.Code {
   padding-right: 0;
 }
 
-textarea {
+textarea,
+input[type="text"] {
   font-family: inherit;
   font-size: 0.9em;
   font-weight: normal;
   color: inherit;
   padding: 0.75em;
+  background: white;
+  border: none;
+  outline-width: 1px;
+  outline-color: blue;
+}
+
+.console-content input[type="text"] {
+  border: none;
+}
+
+.console-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper {
+  display: flex;
+  position: relative;
+}
+
+.input-wrapper > .mark {
+  position: absolute;
+  top: 0.4em;
+  left: 0.5em;
+  color: #c074fa;
+}
+
+.input-wrapper > input {
+  padding-left: 1.6em;
+  flex-grow: 1;
+}
+
+.console-content {
+  font-size: 0.9em;
+  border-radius: 0 0 0.25em 0.25em;
+}
+
+.console-content .section {
+  background: #2c2a30;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.console-content .section > .title {
+  margin: 0;
+  padding: 0.25em 0.75em;
+  background: #ffffff0d;
+  color: #ffffff6e;
+}
+
+.console-content > .functions ul li::before {
+  content: "\0192";
+  opacity: 0.5;
+  margin-right: 0.2em;
+}
+
+.console-content > .functions ul {
+  list-style-type: none;
+  padding: 0.5em;
+  margin: 0;
+  color: #ffffffa8;
+}
+
+.console-content .section.output .Code {
+  flex-grow: 1;
+  color: #e6e6e6;
+}
+
+.console-content .section.output {
+  flex-grow: 1;
 }
