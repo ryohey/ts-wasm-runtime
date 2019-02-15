@@ -2,15 +2,16 @@
   "name": "@ryohey/wasm-vm",
   "version": "1.0.0",
   "description": "WebAssembly runtime",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "fmt": "prettier",
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": "https://github.com/ryohey/ts-wasm-runtime.git",
+  "author": "ryohey",
+  "license": "MIT",
   "dependencies": {
     "@ryohey/wasm-ast": "file:../wasm-ast",
     "@ryohey/wat-parser": "file:../wat-parser",

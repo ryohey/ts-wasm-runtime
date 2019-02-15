@@ -2,9 +2,11 @@ import { html, render } from "lit-html"
 import { unsafeHTML } from "lit-html/directives/unsafe-html"
 import { parser as sParser } from "@ryohey/s-parser"
 import { moduleParser } from "@ryohey/wat-parser"
+import { WASMVirtualMachine, compile } from "@ryohey/wasm-vm"
 import * as formatHighlight from "json-format-highlight"
 
 import "./style.css"
+import { parseConsoleInput } from "./console-parser"
 
 interface State {
   sParserInput: string
@@ -42,6 +44,35 @@ const placeholder = `(module
     get_local 1
     i32.add
   )
+  (func $fib (export "fib") (param $p0 i32) (result i32) (local $l0 i32)
+    i32.const 1
+    set_local $l0
+    block $B0
+      get_local $p0
+      i32.const 2
+      i32.lt_u
+      br_if $B0
+      i32.const 1
+      set_local $l0
+      loop $L1
+        get_local $p0
+        i32.const -1
+        i32.add
+        call $fib
+        get_local $l0
+        i32.add
+        set_local $l0
+        get_local $p0
+        i32.const -2
+        i32.add
+        tee_local $p0
+        i32.const 1
+        i32.gt_u
+        br_if $L1
+      end
+    end
+    get_local $l0
+  )
 )`
 
 const App = () => {
@@ -59,15 +90,36 @@ const App = () => {
 
   const onKeyPressConsoleInput = e => {
     if (e.key === "Enter") {
+      const module = parsedModule[1]
+      if (module === null) {
+        return
+      }
+
       const { consoleInput, consoleOutput } = store()
 
       // TODO: evaluate console input
+      const vm = new WASMVirtualMachine(compile(module))
+      const parsedInput = parseConsoleInput(consoleInput, 0)
+      if (!parsedInput[0]) {
+        const output = `> ${consoleInput}\ninvalid command: ${parsedInput[3]}`
+        store({
+          consoleInput: "",
+          consoleOutput: [...consoleOutput, output]
+        })
+        return
+      }
+      const input = parsedInput[1]
+      const result = vm.callFunction(
+        input.name,
+        ...input.arguments.map(i32 => ({ i32 }))
+      )
+      const resultStr = result.map(x => JSON.stringify(x)).join(", ")
 
-      const result = "no result"
+      const output = `> ${consoleInput}\n${resultStr}`
 
       store({
         consoleInput: "",
-        consoleOutput: [...consoleOutput, result]
+        consoleOutput: [...consoleOutput, output]
       })
     }
   }

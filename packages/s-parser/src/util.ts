@@ -1,4 +1,4 @@
-import { Parser, or, seq, lazy, opt, many, map } from "@ryohey/fn-parser"
+import { Parser } from "@ryohey/fn-parser"
 
 export const token = (word: string): Parser<string, string> => (
   target,

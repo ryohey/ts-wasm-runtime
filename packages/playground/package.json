@@ -5,20 +5,24 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest"
   },
   "keywords": [],
   "author": "ryohey",
   "license": "MIT",
   "dependencies": {
+    "@ryohey/fn-parser": "file:../fn-parser",
     "@ryohey/s-parser": "file:../s-parser",
     "@ryohey/wat-parser": "file:../wat-parser",
+    "@ryohey/wasm-vm": "file:../wasm-vm",
     "json-format-highlight": "1.0.1",
     "lit-html": "1.0.0"
   },
   "devDependencies": {
     "css-loader": "2.1.0",
     "html-webpack-plugin": "3.2.0",
+    "jest": "24.1.0",
     "mini-css-extract-plugin": "0.5.0",
     "ts-loader": "5.3.3",
     "typescript": "3.3.3",
