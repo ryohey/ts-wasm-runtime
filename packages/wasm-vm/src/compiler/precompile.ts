@@ -1,7 +1,8 @@
 import { fromPairs } from "./array"
-import { isString } from "util"
 import { ASTFunction, ASTElem, ASTModule } from "@ryohey/wasm-ast"
 import { Op } from "@ryohey/wasm-ast"
+
+const isString = (x: any): x is string => typeof x === "string"
 
 type IdentifierEntry = { [key: string]: number }
 
