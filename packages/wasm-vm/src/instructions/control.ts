@@ -6,7 +6,7 @@ import {
 } from "../wasm-memory"
 import { range } from "@ryohey/array-helper"
 import { ValType } from "@ryohey/wasm-ast"
-import { Int32 } from "../number"
+import { Int32, Int64, Float32 } from "../number"
 import { convertNumber, numberValue } from "../number/convert"
 import { BreakPosition, BreakFunc } from "../vm"
 import { createWASMVM } from "../wasm-vm"
@@ -107,6 +107,22 @@ export const controlInstructionSet: PartialInstructionSet<
         const idx = memory.values.pop() as Int32
         const funcId = memory.table[idx.toNumber()]
         callFunc(memory, funcId, br)
+      }
+    case "select":
+      return memory => {
+        const { values } = memory
+        const first = values.pop()
+        let condition: boolean
+        if (first instanceof Int32) {
+          condition = Int32.isZero(first as Int32)
+        } else if (first instanceof Int64) {
+          condition = Int64.isZero(first as Int64)
+        } else {
+          throw new Error(`unsupported type: ${typeof first}`)
+        }
+        const lhs = values.pop()
+        const rhs = values.pop()
+        values.push(condition ? lhs : rhs)
       }
   }
   return null
