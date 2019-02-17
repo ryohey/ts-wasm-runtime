@@ -6,13 +6,12 @@ import {
 } from "../wasm-memory"
 import { range } from "@ryohey/array-helper"
 import { ValType } from "@ryohey/wasm-ast"
-import { Int32, Int64, Float32 } from "../number"
+import { Int32, Int64 } from "../number"
 import { convertNumber, numberValue } from "../number/convert"
-import { BreakPosition, BreakFunc } from "../vm"
 import { createWASMVM } from "../wasm-vm"
 import { Stack } from "../stack"
 
-export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {
+export const callFunc = (memory: WASMMemory, funcId: number) => {
   const { functions, values } = memory
   const fn = functions[funcId]
 
@@ -29,7 +28,27 @@ export const callFunc = (memory: WASMMemory, funcId: number, br: BreakFunc) => {
     ]
   }
 
-  runBlock(newMemory, fn.body, fn.results, BreakPosition.tail, br)
+  const flow: FlowControl = {
+    return: innerMemory => {
+      // 指定された数の戻り値をスタックに積む
+      fn.results.map(_ => innerMemory.values.pop()).forEach(memory.values.push)
+    },
+    break: () => {
+      throw new Error("invalid break")
+    }
+  }
+
+  runBlock(newMemory, fn.body, fn.results, BreakPosition.tail, flow)
+}
+
+interface FlowControl {
+  break: (level: number) => void
+  return: (memory: WASMMemory) => void
+}
+
+enum BreakPosition {
+  tail,
+  head
 }
 
 const runBlock = (
@@ -37,7 +56,7 @@ const runBlock = (
   codes: WASMCode[],
   results: ValType[],
   breakPosition: BreakPosition,
-  break_: (level: number) => void
+  flow: FlowControl
 ) => {
   const newMemory = {
     ...memory,
@@ -45,68 +64,99 @@ const runBlock = (
     programCounter: 0
   }
 
-  const vm = createWASMVM()
-  const breakLevel = vm(codes, newMemory, breakPosition)
-  if (breakLevel > 0) {
-    break_(breakLevel - 1)
+  // create break instruction
+  const br = (level: number) => {
+    newMemory.programCounter = (() => {
+      switch (breakPosition) {
+        case BreakPosition.tail:
+          return codes.length
+        case BreakPosition.head:
+          return 0
+      }
+    })()
+    if (level > 0) {
+      flow.break(level - 1)
+    }
   }
 
-  const returnValues = results.map(_ => newMemory.values.pop())
+  let isReturn = false
+  const ret = (memory: WASMMemory) => {
+    flow.return(memory)
+    isReturn = true
+  }
+
+  const newFlow = {
+    break: br,
+    return: ret
+  }
+
+  const vm = createWASMVM(controlInstructionSet(newFlow))
+  vm(codes, newMemory)
+
+  if (isReturn) {
+    return
+  }
 
   // 指定された数の戻り値を pop 後のスタックに積む
-  returnValues.forEach(memory.values.push)
+  results.map(_ => newMemory.values.pop()).forEach(memory.values.push)
 }
 
-export const controlInstructionSet: PartialInstructionSet<
-  WASMCode,
-  WASMMemory
-> = code => {
+export const controlInstructionSet = (
+  flow: FlowControl
+): PartialInstructionSet<WASMCode, WASMMemory> => code => {
   switch (code.opType) {
     case "nop":
       return () => {}
     case "unreachable":
       throw new Error(`not implemented ${code.opType}`)
     case "block":
-      return (memory, break_) => {
-        runBlock(memory, code.body, code.results, BreakPosition.tail, break_)
+      return memory => {
+        runBlock(memory, code.body, code.results, BreakPosition.tail, flow)
       }
     case "loop":
-      return (memory, break_) => {
-        runBlock(memory, code.body, code.results, BreakPosition.head, break_)
+      return memory => {
+        runBlock(memory, code.body, code.results, BreakPosition.head, flow)
       }
     case "if":
-      return (memory, break_) => {
+      return memory => {
         if (!Int32.isZero(memory.values.pop() as Int32)) {
-          runBlock(memory, code.then, code.results, BreakPosition.tail, break_)
+          runBlock(memory, code.then, code.results, BreakPosition.tail, flow)
         } else {
-          runBlock(memory, code.else, code.results, BreakPosition.tail, break_)
+          runBlock(memory, code.else, code.results, BreakPosition.tail, flow)
         }
       }
     case "br":
-      return (_, break_) => {
-        break_(code.parameter as number)
+      return () => {
+        flow.break(code.parameter as number)
       }
     case "br_if":
-      return (memory, break_) => {
+      return memory => {
         const { values } = memory
         if (!Int32.isZero(values.pop() as Int32)) {
-          break_(code.parameter as number)
+          flow.break(code.parameter as number)
         }
       }
     case "br_table":
-      throw new Error(`not implemented ${code.opType}`)
+      return memory => {
+        const labelIds = code.parameters as number[]
+        const { values } = memory
+        const idx = (values.pop() as Int32).toNumber()
+        const label =
+          idx < labelIds.length ? labelIds[idx] : labelIds[labelIds.length - 1]
+        flow.break(label)
+      }
     case "return":
-      return (_, br) => br(0)
+      return memory => flow.return(memory)
     case "call":
-      return (memory, br) => {
+      return memory => {
         const funcId = code.parameter as number
-        callFunc(memory, funcId, br)
+        callFunc(memory, funcId)
       }
     case "call_indirect":
-      return (memory, br) => {
+      return memory => {
         const idx = memory.values.pop() as Int32
         const funcId = memory.table[idx.toNumber()]
-        callFunc(memory, funcId, br)
+        callFunc(memory, funcId)
       }
     case "select":
       return memory => {

@@ -57,7 +57,7 @@ export const plainInstructions = or<Element[], Op.Any>(
   op<Op.Unreachable>("unreachable"),
   op1<Op.Br>("br", indices),
   op1<Op.BrIf>("br_if", indices),
-  // opN<Op.BrTable>("br_table", indices),
+  opN<Op.BrTable>("br_table", indices),
   op1<Op.Call>("call", indices),
   op<Op.CallIndirect>("call_indirect"),
   op<Op.Drop>("drop"),

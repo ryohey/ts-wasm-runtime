@@ -38,6 +38,17 @@ const processInstruction = (
     return processBlock(inst, idTables, labelStack)
   }
 
+  const labelToIndex = (p: string) => indexFromLast(labelStack, l => l === p)
+
+  if (inst.opType === "br_table") {
+    return {
+      ...inst,
+      parameters: inst.parameters.map(p =>
+        isIdentifier(p) ? labelToIndex(p) : p
+      )
+    }
+  }
+
   // 変数の identifier を index に置換
   if ("parameter" in inst) {
     const p = inst.parameter
@@ -50,7 +61,7 @@ const processInstruction = (
           }
         case "br":
         case "br_if":
-          return { ...inst, parameter: indexFromLast(labelStack, l => l === p) }
+          return { ...inst, parameter: labelToIndex(p) }
         case "local.get":
         case "local.set":
         case "local.tee":

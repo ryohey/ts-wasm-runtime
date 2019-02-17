@@ -14,6 +14,18 @@
       "windows": {
         "program": "${workspaceRoot}/node_modules/jest/bin/jest.js"
       }
+    },
+    {
+      "name": "jest: wasm-vm",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/packages/wasm-vm/node_modules/.bin/jest",
+      "cwd": "${workspaceFolder}/packages/wasm-vm/",
+      "protocol": "inspector",
+      "args": ["--runInBand"],
+      "windows": {
+        "program": "${workspaceRoot}/packages/wasm-vm/node_modules/jest/bin/jest.js"
+      }
     }
   ]
 }

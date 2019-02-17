@@ -1,18 +1,11 @@
 export type InstructionSet<Code, Memory> = (code: Code) => Instruction<Memory>
 
 // mutates register and memory
-export type Instruction<Memory> = (memory: Memory, br: BreakFunc) => void
+export type Instruction<Memory> = (memory: Memory) => void
 
 export interface VMMemory {
   programCounter: number
 }
-
-export enum BreakPosition {
-  tail,
-  head
-}
-
-export type BreakFunc = (level: number) => void
 
 /**
  * 特定の命令セットやプログラムに依存しない VM の抽象的な実装
@@ -21,28 +14,11 @@ export type BreakFunc = (level: number) => void
 export const virtualMachine = <Code, Memory extends VMMemory>(
   instructionSet: InstructionSet<Code, Memory>,
   verbose: boolean = false
-) => (
-  program: Code[],
-  memory: Memory,
-  breakPosition: BreakPosition = BreakPosition.tail
-) => {
+) => (program: Code[], memory: Memory) => {
   const log = (msg: string) => {
     if (verbose) {
       console.log(msg)
     }
-  }
-
-  let breakLevel = 0
-  const break_: BreakFunc = level => {
-    memory.programCounter = (() => {
-      switch (breakPosition) {
-        case BreakPosition.tail:
-          return program.length
-        case BreakPosition.head:
-          return 0
-      }
-    })()
-    breakLevel = level
   }
 
   while (memory.programCounter < program.length) {
@@ -50,7 +26,7 @@ export const virtualMachine = <Code, Memory extends VMMemory>(
     const instr = instructionSet(code)
     log(`[${memory.programCounter}] run ${JSON.stringify(code)}`)
     try {
-      instr(memory, break_)
+      instr(memory)
     } catch (e) {
       console.error(
         `Exception thrown at ${memory.programCounter}: ${
@@ -60,7 +36,4 @@ export const virtualMachine = <Code, Memory extends VMMemory>(
       break
     }
   }
-
-  // pass remained break count to break nested call
-  return breakLevel
 }

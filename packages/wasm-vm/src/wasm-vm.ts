@@ -22,7 +22,7 @@ import { NumberValue } from "@ryohey/wasm-ast"
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
 const mergeInstructionSet = <T, S>(
-  ...instructioSets: PartialInstructionSet<T, S>[]
+  instructioSets: PartialInstructionSet<T, S>[]
 ): InstructionSet<T, S> => code => {
   for (const is of instructioSets) {
     const i = is(code)
@@ -33,18 +33,20 @@ const mergeInstructionSet = <T, S>(
   throw new Error(`There is no instruction for ${JSON.stringify(code)}`)
 }
 
-const instructionSet = mergeInstructionSet(
+const baseInstructionSet = [
   memoryInstructionSet as WASMInstructionSet,
   variableInstructionSet as WASMInstructionSet,
   i32InstructionSet as WASMInstructionSet,
   i64InstructionSet as WASMInstructionSet,
   f32InstructionSet as WASMInstructionSet,
-  f64InstructionSet as WASMInstructionSet,
-  controlInstructionSet
-)
+  f64InstructionSet as WASMInstructionSet
+]
 
 // Provides WASM instruction set and creates VirtualMachine.
-export const createWASMVM = () => virtualMachine(instructionSet)
+export const createWASMVM = (controlInstructionSet: WASMInstructionSet) =>
+  virtualMachine(
+    mergeInstructionSet([...baseInstructionSet, controlInstructionSet])
+  )
 
 export class WASMVirtualMachine {
   private table: WASMTable
@@ -75,9 +77,7 @@ export class WASMVirtualMachine {
       .reverse()
       .forEach(memory.values.push)
 
-    callFunc(memory, funcId, () => {
-      throw new Error("invalid break")
-    })
+    callFunc(memory, funcId)
 
     return fn.results.map(_ => memory.values.pop().toObject())
   }
