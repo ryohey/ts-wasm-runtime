@@ -1,4 +1,4 @@
-import { Instruction } from "./vm"
+import { Instruction, VMMemory } from "./vm"
 import { Stack } from "./stack"
 import {
   Int32Value,
@@ -31,7 +31,7 @@ export interface WASMModule {
   table: WASMTable
 }
 
-export interface WASMMemory {
+export interface WASMMemory extends VMMemory {
   // control instruction のみが直接 stack を触るべき
   readonly values: Stack<WASMMemoryValue>
   readonly memory: WASMMemoryValue[]
@@ -40,6 +40,7 @@ export interface WASMMemory {
   readonly functions: ASTFunction[]
   readonly table: WASMTable
   readonly programCounter: number
+  programTerminated: boolean
 }
 
 // 通常の instruction が操作できるメモリ

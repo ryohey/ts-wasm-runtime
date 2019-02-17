@@ -69,7 +69,8 @@ export class WASMVirtualMachine {
       memory: [],
       local: [],
       global: [],
-      programCounter: 0
+      programCounter: 0,
+      programTerminated: false
     }
 
     args

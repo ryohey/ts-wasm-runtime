@@ -5,6 +5,7 @@ export type Instruction<Memory> = (memory: Memory) => void
 
 export interface VMMemory {
   programCounter: number
+  programTerminated: boolean
 }
 
 /**
@@ -21,7 +22,7 @@ export const virtualMachine = <Code, Memory extends VMMemory>(
     }
   }
 
-  while (memory.programCounter < program.length) {
+  while (memory.programCounter < program.length && !memory.programTerminated) {
     const code = program[memory.programCounter++]
     const instr = instructionSet(code)
     log(`[${memory.programCounter}] run ${JSON.stringify(code)}`)

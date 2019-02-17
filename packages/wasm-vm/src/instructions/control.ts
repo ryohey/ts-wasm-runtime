@@ -79,10 +79,10 @@ const runBlock = (
     }
   }
 
-  let isReturn = false
   const ret = (memory: WASMMemory) => {
     flow.return(memory)
-    isReturn = true
+    // vm のループを抜ける
+    newMemory.programTerminated = true
   }
 
   const newFlow = {
@@ -93,7 +93,7 @@ const runBlock = (
   const vm = createWASMVM(controlInstructionSet(newFlow))
   vm(codes, newMemory)
 
-  if (isReturn) {
+  if (newMemory.programTerminated) {
     return
   }
 
@@ -142,7 +142,9 @@ export const controlInstructionSet = (
         const { values } = memory
         const idx = (values.pop() as Int32).toNumber()
         const label =
-          idx < labelIds.length ? labelIds[idx] : labelIds[labelIds.length - 1]
+          idx < labelIds.length && idx >= 0
+            ? labelIds[idx]
+            : labelIds[labelIds.length - 1]
         flow.break(label)
       }
     case "return":
