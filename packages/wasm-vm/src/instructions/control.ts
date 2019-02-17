@@ -46,7 +46,7 @@ const runBlock = (
   }
 
   const vm = createWASMVM()
-  const breakLevel = vm.run(codes, newMemory, breakPosition)
+  const breakLevel = vm(codes, newMemory, breakPosition)
   if (breakLevel > 0) {
     break_(breakLevel - 1)
   }

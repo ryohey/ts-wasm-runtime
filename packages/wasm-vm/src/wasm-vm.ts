@@ -1,4 +1,4 @@
-import { VirtualMachine, InstructionSet } from "./vm"
+import { virtualMachine, InstructionSet } from "./vm"
 import {
   WASMCode,
   WASMMemory,
@@ -21,20 +21,6 @@ import { NumberValue } from "@ryohey/wasm-ast"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
-// Provides WASM instruction set and creates VirtualMachine.
-export const createWASMVM = (): VirtualMachine<WASMCode, WASMMemory> => {
-  const instructionSet = mergeInstructionSet(
-    memoryInstructionSet as WASMInstructionSet,
-    variableInstructionSet as WASMInstructionSet,
-    i32InstructionSet as WASMInstructionSet,
-    i64InstructionSet as WASMInstructionSet,
-    f32InstructionSet as WASMInstructionSet,
-    f64InstructionSet as WASMInstructionSet,
-    controlInstructionSet
-  )
-  return new VirtualMachine(instructionSet)
-}
-
 const mergeInstructionSet = <T, S>(
   ...instructioSets: PartialInstructionSet<T, S>[]
 ): InstructionSet<T, S> => code => {
@@ -46,6 +32,19 @@ const mergeInstructionSet = <T, S>(
   }
   throw new Error(`There is no instruction for ${JSON.stringify(code)}`)
 }
+
+const instructionSet = mergeInstructionSet(
+  memoryInstructionSet as WASMInstructionSet,
+  variableInstructionSet as WASMInstructionSet,
+  i32InstructionSet as WASMInstructionSet,
+  i64InstructionSet as WASMInstructionSet,
+  f32InstructionSet as WASMInstructionSet,
+  f64InstructionSet as WASMInstructionSet,
+  controlInstructionSet
+)
+
+// Provides WASM instruction set and creates VirtualMachine.
+export const createWASMVM = () => virtualMachine(instructionSet)
 
 export class WASMVirtualMachine {
   private table: WASMTable
