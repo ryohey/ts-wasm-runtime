@@ -26,10 +26,7 @@ export interface ParamMany<S extends string, T> extends Base<S> {
 
 export interface Br extends Param1<"br", number | string> {}
 export interface BrIf extends Param1<"br_if", number | string> {}
-export interface BrTable extends Base<"br_table"> {
-  label: number[]
-  labelIndex: number
-}
+export interface BrTable extends ParamMany<"br_table", number | string> {}
 
 export interface Call extends Param1<"call", number | string> {}
 export interface CallIndirect extends Base<"call_indirect"> {}
