@@ -1,4 +1,4 @@
-import { ValType, Int32Value } from "./number"
+import { ValType, Int32Value, NumberValue } from "./number"
 import * as Op from "./instructions"
 
 export interface ASTModule {
@@ -46,6 +46,7 @@ export interface ASTGlobal {
   export: string | null
   type: ValType
   mutable: boolean
+  initialValue: NumberValue
 }
 
 export interface ASTElem {

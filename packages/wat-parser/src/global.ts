@@ -24,6 +24,7 @@ export const moduleGlobal = map(
       identifier: r[1],
       export: r[2],
       type: r[3].type,
-      mutable: r[3].mutable
+      mutable: r[3].mutable,
+      initialValue: r[4].parameter
     } as ASTGlobal)
 )

@@ -1,23 +1,22 @@
-import { virtualMachine, InstructionSet } from "./vm"
-import {
-  WASMCode,
-  WASMMemory,
-  PartialInstructionSet,
-  WASMModule,
-  WASMTable,
-  WASMMemoryValue
-} from "./wasm-memory"
-import { memoryInstructionSet } from "./instructions/memory"
-import { variableInstructionSet } from "./instructions/variable"
+import { ASTElem, ASTGlobal, ASTModule, NumberValue } from "@ryohey/wasm-ast"
+import { callFunc } from "./instructions/control"
+import { f32InstructionSet } from "./instructions/f32"
 import { f64InstructionSet } from "./instructions/f64"
-import { controlInstructionSet, callFunc } from "./instructions/control"
 import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
-import { f32InstructionSet } from "./instructions/f32"
+import { memoryInstructionSet } from "./instructions/memory"
+import { variableInstructionSet } from "./instructions/variable"
+import { Int32 } from "./number"
 import { convertNumber } from "./number/convert"
 import { Stack } from "./stack"
-import { ASTFunction } from "@ryohey/wasm-ast"
-import { NumberValue } from "@ryohey/wasm-ast"
+import { InstructionSet, virtualMachine } from "./vm"
+import {
+  PartialInstructionSet,
+  WASMCode,
+  WASMMemory,
+  WASMMemoryValue,
+  WASMTable
+} from "./wasm-memory"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -48,27 +47,44 @@ export const createWASMVM = (controlInstructionSet: WASMInstructionSet) =>
     mergeInstructionSet([...baseInstructionSet, controlInstructionSet])
   )
 
-export class WASMVirtualMachine {
-  private table: WASMTable
-  private functions: ASTFunction[]
+const createTable = (elems: ASTElem[]) => {
+  const table: WASMTable = {}
+  elems.forEach(e => {
+    const offset = Int32.obj(e.offset).toNumber()
+    e.funcIds.forEach((id, i) => {
+      table[offset + i] = id as number
+    })
+  })
+  return table
+}
 
-  constructor(module: WASMModule) {
-    this.table = module.table
-    this.functions = module.functions
+const createGlobalMemory = (globals: ASTGlobal[]) =>
+  globals.map(g => convertNumber(g.initialValue))
+
+export class WASMVirtualMachine {
+  private module: ASTModule
+  private table: WASMTable
+  private global: WASMMemoryValue[]
+
+  constructor(module: ASTModule) {
+    this.module = module
+    this.table = createTable(module.elems)
+    this.global = createGlobalMemory(module.globals)
   }
 
   // export された関数を呼ぶ
   callFunction(name: string, ...args: NumberValue[]): NumberValue[] {
-    const funcId = this.functions.findIndex(t => t.export === name)
-    const fn = this.functions[funcId]
+    const { functions } = this.module
+    const funcId = functions.findIndex(t => t.export === name)
+    const fn = functions[funcId]
 
     const memory: WASMMemory = {
-      functions: this.functions,
+      functions,
       table: this.table,
       values: new Stack<WASMMemoryValue>(),
       memory: [],
       local: [],
-      global: [],
+      global: this.global,
       programCounter: 0,
       programTerminated: false
     }

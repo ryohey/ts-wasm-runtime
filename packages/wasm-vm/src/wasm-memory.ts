@@ -26,11 +26,6 @@ export type WASMTable = {
   [key: number]: number
 }
 
-export interface WASMModule {
-  functions: ASTFunction[]
-  table: WASMTable
-}
-
 export interface WASMMemory extends VMMemory {
   // control instruction のみが直接 stack を触るべき
   readonly values: Stack<WASMMemoryValue>

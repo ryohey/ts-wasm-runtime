@@ -8,6 +8,7 @@ type IdentifierEntry = { [key: string]: number }
 
 interface IdentifierTables {
   locals: IdentifierEntry
+  globals: IdentifierEntry
   funcs: IdentifierEntry
 }
 
@@ -68,13 +69,17 @@ const processInstruction = (
         case "get_local":
         case "set_local":
         case "tee_local":
+          return {
+            ...inst,
+            parameter: idTables.locals[p]
+          }
         case "global.get":
         case "global.set":
         case "get_global":
         case "set_global":
           return {
             ...inst,
-            parameter: idTables.locals[p]
+            parameter: idTables.globals[p]
           }
       }
     }
@@ -131,11 +136,13 @@ const createLocalTables = (ast: ASTFunction) => {
 
 const processFunction = (
   ast: ASTFunction,
-  funcTable: IdentifierEntry
+  funcs: IdentifierEntry,
+  globals: IdentifierEntry
 ): ASTFunction => {
   const idTables: IdentifierTables = {
     locals: createLocalTables(ast),
-    funcs: funcTable
+    globals,
+    funcs
   }
   const body = ast.body.map(i => processInstruction(i, idTables, []))
   return {
@@ -159,9 +166,17 @@ export const replaceIdentifiers = (ast: ASTModule): ASTModule => {
       .filter(e => e[0])
   )
 
+  const globalTable: IdentifierEntry = fromPairs(
+    ast.globals
+      .map((fn, i) => [fn.identifier, i] as [string, number])
+      .filter(e => e[0])
+  )
+
   return {
     ...ast,
     elems: ast.elems.map(elem => processElem(elem, funcTable)),
-    functions: ast.functions.map(fn => processFunction(fn, funcTable))
+    functions: ast.functions.map(fn =>
+      processFunction(fn, funcTable, globalTable)
+    )
   }
 }
