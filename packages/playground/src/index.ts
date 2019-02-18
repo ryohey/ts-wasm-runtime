@@ -162,18 +162,22 @@ const App = () => {
             <div class="section functions">
               <p class="title">functions</p>
               <ul>
-              ${parsedModule[1].functions
-                .filter(fn => fn.export)
-                .map(
-                  fn =>
-                    html`
-                      <li>
-                        ${fn.export}(${fn.parameters
-                          .map(p => p.type)
-                          .join(", ")})
-                      </li>
-                    `
-                )}
+              ${
+                parsedModule && parsedModule[0]
+                  ? parsedModule[1].functions
+                      .filter(fn => fn.export)
+                      .map(
+                        fn =>
+                          html`
+                            <li>
+                              ${fn.export}(${fn.parameters
+                                .map(p => p.type)
+                                .join(", ")})
+                            </li>
+                          `
+                      )
+                  : null
+              }
               </ul>
             </div>
             <div class="section output">
