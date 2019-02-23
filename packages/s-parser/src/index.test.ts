@@ -8,17 +8,17 @@ describe("parser", () => {
 
   it("parse number", () => {
     const r = expression("123", 0)
-    expect(r).toStrictEqual([true, { int: "123" }, 3])
+    expect(r).toStrictEqual([true, "123", 3])
   })
 
   it("parse float number", () => {
     const r = expression("123.456", 0)
-    expect(r).toStrictEqual([true, { float: "123.456" }, 7])
+    expect(r).toStrictEqual([true, "123.456", 7])
   })
 
   it("parse hex number", () => {
     const r = expression("0x123F", 0)
-    expect(r).toStrictEqual([true, { hex: "0x123F" }, 6])
+    expect(r).toStrictEqual([true, "0x123F", 6])
   })
 
   it("parse list with single token", () => {
@@ -84,13 +84,7 @@ describe("parser", () => {
       true,
       [
         "module",
-        [
-          "func",
-          ["export", '"hello"'],
-          ["result", "i32"],
-          "i32.const",
-          { int: "42" }
-        ]
+        ["func", ["export", '"hello"'], ["result", "i32"], "i32.const", "42"]
       ],
       85
     ])

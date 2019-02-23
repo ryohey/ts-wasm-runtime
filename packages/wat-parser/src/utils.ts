@@ -1,7 +1,7 @@
 // Utilities for Parser<Element[]>
 
 import { Parser } from "@ryohey/fn-parser"
-import { IntElement, HexElement, FloatElement, Element } from "@ryohey/s-parser"
+import { Element } from "@ryohey/s-parser"
 
 const isString = (x: any): x is string => typeof x === "string"
 
@@ -58,24 +58,4 @@ export const array = <T>(
     return [true, result[1], position + 1]
   }
   return [false, null, position, result[3]]
-}
-
-export const isIntElement = (v: any): v is IntElement => {
-  return v instanceof Object && "int" in v
-}
-export const isHexElement = (v: any): v is HexElement => {
-  return v instanceof Object && "hex" in v
-}
-export const isFloatElement = (v: any): v is FloatElement => {
-  return v instanceof Object && "float" in v
-}
-
-export const is = <T extends Element>(
-  fn: (x: Element) => x is T
-): Parser<Element[], T> => (target, position) => {
-  const v = target[position]
-  if (fn(v)) {
-    return [true, v, position + 1]
-  }
-  return [false, null, position]
 }

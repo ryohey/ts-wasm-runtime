@@ -3,7 +3,7 @@ import { moduleGlobal } from "./global"
 describe("global", () => {
   it("parses global", () => {
     const r = moduleGlobal(
-      ["global", "$g0", ["mut", "i32"], ["i32.const", { int: "66560" }]],
+      ["global", "$g0", ["mut", "i32"], ["i32.const", "66560"]],
       0
     )
     expect(r).toStrictEqual([
@@ -26,7 +26,7 @@ describe("global", () => {
         "$__heap_base",
         ["export", `"__heap_base"`],
         "i32",
-        ["i32.const", { int: "66560" }]
+        ["i32.const", "66560"]
       ],
       0
     )

@@ -13,9 +13,9 @@ describe("module parser", () => {
           ["param", "i32"],
           ["result", "i32"],
           "get_local",
-          { int: "0" },
+          "0",
           "get_local",
-          { int: "1" },
+          "1",
           "i32.add"
         ]
       ],

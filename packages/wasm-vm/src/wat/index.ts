@@ -1,5 +1,4 @@
 import { WATModule } from "@ryohey/wat-parser"
-import { Int32 } from "../number"
 import { WASMModule } from "../module"
 import { replaceIdentifiers } from "./precompile"
 

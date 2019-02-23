@@ -172,15 +172,12 @@ describe("parser", () => {
   })
 
   it("parses single folded instruction", () => {
-    const r = funcBody([["get_local", { int: "0" }]], 0)
+    const r = funcBody([["get_local", "0"]], 0)
     expect(r).toStrictEqual([true, [{ opType: "get_local", parameter: 0 }], 1])
   })
 
   it("parses nested folded instruction", () => {
-    const r = funcBody(
-      [["i32.add", ["i32.const", { int: "2" }], ["i32.const", { int: "3" }]]],
-      0
-    )
+    const r = funcBody([["i32.add", ["i32.const", "2"], ["i32.const", "3"]]], 0)
     expect(r).toStrictEqual([
       true,
       [

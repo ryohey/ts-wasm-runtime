@@ -3,7 +3,7 @@ import { parser as sParser } from "@ryohey/s-parser"
 
 describe("block", () => {
   it("parses block-end", () => {
-    const r = blockInstructions(["block", "i32.const", { int: "42" }, "end"], 0)
+    const r = blockInstructions(["block", "i32.const", "42", "end"], 0)
     expect(r).toStrictEqual([
       true,
       [
@@ -18,10 +18,7 @@ describe("block", () => {
     ])
   })
   it("parses block with label", () => {
-    const r = blockInstructions(
-      ["block", "$lbl", "i32.const", { int: "42" }, "end"],
-      0
-    )
+    const r = blockInstructions(["block", "$lbl", "i32.const", "42", "end"], 0)
     expect(r).toStrictEqual([
       true,
       [
@@ -37,7 +34,7 @@ describe("block", () => {
   })
   it("parses folded block", () => {
     const r = blockInstructions(
-      [["block", ["result", "i32"], ["i32.const", { int: "42" }]]],
+      [["block", ["result", "i32"], ["i32.const", "42"]]],
       0
     )
     expect(r).toStrictEqual([
