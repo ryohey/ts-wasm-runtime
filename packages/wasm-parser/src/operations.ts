@@ -61,12 +61,11 @@ export const instr: Parser<Bytes, Op.Any> = lazy(() =>
     op1<Op.Br>(0x0c, "br"),
     op1<Op.BrIf>(0x0d, "br_if"),
     map(
-      seq(byte(0x0e), vector(var1), var1),
+      seq(byte(0x0e), vector(var1)),
       r =>
         ({
           opType: "br_table",
-          label: r[1],
-          labelIndex: r[2]
+          parameters: r[1]
         } as Op.BrTable)
     ),
     op<Op.Return>(0x0f, "return"),
