@@ -1,0 +1,115 @@
+{
+  "folders": [
+    {
+      "path": "packages/array-helper"
+    },
+    {
+      "path": "packages/wasm-parser"
+    },
+    {
+      "path": "packages/s-parser"
+    },
+    {
+      "path": "packages/wasm-ast"
+    },
+    {
+      "path": "packages/fn-parser"
+    },
+    {
+      "path": "packages/wat-parser"
+    },
+    {
+      "path": "packages/wasm-vm"
+    },
+    {
+      "path": "packages/playground"
+    }
+  ],
+  "settings": {
+    "editor.formatOnSave": true
+  },
+  "launch": {
+    "configurations": [
+      {
+        "type": "node",
+        "name": "test: s-parser",
+        "request": "launch",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder:s-parser}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "${workspaceFolder:s-parser}/node_modules/jest/bin/jest"
+      },
+      {
+        "type": "node",
+        "name": "test: wasm-parser",
+        "request": "launch",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder:wasm-parser}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "${workspaceFolder:wasm-parser}/node_modules/jest/bin/jest"
+      },
+      {
+        "type": "node",
+        "name": "test: array-helper",
+        "request": "launch",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder:array-helper}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "${workspaceFolder:array-helper}/node_modules/jest/bin/jest"
+      },
+      {
+        "type": "node",
+        "name": "test: wasm-ast",
+        "request": "launch",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder:wasm-ast}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "${workspaceFolder:wasm-ast}/node_modules/jest/bin/jest"
+      },
+      {
+        "type": "node",
+        "name": "test: fn-parser",
+        "request": "launch",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder:fn-parser}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "${workspaceFolder:fn-parser}/node_modules/jest/bin/jest"
+      },
+      {
+        "type": "node",
+        "name": "test: wat-parser",
+        "request": "launch",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder:wat-parser}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "${workspaceFolder:wat-parser}/node_modules/jest/bin/jest"
+      },
+      {
+        "type": "node",
+        "name": "test: wasm-vm",
+        "request": "launch",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder:wasm-vm}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "${workspaceFolder:wasm-vm}/node_modules/jest/bin/jest"
+      },
+      {
+        "type": "node",
+        "name": "test: playground",
+        "request": "launch",
+        "args": ["--runInBand"],
+        "cwd": "${workspaceFolder:playground}",
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "program": "${workspaceFolder:playground}/node_modules/jest/bin/jest"
+      }
+    ]
+  }
+}
