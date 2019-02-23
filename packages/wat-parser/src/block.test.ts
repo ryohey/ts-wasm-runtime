@@ -1,11 +1,10 @@
-import * as assert from "assert"
 import { blockInstructions } from "./block"
 import { parser as sParser } from "@ryohey/s-parser"
 
 describe("block", () => {
   it("parses block-end", () => {
     const r = blockInstructions(["block", "i32.const", { int: "42" }, "end"], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {
@@ -23,7 +22,7 @@ describe("block", () => {
       ["block", "$lbl", "i32.const", { int: "42" }, "end"],
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {
@@ -41,7 +40,7 @@ describe("block", () => {
       [["block", ["result", "i32"], ["i32.const", { int: "42" }]]],
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {
@@ -60,7 +59,7 @@ describe("block", () => {
       0
     )
     const r = blockInstructions(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {

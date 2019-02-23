@@ -1,4 +1,3 @@
-import * as assert from "assert"
 import { parser as sParser } from "@ryohey/s-parser"
 import { ifParser } from "./if"
 
@@ -6,7 +5,7 @@ describe("if", () => {
   it("parses if-then-else", () => {
     const sExp = sParser(`(if nop else nop end)`, 0)
     const r = ifParser(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {
@@ -31,7 +30,7 @@ describe("if", () => {
       0
     )
     const r = ifParser(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {
@@ -49,7 +48,7 @@ describe("if", () => {
   it("parses if-then", () => {
     const sExp = sParser(`(if nop end)`, 0)
     const r = ifParser(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {
@@ -67,7 +66,7 @@ describe("if", () => {
   it("parses if-then block", () => {
     const sExp = sParser(`((if $foo (then i32.const 10)))`, 0)
     const r = ifParser(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {
@@ -85,7 +84,7 @@ describe("if", () => {
   it("parses folded if-then block", () => {
     const sExp = sParser(`((if (local.get 0) (then (nop))))`, 0)
     const r = ifParser(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         { opType: "local.get", parameter: 0 },
@@ -104,7 +103,7 @@ describe("if", () => {
   it("parses folded if-then-else block", () => {
     const sExp = sParser(`((if (local.get 0) (then (nop)) (else (nop))))`, 0)
     const r = ifParser(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         { opType: "local.get", parameter: 0 },
@@ -126,7 +125,7 @@ describe("if", () => {
       0
     )
     const r = ifParser(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         { opType: "local.get", parameter: 0 },
@@ -155,7 +154,7 @@ describe("if", () => {
     )
 
     const r = ifParser(sExp[1], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         { opType: "local.get", parameter: 0 },

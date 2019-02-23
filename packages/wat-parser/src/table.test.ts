@@ -1,4 +1,3 @@
-import * as assert from "assert"
 import { moduleTable } from "./table"
 
 describe("table", () => {
@@ -7,7 +6,7 @@ describe("table", () => {
       ["table", "$T0", { int: "1" }, { int: "1" }, "anyfunc"],
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       { export: null, identifier: "$T0", nodeType: "table" },
       5

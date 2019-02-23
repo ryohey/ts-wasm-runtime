@@ -1,4 +1,3 @@
-import * as assert from "assert"
 import { moduleGlobal } from "./global"
 
 describe("global", () => {
@@ -7,7 +6,7 @@ describe("global", () => {
       ["global", "$g0", ["mut", "i32"], ["i32.const", { int: "66560" }]],
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         export: null,
@@ -31,7 +30,7 @@ describe("global", () => {
       ],
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         export: "__heap_base",

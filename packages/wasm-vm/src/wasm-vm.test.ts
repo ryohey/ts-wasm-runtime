@@ -1,4 +1,3 @@
-import * as assert from "assert"
 import { watParser } from "@ryohey/wat-parser"
 import { compile } from "./compiler/compiler"
 import { WASMVirtualMachine } from "./wasm-vm"
@@ -17,7 +16,7 @@ describe("wasm-vm", () => {
       )`
     )
     const vm = new WASMVirtualMachine(module)
-    assert.deepStrictEqual(vm.callFunction("hello"), [{ i32: "42" }])
+    expect(vm.callFunction("hello")).toStrictEqual([{ i32: "42" }])
   })
 
   it("call add", () => {
@@ -31,9 +30,8 @@ describe("wasm-vm", () => {
       )`
     )
     const vm = new WASMVirtualMachine(module)
-    assert.deepStrictEqual(
-      vm.callFunction("add", { i32: "133" }, { i32: "234" }),
-      [{ i32: "367" }]
-    )
+    expect(
+      vm.callFunction("add", { i32: "133" }, { i32: "234" })
+    ).toStrictEqual([{ i32: "367" }])
   })
 })

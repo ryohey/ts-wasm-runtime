@@ -1,21 +1,20 @@
-import * as assert from "assert"
 import { param, funcBody, func } from "./func"
 import { parser as sParser } from "@ryohey/s-parser"
 
 describe("parser", () => {
   it("parse param", () => {
     const r = param(["param", "i32"], 0)
-    assert.deepEqual(r, [true, [{ identifier: null, type: "i32" }], 2])
+    expect(r).toStrictEqual([true, [{ identifier: null, type: "i32" }], 2])
   })
 
   it("parse param with identifier", () => {
     const r = param(["param", "$p2", "f64"], 0)
-    assert.deepEqual(r, [true, [{ identifier: "$p2", type: "f64" }], 3])
+    expect(r).toStrictEqual([true, [{ identifier: "$p2", type: "f64" }], 3])
   })
 
   it("parse function body", () => {
     const r = funcBody(["get_local", "$lhs", "get_local", "$rhs"], 0)
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         {
@@ -46,7 +45,7 @@ describe("parser", () => {
       ],
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         nodeType: "func",
@@ -93,7 +92,7 @@ describe("parser", () => {
       ],
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         nodeType: "func",
@@ -130,7 +129,7 @@ describe("parser", () => {
       0
     )
     const r = func(sExp[1], 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         body: [
@@ -157,7 +156,7 @@ describe("parser", () => {
       0
     )
     const r = func(sExp[1], 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         body: [{ opType: "get_local", parameter: 0 }],
@@ -174,11 +173,7 @@ describe("parser", () => {
 
   it("parses single folded instruction", () => {
     const r = funcBody([["get_local", { int: "0" }]], 0)
-    assert.deepStrictEqual(r, [
-      true,
-      [{ opType: "get_local", parameter: 0 }],
-      1
-    ])
+    expect(r).toStrictEqual([true, [{ opType: "get_local", parameter: 0 }], 1])
   })
 
   it("parses nested folded instruction", () => {
@@ -186,7 +181,7 @@ describe("parser", () => {
       [["i32.add", ["i32.const", { int: "2" }], ["i32.const", { int: "3" }]]],
       0
     )
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         { opType: "i32.const", parameter: { i32: "2" } },
@@ -206,7 +201,7 @@ describe("parser", () => {
       0
     )
     const r = func(sExp[1], 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         body: [
@@ -247,7 +242,7 @@ describe("parser", () => {
       0
     )
     const r = func(sExp[1], 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         body: [
@@ -292,7 +287,7 @@ describe("parser", () => {
       0
     )
     const r = func(sExp[1], 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         body: [

@@ -1,4 +1,3 @@
-import * as assert from "assert"
 import { parser as sParser } from "@ryohey/s-parser"
 import { assertionParser } from "./assert"
 
@@ -9,7 +8,7 @@ describe("assertParser", () => {
       0
     )
     const r = assertionParser(sExp[1], 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         nodeType: "assert_return",
@@ -32,7 +31,7 @@ describe("assertParser", () => {
   it("parses assert_return without parameters", () => {
     const sExp = sParser(`(assert_return (invoke "empty"))`, 0)
     const r = assertionParser(sExp[1], 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         nodeType: "assert_return",

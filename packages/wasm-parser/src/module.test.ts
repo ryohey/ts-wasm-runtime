@@ -1,4 +1,3 @@
-import * as assert from "assert"
 import * as fs from "fs"
 import { moduleParser, elemSection, exportSection } from "./module"
 
@@ -6,7 +5,7 @@ describe("module", () => {
   it("parses file", () => {
     const wasm = Array.from(fs.readFileSync("./fixtures/main.wasm"))
     const r = moduleParser(wasm, 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         { version: 1 },
@@ -145,7 +144,7 @@ describe("module", () => {
       3
     ]
     const r = elemSection(wasm, 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         id: 9,
@@ -377,7 +376,7 @@ describe("module", () => {
       0x00
     ]
     const r = exportSection(input, 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         id: 7,

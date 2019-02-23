@@ -1,4 +1,3 @@
-import * as assert from "assert"
 import { parser as sParser } from "@ryohey/s-parser"
 import { moduleParser } from "./module"
 
@@ -22,7 +21,7 @@ describe("module parser", () => {
       ],
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         nodeType: "module",
@@ -82,7 +81,7 @@ describe("module parser", () => {
 
     const r = moduleParser(sExp[1], 0)
 
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         nodeType: "module",
@@ -145,7 +144,7 @@ describe("module parser", () => {
       0
     )
     const r = moduleParser(sExp[1], 0)
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       {
         exports: [],

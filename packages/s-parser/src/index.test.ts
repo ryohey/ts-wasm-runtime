@@ -1,40 +1,39 @@
-import * as assert from "assert"
 import { parser, multiParser, expression } from "./index"
 
 describe("parser", () => {
   it("parse text", () => {
     const r = expression("abc", 0)
-    assert.deepEqual(r, [true, "abc", 3])
+    expect(r).toStrictEqual([true, "abc", 3])
   })
 
   it("parse number", () => {
     const r = expression("123", 0)
-    assert.deepEqual(r, [true, { int: "123" }, 3])
+    expect(r).toStrictEqual([true, { int: "123" }, 3])
   })
 
   it("parse float number", () => {
     const r = expression("123.456", 0)
-    assert.deepEqual(r, [true, { float: "123.456" }, 7])
+    expect(r).toStrictEqual([true, { float: "123.456" }, 7])
   })
 
   it("parse hex number", () => {
     const r = expression("0x123F", 0)
-    assert.deepEqual(r, [true, { hex: "0x123F" }, 6])
+    expect(r).toStrictEqual([true, { hex: "0x123F" }, 6])
   })
 
   it("parse list with single token", () => {
     const r = parser("(a)", 0)
-    assert.deepEqual(r, [true, ["a"], 3])
+    expect(r).toStrictEqual([true, ["a"], 3])
   })
 
   it("parse list", () => {
     const r = parser("(a b c)", 0)
-    assert.deepEqual(r, [true, ["a", "b", "c"], 7])
+    expect(r).toStrictEqual([true, ["a", "b", "c"], 7])
   })
 
   it("parse nested list", () => {
     const r = parser("(a (b c) ((d)))", 0)
-    assert.deepEqual(r, [true, ["a", ["b", "c"], [["d"]]], 15])
+    expect(r).toStrictEqual([true, ["a", ["b", "c"], [["d"]]], 15])
   })
 
   it("parse multiline text", () => {
@@ -44,7 +43,7 @@ describe("parser", () => {
       )`,
       0
     )
-    assert.deepEqual(r, [true, ["a", ["b", "c"]], 22])
+    expect(r).toStrictEqual([true, ["a", ["b", "c"]], 22])
   })
 
   it("parse wasm", () => {
@@ -55,7 +54,7 @@ describe("parser", () => {
     i32.add)`,
       0
     )
-    assert.deepEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         "func",
@@ -81,7 +80,7 @@ describe("parser", () => {
     )`,
       0
     )
-    assert.deepStrictEqual(r, [
+    expect(r).toStrictEqual([
       true,
       [
         "module",
@@ -104,7 +103,7 @@ describe("parser", () => {
       `,
       0
     )
-    assert.deepStrictEqual(r, [true, [["aa", "bb"], ["c", "d"]], 26])
+    expect(r).toStrictEqual([true, [["aa", "bb"], ["c", "d"]], 26])
   })
 
   it("parses with comments", () => {
@@ -115,6 +114,6 @@ describe("parser", () => {
       `,
       0
     )
-    assert.deepEqual(r, [true, ["a", ["b", "c"]], 51])
+    expect(r).toStrictEqual([true, ["a", ["b", "c"]], 51])
   })
 })
