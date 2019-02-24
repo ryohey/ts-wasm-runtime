@@ -34,7 +34,7 @@ describe("module", () => {
           {
             id: 5,
             nodeType: "mem",
-            sections: [{ type: { lim: { max: 2, min: 128 } } }],
+            sections: [{ max: 2, min: 128 }],
             size: 6
           }
         ],
@@ -45,7 +45,7 @@ describe("module", () => {
             sections: [
               {
                 init: [{ opType: "i32.const", parameter: { i32: "0x0" } }],
-                type: ["i32", "var"]
+                type: { type: "i32", isMutable: true }
               }
             ],
             size: 6
