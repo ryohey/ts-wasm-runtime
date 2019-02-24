@@ -3,7 +3,7 @@
     "target": "esnext",
     "module": "commonjs",
     "allowSyntheticDefaultImports": false,
-    "declaration": true,
+    "declaration": true
   },
-  "exclude": ["node_modules", "**/*.test.ts", "dist"]
+  "exclude": ["node_modules", "**/*.test.ts", "**/dist"]
 }
