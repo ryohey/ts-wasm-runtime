@@ -1,0 +1,16 @@
+{
+  "name": "ts-wasm-runtime",
+  "version": "1.0.0",
+  "description": "A toolkit for WebAssembly written in TypeScript",
+  "scripts": {
+    "install": "node ./scripts/run-all.js npm install",
+    "test": "node ./scripts/run-all.js npm run test",
+    "build": "node ./scripts/run-all.js npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryohey/ts-wasm-runtime.git"
+  },
+  "author": "ryohey",
+  "license": "MIT"
+}
