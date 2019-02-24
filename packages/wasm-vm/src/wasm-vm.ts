@@ -1,5 +1,10 @@
-import { ASTElem, ASTGlobal, ASTModule, NumberValue } from "@ryohey/wasm-ast"
-import { callFunc } from "./instructions/control"
+import {
+  ASTElem,
+  ASTGlobal,
+  ASTModule,
+  NumberValue,
+  ASTFunction
+} from "@ryohey/wasm-ast"
 import { f32InstructionSet } from "./instructions/f32"
 import { f64InstructionSet } from "./instructions/f64"
 import { i32InstructionSet } from "./instructions/i32"
@@ -17,6 +22,7 @@ import {
   WASMMemoryValue,
   WASMTable
 } from "./wasm-memory"
+import { createFunction } from "./block"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -94,7 +100,7 @@ export class WASMVirtualMachine {
       .reverse()
       .forEach(memory.values.push)
 
-    callFunc(memory, funcId)
+    createFunction(fn)(memory)
 
     return fn.results.map(_ => memory.values.pop().toObject())
   }
