@@ -7,9 +7,9 @@ describe("module", () => {
     const r = moduleParser(wasm, 0)
     expect(r).toStrictEqual([
       true,
-      [
-        { version: 1 },
-        [
+      {
+        version: 1,
+        sections: [
           {
             id: 1,
             nodeType: "type",
@@ -19,26 +19,21 @@ describe("module", () => {
               { parameters: [], results: [] }
             ],
             size: 14
-          }
-        ],
-        [
+          },
           {
             id: 2,
             nodeType: "import",
             sections: [{ desc: { func: 1 }, module: "console", name: "log" }],
             size: 15
-          }
-        ],
-        [{ id: 3, nodeType: "func", sections: [0, 2], size: 3 }],
-        [
+          },
+          { id: 3, nodeType: "func", sections: [0, 2], size: 3 },
+
           {
             id: 5,
             nodeType: "mem",
             sections: [{ max: 2, min: 128 }],
             size: 6
-          }
-        ],
-        [
+          },
           {
             id: 6,
             nodeType: "global",
@@ -49,25 +44,19 @@ describe("module", () => {
               }
             ],
             size: 6
-          }
-        ],
-        [
+          },
           {
             id: 7,
             nodeType: "export",
             sections: [{ desc: { func: 1 }, name: "add" }],
             size: 7
-          }
-        ],
-        [
+          },
           {
             id: 8,
             nodeType: "start",
             sections: [{ func: 0 }, { func: 0 }],
             size: 1
-          }
-        ],
-        [
+          },
           {
             id: 10,
             nodeType: "code",
@@ -91,9 +80,7 @@ describe("module", () => {
               }
             ],
             size: 16
-          }
-        ],
-        [
+          },
           {
             id: 11,
             nodeType: "data",
@@ -105,10 +92,10 @@ describe("module", () => {
               }
             ],
             size: 18
-          }
-        ],
-        [{ id: 0, nodeType: "custom", sections: [], size: 45 }]
-      ],
+          },
+          { id: 0, nodeType: "custom", sections: [], size: 45 }
+        ]
+      },
       159
     ])
   })

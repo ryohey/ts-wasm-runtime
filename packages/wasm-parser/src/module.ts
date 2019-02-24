@@ -138,8 +138,10 @@ const table: Parser<Bytes, Table> = map(seq(elemtype, limits), r => ({
   lim: r[1]
 }))
 
+type Mem = Limits
+
 const mem = limits
-const memType = mem
+const memType: Parser<Bytes, Mem> = mem
 
 const mut = or(map(byte(0x00), _ => false), map(byte(0x01), _ => true))
 
@@ -174,7 +176,9 @@ const export_: Parser<Bytes, Export> = map(seq(name, exportDesc), r => ({
   desc: r[1]
 }))
 
-const start = map(funcIdx, func => ({ func } as FuncRef))
+type Start = FuncRef
+
+const start: Parser<Bytes, Start> = map(funcIdx, func => ({ func } as FuncRef))
 
 interface Elem {
   table: number
@@ -203,7 +207,7 @@ const data: Parser<Bytes, Data> = map(seq(memIdx, expr, vector(var1)), r => ({
   init: r[2]
 }))
 
-interface ASTCode {
+interface Code {
   body: Op.Any[]
   locals: ASTFunctionLocal[]
 }
@@ -223,8 +227,10 @@ const code = map(
     ({
       size: r[0],
       ...r[1]
-    } as ASTCode)
+    } as Code)
 )
+
+type Func = number
 
 const customSection = section(0, "custom", _ => null)
 const typeSection = section(1, "type", vector(funcType))
@@ -239,31 +245,50 @@ export const elemSection = section(9, "elem", vector(elem))
 const codeSection = section(10, "code", vector(code))
 const dataSection = section(11, "data", vector(data))
 
+type AnySection =
+  | Section<{}>
+  | Section<Type>
+  | Section<Import>
+  | Section<Func>
+  | Section<Table>
+  | Section<Mem>
+  | Section<Global>
+  | Section<Export>
+  | Section<Start>
+  | Section<Elem>
+  | Section<Code>
+  | Section<Data>
+
 export const moduleParser = map(
-  seq<Bytes, any>(
+  seq(
     beginWASM,
-    opt(many(typeSection)),
-    opt(many(customSection)),
-    opt(many(importSection)),
-    opt(many(customSection)),
-    opt(many(funcSection)),
-    opt(many(customSection)),
-    opt(many(tableSection)),
-    opt(many(customSection)),
-    opt(many(memorySection)),
-    opt(many(customSection)),
-    opt(many(globalSection)),
-    opt(many(customSection)),
-    opt(many(exportSection)),
-    opt(many(customSection)),
-    opt(many(startsSection)),
-    opt(many(customSection)),
-    opt(many(elemSection)),
-    opt(many(customSection)),
-    opt(many(codeSection)),
-    opt(many(customSection)),
-    opt(many(dataSection)),
-    opt(many(customSection))
+    seq<Bytes, AnySection[]>(
+      opt(many(typeSection)),
+      opt(many(customSection)),
+      opt(many(importSection)),
+      opt(many(customSection)),
+      opt(many(funcSection)),
+      opt(many(customSection)),
+      opt(many(tableSection)),
+      opt(many(customSection)),
+      opt(many(memorySection)),
+      opt(many(customSection)),
+      opt(many(globalSection)),
+      opt(many(customSection)),
+      opt(many(exportSection)),
+      opt(many(customSection)),
+      opt(many(startsSection)),
+      opt(many(customSection)),
+      opt(many(elemSection)),
+      opt(many(customSection)),
+      opt(many(codeSection)),
+      opt(many(customSection)),
+      opt(many(dataSection)),
+      opt(many(customSection))
+    )
   ),
-  r => r.filter(x => x)
+  r => ({
+    version: r[0].version,
+    sections: flatten(r[1].filter(x => x))
+  })
 )
