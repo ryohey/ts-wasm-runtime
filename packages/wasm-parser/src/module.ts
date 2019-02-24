@@ -3,7 +3,7 @@ import { u32 } from "./number"
 import { expr } from "./operations"
 import { Bytes, valType } from "./types"
 import { byte, bytes, string, var1, variable, vector } from "./utils"
-import { ASTFunction, ASTFunctionLocal, Op, ValType } from "@ryohey/wasm-ast"
+import { Op, ValType } from "@ryohey/wasm-ast"
 import { range, flatten } from "@ryohey/array-helper"
 
 // https://webassembly.github.io/spec/core/binary/index.html
@@ -207,13 +207,17 @@ const data: Parser<Bytes, Data> = map(seq(memIdx, expr, vector(var1)), r => ({
   init: r[2]
 }))
 
+interface FunctionLocal {
+  type: ValType
+}
+
 interface Code {
   body: Op.Any[]
-  locals: ASTFunctionLocal[]
+  locals: FunctionLocal[]
 }
 
 const locals = map(seq(u32, valType), r =>
-  range(0, r[0]).map(_ => ({ type: r[1] } as ASTFunctionLocal))
+  range(0, r[0]).map(_ => ({ type: r[1] } as FunctionLocal))
 )
 
 const func = map(seq(vector(locals), expr), r => ({

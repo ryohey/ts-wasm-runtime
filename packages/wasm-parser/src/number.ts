@@ -1,6 +1,6 @@
 import { Parser, seqMap, map, terminate } from "@ryohey/fn-parser"
 import { Bytes } from "./types"
-import { var1, variable } from "./utils"
+import { var1 } from "./utils"
 import {
   Int32Value,
   Int64Value,
