@@ -1,5 +1,5 @@
 import { map, seq, opt } from "@ryohey/fn-parser"
-import { ASTType } from "@ryohey/wasm-ast"
+import { WATType } from "./moduleTypes"
 import { identifier, blockType } from "./types"
 import { keyword, array } from "./utils"
 
@@ -11,5 +11,5 @@ export const moduleType = map(
     ({
       nodeType: "type",
       identifier: r[1]
-    } as ASTType)
+    } as WATType)
 )

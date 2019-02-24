@@ -1,16 +1,5 @@
 import { seq, or, map, many } from "@ryohey/fn-parser"
 import { Element } from "@ryohey/s-parser"
-import {
-  ASTSection,
-  ASTModule,
-  ASTExport,
-  ASTFunction,
-  ASTGlobal,
-  ASTMemory,
-  ASTTable,
-  ASTType,
-  ASTElem
-} from "@ryohey/wasm-ast"
 import { func } from "./func"
 import { keyword, array } from "./utils"
 import { moduleExport } from "./export"
@@ -19,20 +8,31 @@ import { moduleMemory } from "./memory"
 import { moduleTable } from "./table"
 import { moduleType } from "./type"
 import { moduleElem } from "./elem"
+import {
+  WATSection,
+  WATExport,
+  WATFunction,
+  WATGlobal,
+  WATMemory,
+  WATTable,
+  WATType,
+  WATElem,
+  WATModule
+} from "./moduleTypes"
 
-const isExport = (x: ASTSection): x is ASTExport => x.nodeType === "export"
-const isFunc = (x: ASTSection): x is ASTFunction => x.nodeType === "func"
-const isGlobal = (x: ASTSection): x is ASTGlobal => x.nodeType === "global"
-const isMemory = (x: ASTSection): x is ASTMemory => x.nodeType === "memory"
-const isTable = (x: ASTSection): x is ASTTable => x.nodeType === "table"
-const isType = (x: ASTSection): x is ASTType => x.nodeType === "type"
-const isElem = (x: ASTSection): x is ASTElem => x.nodeType === "elem"
+const isExport = (x: WATSection): x is WATExport => x.nodeType === "export"
+const isFunc = (x: WATSection): x is WATFunction => x.nodeType === "func"
+const isGlobal = (x: WATSection): x is WATGlobal => x.nodeType === "global"
+const isMemory = (x: WATSection): x is WATMemory => x.nodeType === "memory"
+const isTable = (x: WATSection): x is WATTable => x.nodeType === "table"
+const isType = (x: WATSection): x is WATType => x.nodeType === "type"
+const isElem = (x: WATSection): x is WATElem => x.nodeType === "elem"
 
 export const moduleParser = map(
   seq(
     keyword("module"),
     many(
-      or<Element[], ASTSection>(
+      or<Element[], WATSection>(
         array(moduleExport),
         array(func),
         array(moduleGlobal),
@@ -53,5 +53,5 @@ export const moduleParser = map(
       tables: r[1].filter(isTable),
       types: r[1].filter(isType),
       elems: r[1].filter(isElem)
-    } as ASTModule)
+    } as WATModule)
 )

@@ -1,5 +1,5 @@
 import { map, seq, or, opt } from "@ryohey/fn-parser"
-import { ASTGlobal } from "@ryohey/wasm-ast"
+import { WATGlobal } from "./moduleTypes"
 import { string, identifier, valType } from "./types"
 import { keyword, array } from "./utils"
 import { constInstructions } from "./operations"
@@ -26,5 +26,5 @@ export const moduleGlobal = map(
       type: r[3].type,
       mutable: r[3].mutable,
       initialValue: r[4].parameter
-    } as ASTGlobal)
+    } as WATGlobal)
 )

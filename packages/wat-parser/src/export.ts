@@ -1,5 +1,5 @@
 import { map, seq, or } from "@ryohey/fn-parser"
-import { ASTExport } from "@ryohey/wasm-ast"
+import { WATExport } from "./moduleTypes"
 import { string, identifier } from "./types"
 import { keyword, array } from "./utils"
 
@@ -17,5 +17,5 @@ export const moduleExport = map(
       nodeType: "export",
       exportType: r[2][0],
       identifier: r[2][1]
-    } as ASTExport)
+    } as WATExport)
 )

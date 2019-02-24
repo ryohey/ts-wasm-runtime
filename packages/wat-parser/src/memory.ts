@@ -1,7 +1,7 @@
 import { map, seq, opt } from "@ryohey/fn-parser"
-import { ASTMemory } from "@ryohey/wasm-ast"
 import { string, identifier, num } from "./types"
 import { keyword, array } from "./utils"
+import { WATMemory } from "./moduleTypes"
 
 export const moduleMemory = map(
   seq(
@@ -15,5 +15,5 @@ export const moduleMemory = map(
       nodeType: "memory",
       identifier: r[1],
       export: r[2]
-    } as ASTMemory)
+    } as WATMemory)
 )

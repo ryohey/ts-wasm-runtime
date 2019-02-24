@@ -1,9 +1,16 @@
 import { map, seq, opt, many } from "@ryohey/fn-parser"
-import { ASTAssertReturn } from "@ryohey/wasm-ast"
+import { Op } from "@ryohey/wasm-ast"
 import { keyword, array } from "./utils"
 import { string } from "./types"
 import { operations } from "./operations"
 import { flatten } from "@ryohey/array-helper"
+
+export interface WATAssertReturn {
+  nodeType: "assert_return"
+  invoke: string
+  args: Op.Const[]
+  expected: Op.Const[]
+}
 
 export const assertionParser = map(
   seq(
@@ -17,6 +24,6 @@ export const assertionParser = map(
       invoke: r[1][1],
       args: flatten(r[1][2] || []),
       expected: r[2] || []
-    } as ASTAssertReturn
+    } as WATAssertReturn
   }
 )

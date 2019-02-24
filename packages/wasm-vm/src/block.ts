@@ -1,4 +1,4 @@
-import { ASTFunction, ValType } from "@ryohey/wasm-ast"
+import { WATFunction, ValType } from "@ryohey/wasm-ast"
 import { WASMMemory, WASMCode, WASMMemoryValue } from "./wasm-memory"
 import { range } from "@ryohey/array-helper"
 import { numberValue, convertNumber } from "./number/convert"
@@ -19,7 +19,7 @@ export enum BreakPosition {
 }
 
 export const createFunction = (
-  fn: Pick<ASTFunction, "parameters" | "body" | "results" | "locals">
+  fn: Pick<WATFunction, "parameters" | "body" | "results" | "locals">
 ) => {
   const block = createBlock(fn.body, fn.results, BreakPosition.tail)
 

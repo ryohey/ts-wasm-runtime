@@ -1,28 +1,28 @@
 import { map, seq, opt, Parser, many } from "@ryohey/fn-parser"
 import { Element } from "@ryohey/s-parser"
+import { flatten } from "@ryohey/array-helper"
 import {
-  ASTFunctionParameter,
-  ASTFunctionLocal,
-  ASTFunction
-} from "@ryohey/wasm-ast"
+  WATFunctionParameter,
+  WATFunctionLocal,
+  WATFunction
+} from "./moduleTypes"
 import { keyword, array } from "./utils"
 import { valType, identifier, string, blockType } from "./types"
 import { operations } from "./operations"
-import { flatten } from "@ryohey/array-helper"
 
 export const param = map(
   seq(keyword("param"), opt(identifier), many(valType)),
-  r => r[2].map(type => ({ identifier: r[1], type } as ASTFunctionParameter))
+  r => r[2].map(type => ({ identifier: r[1], type } as WATFunctionParameter))
 )
 
 export const local = map(
   seq(keyword("local"), opt(identifier), many(valType)),
-  r => r[2].map(type => ({ identifier: r[1], type } as ASTFunctionLocal))
+  r => r[2].map(type => ({ identifier: r[1], type } as WATFunctionLocal))
 )
 
 export const funcBody = map(many(operations), r => flatten(r))
 
-export const func: Parser<Element[], ASTFunction> = map(
+export const func: Parser<Element[], WATFunction> = map(
   seq(
     keyword("func"),
     opt(identifier),
@@ -41,6 +41,6 @@ export const func: Parser<Element[], ASTFunction> = map(
       results: r[4] ? [r[4]] : [],
       locals: flatten(r[5] || []),
       body: r[6] || []
-    } as ASTFunction
+    } as WATFunction
   }
 )

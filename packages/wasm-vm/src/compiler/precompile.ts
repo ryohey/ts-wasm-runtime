@@ -1,5 +1,5 @@
 import { fromPairs } from "./array"
-import { ASTFunction, ASTElem, ASTModule } from "@ryohey/wasm-ast"
+import { WATFunction, WATElem, ASTModule } from "@ryohey/wasm-ast"
 import { Op } from "@ryohey/wasm-ast"
 
 const isString = (x: any): x is string => typeof x === "string"
@@ -116,7 +116,7 @@ const processIf = (
   }
 }
 
-const createLocalTables = (ast: ASTFunction) => {
+const createLocalTables = (ast: WATFunction) => {
   const params = fromPairs(
     ast.parameters
       .map((p, i) => [p.identifier, i] as [string, number])
@@ -135,10 +135,10 @@ const createLocalTables = (ast: ASTFunction) => {
 }
 
 const processFunction = (
-  ast: ASTFunction,
+  ast: WATFunction,
   funcs: IdentifierEntry,
   globals: IdentifierEntry
-): ASTFunction => {
+): WATFunction => {
   const idTables: IdentifierTables = {
     locals: createLocalTables(ast),
     globals,
@@ -151,7 +151,7 @@ const processFunction = (
   }
 }
 
-const processElem = (ast: ASTElem, funcTable: IdentifierEntry): ASTElem => {
+const processElem = (ast: WATElem, funcTable: IdentifierEntry): WATElem => {
   const funcIds = ast.funcIds.map(id => (isIdentifier(id) ? funcTable[id] : id))
   return {
     ...ast,

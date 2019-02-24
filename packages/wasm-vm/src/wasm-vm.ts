@@ -1,9 +1,9 @@
 import {
-  ASTElem,
-  ASTGlobal,
+  WATElem,
+  WATGlobal,
   ASTModule,
   NumberValue,
-  ASTFunction
+  WATFunction
 } from "@ryohey/wasm-ast"
 import { f32InstructionSet } from "./instructions/f32"
 import { f64InstructionSet } from "./instructions/f64"
@@ -53,7 +53,7 @@ export const createWASMVM = (controlInstructionSet: WASMInstructionSet) =>
     mergeInstructionSet([...baseInstructionSet, controlInstructionSet])
   )
 
-const createTable = (elems: ASTElem[]) => {
+const createTable = (elems: WATElem[]) => {
   const table: WASMTable = {}
   elems.forEach(e => {
     const offset = Int32.obj(e.offset).toNumber()
@@ -64,7 +64,7 @@ const createTable = (elems: ASTElem[]) => {
   return table
 }
 
-const createGlobalMemory = (globals: ASTGlobal[]) =>
+const createGlobalMemory = (globals: WATGlobal[]) =>
   globals.map(g => convertNumber(g.initialValue))
 
 export class WASMVirtualMachine {

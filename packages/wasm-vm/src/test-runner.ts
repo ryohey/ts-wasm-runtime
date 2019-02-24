@@ -1,18 +1,18 @@
 import * as assert from "assert"
-import { wastParser } from "@ryohey/wat-parser"
-import { ASTModule, ASTAssertReturn } from "@ryohey/wasm-ast"
+import { wastParser, WATAssertReturn } from "@ryohey/wat-parser"
+import { ASTModule } from "@ryohey/wasm-ast"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { compile } from "./compiler/compiler"
 import { convertNumber } from "./number/convert"
 
-type ASTTopNode = ASTModule | ASTAssertReturn
+type ASTTopNode = ASTModule | WATAssertReturn
 
-const isAssertReturn = (n: ASTTopNode): n is ASTAssertReturn =>
+const isAssertReturn = (n: ASTTopNode): n is WATAssertReturn =>
   n.nodeType === "assert_return"
 
 const isModule = (n: ASTTopNode): n is ASTModule => n.nodeType === "module"
 
-const runTestCase = (vm: WASMVirtualMachine, ast: ASTAssertReturn) => {
+const runTestCase = (vm: WASMVirtualMachine, ast: WATAssertReturn) => {
   console.log(`Testing ${ast.invoke}...`)
   const received = vm.callFunction(
     ast.invoke,

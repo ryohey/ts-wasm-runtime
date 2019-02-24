@@ -5,7 +5,7 @@ import {
   Int64Value,
   Float32Value,
   Float64Value,
-  ASTFunction,
+  WATFunction,
   Op
 } from "@ryohey/wasm-ast"
 import { Int32, Float32, Int64, Float64 } from "./number"
@@ -32,7 +32,7 @@ export interface WASMMemory extends VMMemory {
   readonly memory: WASMMemoryValue[]
   readonly global: WASMMemoryValue[]
   readonly local: WASMMemoryValue[]
-  readonly functions: ASTFunction[]
+  readonly functions: WATFunction[]
   readonly table: WASMTable
   readonly programCounter: number
   programTerminated: boolean
