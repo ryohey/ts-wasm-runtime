@@ -1,12 +1,10 @@
 import { NumberValue } from "@ryohey/wasm-ast"
-import { WATModule, WATElem, WATGlobal } from "@ryohey/wat-parser"
 import { f32InstructionSet } from "./instructions/f32"
 import { f64InstructionSet } from "./instructions/f64"
 import { i32InstructionSet } from "./instructions/i32"
 import { i64InstructionSet } from "./instructions/i64"
 import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
-import { Int32 } from "./number"
 import { convertNumber } from "./number/convert"
 import { Stack } from "./stack"
 import { InstructionSet, virtualMachine } from "./vm"
@@ -18,6 +16,7 @@ import {
   WASMTable
 } from "./wasm-memory"
 import { createFunction } from "./block"
+import { WASMElem, WASMGlobal, WASMFunction, WASMModule } from "./module"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
@@ -48,34 +47,33 @@ export const createWASMVM = (controlInstructionSet: WASMInstructionSet) =>
     mergeInstructionSet([...baseInstructionSet, controlInstructionSet])
   )
 
-const createTable = (elems: WATElem[]) => {
+const createTable = (elems: WASMElem[]) => {
   const table: WASMTable = {}
   elems.forEach(e => {
-    const offset = Int32.obj(e.offset).toNumber()
     e.funcIds.forEach((id, i) => {
-      table[offset + i] = id as number
+      table[e.offset + i] = id
     })
   })
   return table
 }
 
-const createGlobalMemory = (globals: WATGlobal[]) =>
+const createGlobalMemory = (globals: WASMGlobal[]) =>
   globals.map(g => convertNumber(g.initialValue))
 
 export class WASMVirtualMachine {
-  private module: WATModule
+  private functions: WASMFunction[]
   private table: WASMTable
   private global: WASMMemoryValue[]
 
-  constructor(module: WATModule) {
-    this.module = module
+  constructor(module: WASMModule) {
+    this.functions = module.functions
     this.table = createTable(module.elems)
     this.global = createGlobalMemory(module.globals)
   }
 
   // export された関数を呼ぶ
   callFunction(name: string, ...args: NumberValue[]): NumberValue[] {
-    const { functions } = this.module
+    const { functions } = this
     const funcId = functions.findIndex(t => t.export === name)
     const fn = functions[funcId]
 

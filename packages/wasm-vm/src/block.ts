@@ -1,11 +1,11 @@
 import { ValType } from "@ryohey/wasm-ast"
-import { WATFunction } from "@ryohey/wat-parser"
 import { WASMMemory, WASMCode, WASMMemoryValue } from "./wasm-memory"
 import { range } from "@ryohey/array-helper"
 import { numberValue, convertNumber } from "./number/convert"
 import { Stack } from "./stack"
 import { createWASMVM } from "./wasm-vm"
 import { controlInstructionSet } from "./instructions/control"
+import { WASMFunction } from "./module"
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
@@ -19,9 +19,7 @@ export enum BreakPosition {
   head
 }
 
-export const createFunction = (
-  fn: Pick<WATFunction, "parameters" | "body" | "results" | "locals">
-) => {
+export const createFunction = (fn: WASMFunction) => {
   const block = createBlock(fn.body, fn.results, BreakPosition.tail)
 
   return (memory: Omit<WASMMemory, "local" | "programCounter">) => {
@@ -33,7 +31,7 @@ export const createFunction = (
 
         // local を初期化する
         ...fn.locals
-          .map(l => numberValue(l.type, "0"))
+          .map(type => numberValue(type, "0"))
           .map(num => convertNumber(num))
       ]
     }
