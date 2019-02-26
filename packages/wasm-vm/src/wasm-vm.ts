@@ -1,10 +1,5 @@
-import {
-  WATElem,
-  WATGlobal,
-  ASTModule,
-  NumberValue,
-  WATFunction
-} from "@ryohey/wasm-ast"
+import { NumberValue } from "@ryohey/wasm-ast"
+import { WATModule, WATElem, WATGlobal } from "@ryohey/wat-parser"
 import { f32InstructionSet } from "./instructions/f32"
 import { f64InstructionSet } from "./instructions/f64"
 import { i32InstructionSet } from "./instructions/i32"
@@ -68,11 +63,11 @@ const createGlobalMemory = (globals: WATGlobal[]) =>
   globals.map(g => convertNumber(g.initialValue))
 
 export class WASMVirtualMachine {
-  private module: ASTModule
+  private module: WATModule
   private table: WASMTable
   private global: WASMMemoryValue[]
 
-  constructor(module: ASTModule) {
+  constructor(module: WATModule) {
     this.module = module
     this.table = createTable(module.elems)
     this.global = createGlobalMemory(module.globals)

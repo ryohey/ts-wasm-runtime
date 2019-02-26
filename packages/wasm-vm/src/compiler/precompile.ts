@@ -1,5 +1,5 @@
 import { fromPairs } from "./array"
-import { WATFunction, WATElem, ASTModule } from "@ryohey/wasm-ast"
+import { WATFunction, WATElem, WATModule } from "@ryohey/wat-parser"
 import { Op } from "@ryohey/wasm-ast"
 
 const isString = (x: any): x is string => typeof x === "string"
@@ -159,7 +159,7 @@ const processElem = (ast: WATElem, funcTable: IdentifierEntry): WATElem => {
   }
 }
 
-export const replaceIdentifiers = (ast: ASTModule): ASTModule => {
+export const replaceIdentifiers = (ast: WATModule): WATModule => {
   const funcTable: IdentifierEntry = fromPairs(
     ast.functions
       .map((fn, i) => [fn.identifier, i] as [string, number])

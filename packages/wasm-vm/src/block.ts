@@ -1,4 +1,5 @@
-import { WATFunction, ValType } from "@ryohey/wasm-ast"
+import { ValType } from "@ryohey/wasm-ast"
+import { WATFunction } from "@ryohey/wat-parser"
 import { WASMMemory, WASMCode, WASMMemoryValue } from "./wasm-memory"
 import { range } from "@ryohey/array-helper"
 import { numberValue, convertNumber } from "./number/convert"

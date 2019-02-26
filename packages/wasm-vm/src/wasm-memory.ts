@@ -5,9 +5,9 @@ import {
   Int64Value,
   Float32Value,
   Float64Value,
-  WATFunction,
   Op
 } from "@ryohey/wasm-ast"
+import { WATFunction } from "@ryohey/wat-parser"
 import { Int32, Float32, Int64, Float64 } from "./number"
 
 export type WASMCodeParameter =
