@@ -1,7 +1,7 @@
 {
-  "name": "@ryohey/wat-parser",
+  "name": "@ryohey/wasm-parser",
   "version": "1.0.0",
-  "description": "WebAssembly text format parser",
+  "description": "WebAssembly binary format parser",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
