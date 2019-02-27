@@ -15,6 +15,7 @@
   "dependencies": {
     "@ryohey/wasm-ast": "file:../wasm-ast",
     "@ryohey/wat-parser": "file:../wat-parser",
+    "@ryohey/wasm-parser": "file:../wasm-parser",
     "@ryohey/array-helper": "file:../array-helper"
   },
   "devDependencies": {
