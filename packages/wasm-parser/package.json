@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@ryohey/fn-parser": "file:../fn-parser",
-    "@ryohey/s-parser": "file:../s-parser",
     "@ryohey/wasm-ast": "file:../wasm-ast",
     "@ryohey/array-helper": "file:../array-helper"
   }
