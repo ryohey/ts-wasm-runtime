@@ -1,14 +1,27 @@
 import { html, render } from "lit-html"
 import { unsafeHTML } from "lit-html/directives/unsafe-html"
 import { parser as sParser } from "@ryohey/s-parser"
-import { moduleParser } from "@ryohey/wat-parser"
-import { WASMVirtualMachine, watModuleToWasmModule } from "@ryohey/wasm-vm"
+import { moduleParser as watParser, WATModule } from "@ryohey/wat-parser"
+import {
+  WASMVirtualMachine,
+  watModuleToWasmModule,
+  wasmToVMModule
+} from "@ryohey/wasm-vm"
+import { moduleParser as wasmParser, Module } from "@ryohey/wasm-parser"
 import * as formatHighlight from "json-format-highlight"
 
 import "./style.css"
 import { parseConsoleInput } from "./console-parser"
+import { WASMModule } from "../../wasm-vm/dist/module"
+
+enum InputMode {
+  text,
+  binary
+}
 
 interface State {
+  inputMode: InputMode
+  wasmBinary: number[]
   sParserInput: string
   consoleInput: string
   consoleOutput: string[]
@@ -75,10 +88,58 @@ const placeholder = `(module
   )
 )`
 
+interface RadioItem<T> {
+  data: T
+  label: string
+}
+
+const RadioSelect = <T>(
+  items: RadioItem<T>[],
+  name: String,
+  value: T,
+  onSelect: (item: T) => void
+) =>
+  items.map((item, i) => {
+    const id = `${name}-${i}`
+    return html`
+      <input
+        type="radio"
+        name=${name}
+        id=${id}
+        .checked=${item.data === value}
+        @change=${() => onSelect(item.data)}
+      />
+      <label for=${id}>${item.label}</label>
+    `
+  })
+
 const App = () => {
-  const { sParserInput, consoleInput, consoleOutput } = store()
+  const {
+    sParserInput,
+    consoleInput,
+    consoleOutput,
+    inputMode,
+    wasmBinary
+  } = store()
   const parsedS = sParser(sParserInput, 0)
-  const parsedModule = parsedS[0] ? moduleParser(parsedS[1], 0) : null
+  const watModule = parsedS[0] ? watParser(parsedS[1], 0) : null
+
+  const wasmHexString = wasmBinary
+    ? wasmBinary.map(n => n.toString(16)).join(" ")
+    : ""
+  const wasmModule = wasmBinary ? wasmParser(wasmBinary, 0) : null
+  const module = (() => {
+    switch (inputMode) {
+      case InputMode.text:
+        return watModule !== null && watModule[0]
+          ? watModuleToWasmModule(watModule[1])
+          : null
+      case InputMode.binary:
+        return wasmModule !== null && wasmModule[0]
+          ? wasmToVMModule(wasmModule[1])
+          : null
+    }
+  })()
 
   const onChangeText = e => {
     store({ sParserInput: e.target.value })
@@ -90,14 +151,13 @@ const App = () => {
 
   const onKeyPressConsoleInput = e => {
     if (e.key === "Enter") {
-      const module = parsedModule[1]
       if (module === null) {
         return
       }
 
       const { consoleInput, consoleOutput } = store()
 
-      const vm = new WASMVirtualMachine(watModuleToWasmModule(module))
+      const vm = new WASMVirtualMachine(module)
       const parsedInput = parseConsoleInput(consoleInput, 0)
       if (!parsedInput[0]) {
         const output = `> ${consoleInput}\ninvalid command: ${parsedInput[3]}`
@@ -123,28 +183,91 @@ const App = () => {
     }
   }
 
+  const onChangeFile = (e: Event) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const arrayBuffer = reader.result as ArrayBuffer
+      const array = Array.from(new Uint8Array(arrayBuffer))
+      store({
+        wasmBinary: array
+      })
+    }
+    reader.readAsArrayBuffer((e.currentTarget as HTMLInputElement).files[0])
+  }
+
+  const onSelectInputMode = (inputMode: InputMode) => store({ inputMode })
+
   return html`
     <div class="App">
       <h1>Playground</h1>
 
+      <div class="mode">
+        ${RadioSelect(
+          [
+            {
+              label: "Text",
+              data: InputMode.text
+            },
+            {
+              label: "Binary",
+              data: InputMode.binary
+            }
+          ],
+          "input-select",
+          inputMode,
+          onSelectInputMode
+        )}
+      </div>
+
       <div class="sections">
-        <section>
-          <h2>Input Text</h2>
-          <textarea @input=${onChangeText} .value=${sParserInput}></textarea>
-        </section>
+        ${
+          inputMode === InputMode.text
+            ? html`
+                <section>
+                  <h2>Input Text</h2>
+                  <textarea
+                    @input=${onChangeText}
+                    .value=${sParserInput}
+                  ></textarea>
+                </section>
 
-        <section>
-          <h2>S-Expression Parser</h2>
-          ${parsedS[0] ? JSONView(parsedS[1]) : Error(parsedS[3])}
-        </section>
+                <section>
+                  <h2>S-Expression Parser</h2>
+                  ${parsedS[0] ? JSONView(parsedS[1]) : Error(parsedS[3])}
+                </section>
 
-        <section>
-          <h2>WebAssembly Text Format Parser</h2>
-          ${parsedModule &&
-            (parsedModule[0]
-              ? JSONView(parsedModule[1])
-              : Error(parsedModule[3]))}
-        </section>
+                <section>
+                  <h2>WebAssembly Text Format Parser</h2>
+                  ${watModule &&
+                    (watModule[0]
+                      ? JSONView(watModule[1])
+                      : Error(watModule[3]))}
+                </section>
+              `
+            : null
+        }
+
+        ${
+          inputMode === InputMode.binary
+            ? html`
+                <section>
+                  <h2>Open .wasm file</h2>
+                  <div class="file-input">
+                    <input type="file" accept=".wasm" @change=${onChangeFile} />
+                    ${Code(wasmHexString)}
+                  </div>
+                </section>
+
+                <section>
+                  <h2>WebAssembly Binary Format Parser</h2>
+                  ${wasmModule &&
+                    (wasmModule[0]
+                      ? JSONView(wasmModule[1])
+                      : Error(wasmModule[3]))}
+                </section>
+              `
+            : null
+        }
 
         <section>
           <h2>Console</h2>
@@ -162,16 +285,14 @@ const App = () => {
               <p class="title">functions</p>
               <ul>
               ${
-                parsedModule && parsedModule[0]
-                  ? parsedModule[1].functions
+                module !== null
+                  ? module.functions
                       .filter(fn => fn.export)
                       .map(
                         fn =>
                           html`
                             <li>
-                              ${fn.export}(${fn.parameters
-                                .map(p => p.type)
-                                .join(", ")})
+                              ${fn.export}(${fn.parameters.join(", ")})
                             </li>
                           `
                       )
@@ -205,6 +326,8 @@ const createStore = <T>(initialState: T) => {
 }
 
 store = createStore({
+  inputMode: InputMode.text,
+  wasmBinary: null,
   sParserInput: placeholder,
   consoleInput: "",
   consoleOutput: []
