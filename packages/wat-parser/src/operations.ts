@@ -51,8 +51,18 @@ export const constInstructions = or(
   op1<Op.F64_const>("f64.const", float64)
 )
 
+const getGlobal = op1<Op.Get_global>("get_global", indices)
+const globalGet = op1<Op.Global_get>("global.get", indices)
+
+export const initializerInstructions = or(
+  constInstructions,
+  getGlobal,
+  globalGet
+)
+
 export const plainInstructions = or<Element[], Op.Any>(
   constInstructions,
+
   op<Op.Nop>("nop"),
   op<Op.Unreachable>("unreachable"),
   op1<Op.Br>("br", indices),
@@ -72,9 +82,9 @@ export const plainInstructions = or<Element[], Op.Any>(
   op1<Op.Local_tee>("local.tee", indices),
   op1<Op.Tee_local>("tee_local", indices),
 
-  op1<Op.Global_get>("global.get", indices),
+  globalGet,
   op1<Op.Global_set>("global.set", indices),
-  op1<Op.Get_global>("get_global", indices),
+  getGlobal,
   op1<Op.Set_global>("set_global", indices),
 
   op<Op.I32_add>("i32.add"),

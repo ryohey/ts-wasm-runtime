@@ -13,7 +13,7 @@ describe("global", () => {
         identifier: "$g0",
         mutable: true,
         nodeType: "global",
-        initialValue: { i32: "66560" },
+        init: { opType: "i32.const", parameter: { i32: "66560" } },
         type: "i32"
       },
       4
@@ -37,7 +37,7 @@ describe("global", () => {
         identifier: "$__heap_base",
         mutable: false,
         nodeType: "global",
-        initialValue: { i32: "66560" },
+        init: { opType: "i32.const", parameter: { i32: "66560" } },
         type: "i32"
       },
       5

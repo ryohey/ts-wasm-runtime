@@ -175,7 +175,7 @@ describe("module parser", () => {
             identifier: "$g0",
             mutable: true,
             nodeType: "global",
-            initialValue: { i32: "66560" },
+            init: { opType: "i32.const", parameter: { i32: "66560" } },
             type: "i32"
           },
           {
@@ -183,13 +183,13 @@ describe("module parser", () => {
             identifier: "$__heap_base",
             mutable: false,
             nodeType: "global",
-            initialValue: { i32: "66560" },
+            init: { opType: "i32.const", parameter: { i32: "66560" } },
             type: "i32"
           },
           {
             export: "__data_end",
             identifier: "$__data_end",
-            initialValue: { i32: "1024" },
+            init: { opType: "i32.const", parameter: { i32: "1024" } },
             mutable: false,
             nodeType: "global",
             type: "i32"

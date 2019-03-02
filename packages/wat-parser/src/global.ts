@@ -2,7 +2,7 @@ import { map, seq, or, opt } from "@ryohey/fn-parser"
 import { WATGlobal } from "./moduleTypes"
 import { string, identifier, valType } from "./types"
 import { keyword, array } from "./utils"
-import { constInstructions } from "./operations"
+import { initializerInstructions } from "./operations"
 
 export const moduleGlobal = map(
   seq(
@@ -16,7 +16,7 @@ export const moduleGlobal = map(
         type: r[1]
       }))
     ),
-    array(constInstructions)
+    array(initializerInstructions)
   ),
   r =>
     ({
@@ -25,6 +25,6 @@ export const moduleGlobal = map(
       export: r[2],
       type: r[3].type,
       mutable: r[3].mutable,
-      initialValue: r[4].parameter
+      init: r[4]
     } as WATGlobal)
 )

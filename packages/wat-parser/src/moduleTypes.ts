@@ -45,12 +45,12 @@ export interface WATGlobal {
   export: string | null
   type: ValType
   mutable: boolean
-  initialValue: NumberValue
+  init: Op.Initializer
 }
 
 export interface WATElem {
   nodeType: "elem"
-  offset: Int32Value
+  offset: Op.Initializer
   funcIds: (number | string)[]
 }
 

@@ -284,6 +284,9 @@ export interface If extends Base<"if"> {
 
 export type Const = I32_const | I64_const | F32_const | F64_const
 
+// https://github.com/sunfishcode/wasm-reference-manual/blob/master/WebAssembly.md#instantiation-time-initializers
+export type Initializer = Const | Global_get | Get_global
+
 export type Any =
   | Nop
   | Unreachable
