@@ -25,6 +25,20 @@ const op1 = <T extends Op.Param1<string, any>>(
 ): Parser<Bytes, T> =>
   map(seq(byte(opcode), value), r => ({ opType, parameter: r[1] } as T))
 
+const globalGet = op1<Op.Global_get>(0x23, "global.get")
+
+const constants = or(
+  op1<Op.I32_const>(0x41, "i32.const", i32),
+  op1<Op.I64_const>(0x42, "i64.const", i64),
+  op1<Op.F32_const>(0x43, "f32.const", f32),
+  op1<Op.F64_const>(0x44, "f64.const", f64)
+)
+
+export const initializer = map(
+  seq(or(constants, globalGet), byte(0x0b)),
+  r => r[0]
+)
+
 // https://webassembly.github.io/spec/core/binary/instructions.html#binary-expr
 export const instr: Parser<Bytes, Op.Any> = lazy(() =>
   or<Bytes, Op.Any>(
@@ -85,9 +99,10 @@ export const instr: Parser<Bytes, Op.Any> = lazy(() =>
     op1<Op.Local_get>(0x20, "local.get"),
     op1<Op.Local_set>(0x21, "local.set"),
     op1<Op.Local_tee>(0x22, "local.tee"),
-    op1<Op.Global_get>(0x23, "global.get"),
+    globalGet,
     op1<Op.Global_set>(0x24, "global.set"),
 
+    constants,
     opV<Op.I32_load>(0x28, "i32.load", memarg),
     opV<Op.I64_load>(0x29, "i64.load", memarg),
     opV<Op.F32_load>(0x2a, "f32.load", memarg),
@@ -120,11 +135,6 @@ export const instr: Parser<Bytes, Op.Any> = lazy(() =>
       seq(byte(0x40), byte(0x00)),
       _ => ({ opType: "memory.grow" } as Op.Memory_grow)
     ),
-
-    op1<Op.I32_const>(0x41, "i32.const", i32),
-    op1<Op.I64_const>(0x42, "i64.const", i64),
-    op1<Op.F32_const>(0x43, "f32.const", f32),
-    op1<Op.F64_const>(0x44, "f64.const", f64),
 
     op<Op.I32_eqz>(0x45, "i32.eqz"),
     op<Op.I32_eq>(0x46, "i32.eq"),

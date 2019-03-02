@@ -19,7 +19,7 @@ describe("module", () => {
         mems: [{ max: 2, min: 128 }],
         globals: [
           {
-            init: [{ opType: "i32.const", parameter: { i32: "0x0" } }],
+            init: { opType: "i32.const", parameter: { i32: "0x0" } },
             type: { type: "i32", isMutable: true }
           }
         ],
@@ -48,7 +48,7 @@ describe("module", () => {
           {
             data: 0,
             init: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100],
-            offset: [{ opType: "i32.const", parameter: { i32: "0x08" } }]
+            offset: { opType: "i32.const", parameter: { i32: "0x08" } }
           }
         ],
         elems: [],
