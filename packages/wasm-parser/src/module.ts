@@ -22,55 +22,62 @@ const beginWASM = map(seq(string("\0asm"), var1, bytes([0, 0, 0])), r => ({
   version: r[1]
 }))
 
-export type AnySection =
-  | Section<{}>
-  | Section<Type>
-  | Section<Import>
-  | Section<number> // Func
-  | Section<Table>
-  | Section<Mem>
-  | Section<Global>
-  | Section<Export>
-  | Section<Start>
-  | Section<Elem>
-  | Section<Code>
-  | Section<Data>
-
 export interface Module {
   version: number
-  sections: AnySection[]
+  types: Type[]
+  imports: Import[]
+  funcs: number[]
+  tables: Table[]
+  mems: Mem[]
+  globals: Global[]
+  exports: Export[]
+  starts: Start[]
+  elems: Elem[]
+  codes: Code[]
+  data: Data[]
 }
 
+const getSections = <T>(obj: Section<T>[] | undefined | null): T[] =>
+  obj === null || obj === undefined ? [] : flatten(obj.map(s => s.sections))
+
 export const moduleParser: Parser<Bytes, Module> = map(
-  seq(
+  seq<Bytes, any>(
     beginWASM,
-    seq<Bytes, AnySection[]>(
-      opt(many(typeSection)),
-      opt(many(customSection)),
-      opt(many(importSection)),
-      opt(many(customSection)),
-      opt(many(funcSection)),
-      opt(many(customSection)),
-      opt(many(tableSection)),
-      opt(many(customSection)),
-      opt(many(memorySection)),
-      opt(many(customSection)),
-      opt(many(globalSection)),
-      opt(many(customSection)),
-      opt(many(exportSection)),
-      opt(many(customSection)),
-      opt(many(startsSection)),
-      opt(many(customSection)),
-      opt(many(elemSection)),
-      opt(many(customSection)),
-      opt(many(codeSection)),
-      opt(many(customSection)),
-      opt(many(dataSection)),
-      opt(many(customSection))
-    )
+    opt(many(typeSection)),
+    opt(many(customSection)),
+    opt(many(importSection)),
+    opt(many(customSection)),
+    opt(many(funcSection)),
+    opt(many(customSection)),
+    opt(many(tableSection)),
+    opt(many(customSection)),
+    opt(many(memorySection)),
+    opt(many(customSection)),
+    opt(many(globalSection)),
+    opt(many(customSection)),
+    opt(many(exportSection)),
+    opt(many(customSection)),
+    opt(many(startsSection)),
+    opt(many(customSection)),
+    opt(many(elemSection)),
+    opt(many(customSection)),
+    opt(many(codeSection)),
+    opt(many(customSection)),
+    opt(many(dataSection)),
+    opt(many(customSection))
   ),
   r => ({
     version: r[0].version,
-    sections: flatten(r[1].filter(x => x))
+    types: getSections<Type>(r[1]),
+    imports: getSections<Import>(r[3]),
+    funcs: getSections<number>(r[5]),
+    tables: getSections<Table>(r[7]),
+    mems: getSections<Mem>(r[9]),
+    globals: getSections<Global>(r[11]),
+    exports: getSections<Export>(r[13]),
+    starts: getSections<Start>(r[15]),
+    elems: getSections<Elem>(r[17]),
+    codes: getSections<Code>(r[19]),
+    data: getSections<Data>(r[21])
   })
 )
