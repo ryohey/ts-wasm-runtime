@@ -1,14 +1,14 @@
-import { ValType, NumberValue, Op } from "@ryohey/wasm-ast"
+import { ValType, Op } from "@ryohey/wasm-ast"
 
 export interface WASMElem {
-  offset: number
+  offset: Op.Initializer
   funcIds: number[]
 }
 
 export interface WASMGlobal {
   type: ValType
   mutable: boolean
-  initialValue: NumberValue
+  init: Op.Initializer
 }
 
 export interface WASMFunction {

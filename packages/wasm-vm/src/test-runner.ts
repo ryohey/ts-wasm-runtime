@@ -11,8 +11,17 @@ const isAssertReturn = (n: ASTTopNode): n is WATAssertReturn =>
 
 const isModule = (n: ASTTopNode): n is WATModule => n.nodeType === "module"
 
-const runTestCase = (vm: WASMVirtualMachine, ast: WATAssertReturn) => {
-  console.log(`Testing ${ast.invoke}...`)
+const runTestCase = (
+  vm: WASMVirtualMachine,
+  ast: WATAssertReturn,
+  verbose: boolean = false
+) => {
+  const log = (msg: string) => {
+    if (verbose) {
+      console.log(msg)
+    }
+  }
+  log(`Testing ${ast.invoke}...`)
   const received = vm.callFunction(
     ast.invoke,
     ...ast.args.map(a => a.parameter)
@@ -32,7 +41,7 @@ const runTestCase = (vm: WASMVirtualMachine, ast: WATAssertReturn) => {
       )}. but received ${JSON.stringify(received[i])}`
     )
   }
-  console.log(`PASS: ${ast.invoke}`)
+  log(`PASS: ${ast.invoke}`)
 }
 
 export const runTests = (code: string) => {

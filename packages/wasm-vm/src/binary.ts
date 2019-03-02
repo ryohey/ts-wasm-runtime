@@ -1,7 +1,5 @@
 import { Module } from "@ryohey/wasm-parser"
 import { WASMModule, WASMFunction } from "./module"
-import { Op } from "@ryohey/wasm-ast"
-import { convertNumber } from "./number/convert"
 
 export const wasmToVMModule = (wasm: Module): WASMModule => {
   const functions = wasm.funcs.map((f, i) => {
@@ -18,14 +16,14 @@ export const wasmToVMModule = (wasm: Module): WASMModule => {
   })
 
   const elems = wasm.elems.map(s => ({
-    offset: convertNumber((s.offset[0] as Op.Const).parameter).toNumber(),
+    offset: s.offset,
     funcIds: s.init
   }))
 
   const globals = wasm.globals.map(s => ({
     type: s.type.type,
     mutable: s.type.isMutable,
-    initialValue: (s.init[0] as Op.Const).parameter
+    init: s.init
   }))
 
   return {

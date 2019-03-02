@@ -13,7 +13,7 @@ export const watModuleToWasmModule = (module: WATModule): WASMModule => {
       locals: fn.locals.map(r => r.type)
     })),
     elems: module.elems.map(e => ({
-      offset: Int32.obj(e.offset).toNumber(),
+      offset: e.offset,
       funcIds: e.funcIds as number[]
     })),
     globals: module.globals

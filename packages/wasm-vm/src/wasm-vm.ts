@@ -1,4 +1,4 @@
-import { NumberValue } from "@ryohey/wasm-ast"
+import { NumberValue, Op } from "@ryohey/wasm-ast"
 import { f32InstructionSet } from "./instructions/f32"
 import { f64InstructionSet } from "./instructions/f64"
 import { i32InstructionSet } from "./instructions/i32"
@@ -51,14 +51,21 @@ const createTable = (elems: WASMElem[]) => {
   const table: WASMTable = {}
   elems.forEach(e => {
     e.funcIds.forEach((id, i) => {
-      table[e.offset + i] = id
+      // TODO: support global.get
+      const init = e.offset as Op.Const
+      const offset = convertNumber(init.parameter).toNumber()
+      table[offset + i] = id
     })
   })
   return table
 }
 
 const createGlobalMemory = (globals: WASMGlobal[]) =>
-  globals.map(g => convertNumber(g.initialValue))
+  globals.map(g => {
+    // TODO: support global.get
+    const init = g.init as Op.Const
+    return convertNumber(init.parameter)
+  })
 
 export class WASMVirtualMachine {
   private functions: WASMFunction[]
