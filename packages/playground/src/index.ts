@@ -2,7 +2,7 @@ import { html, render } from "lit-html"
 import { unsafeHTML } from "lit-html/directives/unsafe-html"
 import { parser as sParser } from "@ryohey/s-parser"
 import { moduleParser } from "@ryohey/wat-parser"
-import { WASMVirtualMachine, watModuleToWasmModele } from "@ryohey/wasm-vm"
+import { WASMVirtualMachine, watModuleToWasmModule } from "@ryohey/wasm-vm"
 import * as formatHighlight from "json-format-highlight"
 
 import "./style.css"
@@ -97,7 +97,7 @@ const App = () => {
 
       const { consoleInput, consoleOutput } = store()
 
-      const vm = new WASMVirtualMachine(watModuleToWasmModele(module))
+      const vm = new WASMVirtualMachine(watModuleToWasmModule(module))
       const parsedInput = parseConsoleInput(consoleInput, 0)
       if (!parsedInput[0]) {
         const output = `> ${consoleInput}\ninvalid command: ${parsedInput[3]}`

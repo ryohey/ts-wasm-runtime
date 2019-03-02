@@ -2,7 +2,7 @@ import * as assert from "assert"
 import { wastParser, WATAssertReturn, WATModule } from "@ryohey/wat-parser"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { convertNumber } from "./number/convert"
-import { watModuleToWasmModele } from "./wat"
+import { watModuleToWasmModule } from "./wat"
 
 type ASTTopNode = WATModule | WATAssertReturn
 
@@ -43,7 +43,7 @@ export const runTests = (code: string) => {
   const testCases = r[1].filter(isAssertReturn)
   const modules = r[1].filter(isModule)
 
-  const module = watModuleToWasmModele(modules[0])
+  const module = watModuleToWasmModule(modules[0])
   const vm = new WASMVirtualMachine(module)
 
   if (testCases.length === 0) {

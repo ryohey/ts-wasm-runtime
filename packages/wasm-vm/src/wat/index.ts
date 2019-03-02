@@ -3,7 +3,7 @@ import { Int32 } from "../number"
 import { WASMModule } from "../module"
 import { replaceIdentifiers } from "./precompile"
 
-export const watModuleToWasmModele = (module: WATModule): WASMModule => {
+export const watModuleToWasmModule = (module: WATModule): WASMModule => {
   module = replaceIdentifiers(module)
 
   return {

@@ -1,2 +1,2 @@
 export * from "./wasm-vm"
-export { watModuleToWasmModele } from "./wat"
+export { watModuleToWasmModule } from "./wat"

@@ -1,9 +1,9 @@
 import { watParser } from "@ryohey/wat-parser"
 import { WASMVirtualMachine } from "./wasm-vm"
-import { watModuleToWasmModele } from "./wat"
+import { watModuleToWasmModule } from "./wat"
 
 const wasmTextCompiler = (text: string) => {
-  return watModuleToWasmModele(watParser(text, 0)[1])
+  return watModuleToWasmModule(watParser(text, 0)[1])
 }
 
 describe("wasm-vm", () => {
