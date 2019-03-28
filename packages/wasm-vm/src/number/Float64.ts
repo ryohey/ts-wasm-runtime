@@ -13,9 +13,15 @@ export class Float64 {
   toObject = (): Float64Value => ({
     f64: this.value.toString(10)
   })
+  toBytes = (): Uint8Array => {
+    throw new Error("not implemented")
+  }
 
   static obj = (value: Float64Value): Float64 =>
     new Float64(parseFloat(value.f64))
+  static bytes = (v: Uint8Array): Float64 => {
+    throw new Error("not implemented")
+  }
 
   static add = (a: Float64, b: Float64) => new Float64(a.value + b.value)
   static sub = (a: Float64, b: Float64) => new Float64(a.value - b.value)

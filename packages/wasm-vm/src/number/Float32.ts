@@ -12,9 +12,15 @@ export class Float32 {
   toObject = (): Float32Value => ({
     f32: this.value.toString(10)
   })
+  toBytes = (): Uint8Array => {
+    throw new Error("not implemented")
+  }
 
   static obj = (value: Float32Value): Float32 =>
     new Float32(parseFloat(value.f32))
+  static bytes = (v: Uint8Array): Float32 => {
+    throw new Error("not implemented")
+  }
 
   static add = (a: Float32, b: Float32) => new Float32(a.value + b.value)
   static sub = (a: Float32, b: Float32) => new Float32(a.value - b.value)

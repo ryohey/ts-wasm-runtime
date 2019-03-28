@@ -52,4 +52,10 @@ describe("Int32", () => {
     expect(div("-1", "-1")).toBe("1")
     expect(div("0x1000", "0x10000000")).toBe("0")
   })
+
+  it("byte representation", () => {
+    expect(new Int32(1).toBytes()).toBe(new Uint8Array([0, 0, 0, 1]))
+    expect(Int32.bytes(new Int32(-1).toBytes()).toNumber()).toBe(-1)
+    expect(Int32.bytes(new Int32(1 << 31).toBytes()).toNumber()).toBe(1 << 31)
+  })
 })

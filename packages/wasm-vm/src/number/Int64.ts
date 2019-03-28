@@ -14,10 +14,16 @@ export class Int64 {
   toString = (radix: number) => this.value.toString(radix)
   toNumber = () => Number(this.value)
   toObject = (): Int64Value => ({ i64: this.toString(10) })
+  toBytes = (): Uint8Array => {
+    throw new Error("not implemented")
+  }
 
   static obj = (value: Int64Value): Int64 => new Int64(BigInt(value.i64))
   static hex = (value: string): Int64 => new Int64(BigInt(value))
   static bool = (value: boolean): Int64 => (value ? Int64.one : Int64.zero)
+  static bytes = (v: Uint8Array): Int64 => {
+    throw new Error("not implemented")
+  }
 
   static one: Int64 = new Int64(BigInt(1))
   static zero: Int64 = new Int64(BigInt(0))

@@ -88,7 +88,7 @@ export class WASMVirtualMachine {
       functions,
       table: this.table,
       values: new Stack<WASMMemoryValue>(),
-      memory: [],
+      memory: new Uint8Array(1024),
       local: [],
       global: this.global,
       programCounter: 0,

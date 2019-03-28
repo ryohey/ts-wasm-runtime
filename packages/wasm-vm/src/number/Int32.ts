@@ -1,8 +1,6 @@
 import { Int32Value } from "@ryohey/wasm-ast"
 import { countTrailingZeros, countLeadingZeros, popCount } from "./bin"
-
-const unsigned = (a: number): number => a >>> 0
-const signed = (a: number): number => a >> 0
+import { signed, unsigned } from "./integer"
 
 export class Int32 {
   readonly value: number
@@ -14,11 +12,23 @@ export class Int32 {
   toString = (radix: number) => this.value.toString(radix)
   toNumber = () => this.value
   toObject = (): Int32Value => ({ i32: this.toString(10) })
+  toBytes = (): Uint8Array => {
+    const mask = (1 << 32) - 1
+    const v = unsigned(this.value)
+    return new Uint8Array([
+      v & mask,
+      (v >> 8) & mask,
+      (v >> 16) & mask,
+      (v >> 24) & mask
+    ])
+  }
 
   static obj = (value: Int32Value): Int32 =>
     new Int32(parseInt(value.i32, value.isHex ? 16 : 10))
   static hex = (value: string): Int32 => new Int32(parseInt(value, 16))
   static bool = (value: boolean): Int32 => (value ? Int32.one : Int32.zero)
+  static bytes = (v: Uint8Array): Int32 =>
+    new Int32(v[0] | (v[1] << 8) | (v[2] << 16) | (v[3] << 24))
 
   static one: Int32 = new Int32(1)
   static zero: Int32 = new Int32(0)
