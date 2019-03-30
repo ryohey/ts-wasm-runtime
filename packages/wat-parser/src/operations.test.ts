@@ -1,4 +1,4 @@
-import { plainInstructions } from "./operations"
+import { plainInstructions, attr } from "./operations"
 
 describe("plainInstructions", () => {
   it("parses operator get_local with number", () => {
@@ -22,6 +22,22 @@ describe("plainInstructions", () => {
         parameter: "$lhs"
       },
       2
+    ])
+  })
+  it("parses attributes", () => {
+    const r = attr("foo")(["foo=8"], 0)
+    expect(r).toStrictEqual([true, 8, 1])
+  })
+  it("parses memory instructions", () => {
+    const r = plainInstructions(["i32.load", "offset=8", "align=7"], 0)
+    expect(r).toStrictEqual([
+      true,
+      {
+        opType: "i32.load",
+        offset: 8,
+        align: 7
+      },
+      3
     ])
   })
 })

@@ -24,7 +24,7 @@ const number = or(
   map(regexp(/^-?[0-9]+\.[0-9]*/), value => ({ float: value } as FloatElement)),
   map(regexp(/^-?[0-9]+/), value => ({ int: value } as IntElement))
 )
-const text = regexp(/^[a-zA-Z\$][0-9a-zA-Z\._]*/)
+const text = regexp(/^[a-zA-Z\$][0-9a-zA-Z\._=]*/)
 const string = regexp(/^(".+")/)
 const types = or(number, text, string)
 const comment = regexp(/^;;.*\n/)

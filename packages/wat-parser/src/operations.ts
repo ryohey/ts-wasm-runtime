@@ -1,8 +1,8 @@
 import { or, seq, many, map, Parser, lazy, opt } from "@ryohey/fn-parser"
 import { Element } from "@ryohey/s-parser"
 import { Op } from "@ryohey/wasm-ast"
-import { keyword, array } from "./utils"
-import { int32, int64, float32, float64, indices } from "./types"
+import { keyword, array, regexp } from "./utils"
+import { int32, int64, float32, float64, indices, num } from "./types"
 import { blockInstructions } from "./block"
 import { flatten } from "@ryohey/array-helper"
 import { ifParser } from "./if"
@@ -42,6 +42,20 @@ const opN = <T extends Op.ParamMany<string, any>>(
         opType: str,
         parameters: r[1]
       } as T)
+  )
+
+export const attr = (str: string) =>
+  map(regexp(new RegExp(`^${str}=([0-9]+)`)), r => parseInt(r, 10))
+
+const memOp = <S extends Op.Mem<any>>(str: string) =>
+  map(
+    seq(keyword(str), opt(attr("offset")), opt(attr("align"))),
+    r =>
+      ({
+        opType: r[0],
+        offset: r[1],
+        align: r[2]
+      } as S)
   )
 
 export const constInstructions = or(
@@ -263,36 +277,42 @@ export const plainInstructions = or<Element[], Op.Any>(
   op<Op.F64_convert_i32_u>("f64.convert_u/i32"),
   op<Op.F64_convert_i64_u>("f64.convert_u/i64"),
 
-  op<Op.I32_load>("i32.load"),
-  op<Op.I64_load>("i64.load"),
-  op<Op.F32_load>("f32.load"),
-  op<Op.F64_load>("f64.load"),
+  memOp<Op.I32_load>("i32.load"),
+  memOp<Op.I64_load>("i64.load"),
+  memOp<Op.F32_load>("f32.load"),
+  memOp<Op.F64_load>("f64.load"),
 
-  op<Op.I32_load8_s>("i32.load8_s"),
-  op<Op.I32_load8_u>("i32.load8_u"),
-  op<Op.I32_load16_s>("i32.load16_s"),
-  op<Op.I32_load16_u>("i32.load16_u"),
-  op<Op.I64_load8_s>("i64.load8_s"),
-  op<Op.I64_load8_u>("i64.load8_u"),
-  op<Op.I64_load16_s>("i64.load16_s"),
-  op<Op.I64_load16_u>("i64.load16_u"),
-  op<Op.F32_load8_s>("f32.load8_s"),
-  op<Op.F32_load8_u>("f32.load8_u"),
-  op<Op.F32_load16_s>("f32.load16_s"),
-  op<Op.F32_load16_u>("f32.load16_u"),
-  op<Op.F64_load8_s>("f64.load8_s"),
-  op<Op.F64_load8_u>("f64.load8_u"),
-  op<Op.F64_load16_s>("f64.load16_s"),
-  op<Op.F64_load16_u>("f64.load16_u"),
-  op<Op.I32_store>("i32.store"),
-  op<Op.I64_store>("i64.store"),
-  op<Op.F32_store>("f32.store"),
-  op<Op.F64_store>("f64.store"),
-  op<Op.I32_store8>("i32.store8"),
-  op<Op.I32_store16>("i32.store16"),
-  op<Op.I64_store8>("i64.store8"),
-  op<Op.I64_store16>("i64.store16"),
-  op<Op.I64_store32>("i64.store32")
+  memOp<Op.I32_load8_u>("i32.load8_u"),
+  memOp<Op.I32_load8_s>("i32.load8_s"),
+  memOp<Op.I32_load16_s>("i32.load16_s"),
+  memOp<Op.I32_load16_u>("i32.load16_u"),
+
+  memOp<Op.I64_load8_s>("i64.load8_s"),
+  memOp<Op.I64_load8_u>("i64.load8_u"),
+  memOp<Op.I64_load16_s>("i64.load16_s"),
+  memOp<Op.I64_load16_u>("i64.load16_u"),
+  memOp<Op.I64_load16_s>("i64.load32_s"),
+  memOp<Op.I64_load16_u>("i64.load32_u"),
+
+  memOp<Op.F32_load8_s>("f32.load8_s"),
+  memOp<Op.F32_load8_u>("f32.load8_u"),
+  memOp<Op.F32_load16_s>("f32.load16_s"),
+  memOp<Op.F32_load16_u>("f32.load16_u"),
+
+  memOp<Op.F64_load8_s>("f64.load8_s"),
+  memOp<Op.F64_load8_u>("f64.load8_u"),
+  memOp<Op.F64_load16_s>("f64.load16_s"),
+  memOp<Op.F64_load16_u>("f64.load16_u"),
+
+  memOp<Op.I32_store>("i32.store"),
+  memOp<Op.I64_store>("i64.store"),
+  memOp<Op.F32_store>("f32.store"),
+  memOp<Op.F64_store>("f64.store"),
+  memOp<Op.I32_store8>("i32.store8"),
+  memOp<Op.I32_store16>("i32.store16"),
+  memOp<Op.I64_store8>("i64.store8"),
+  memOp<Op.I64_store16>("i64.store16"),
+  memOp<Op.I64_store32>("i64.store32")
 )
 
 const foldedInstructions = map(
