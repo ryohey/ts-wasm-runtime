@@ -1,4 +1,12 @@
 (module
+  (func (export "i32_load") (param $i i32) (result i32)
+	(i32.store (i32.const 8) (local.get $i))
+	(i32.load (i32.const 8))
+  )
+  (func (export "i64_load") (param $i i64) (result i64)
+	(i64.store (i64.const 8) (local.get $i))
+	(i64.load (i64.const 8))
+  )
   (func (export "i32_load8_s") (param $i i32) (result i32)
 	(i32.store8 (i32.const 8) (local.get $i))
 	(i32.load8_s (i32.const 8))
@@ -40,6 +48,10 @@
 	(i64.load32_u (i32.const 8))
   )
 )
+(assert_return (invoke "i32_load" (i32.const -1)) (i32.const -1))
+(assert_return (invoke "i32_load" (i32.const 100)) (i32.const 100))
+(assert_return (invoke "i64_load" (i64.const -1)) (i64.const -1))
+(assert_return (invoke "i64_load" (i64.const 100)) (i64.const 100))
 
 (assert_return (invoke "i32_load8_s" (i32.const -1)) (i32.const -1))
 (assert_return (invoke "i32_load8_u" (i32.const -1)) (i32.const 255))

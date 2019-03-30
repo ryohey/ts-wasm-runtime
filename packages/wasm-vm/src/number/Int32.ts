@@ -13,7 +13,7 @@ export class Int32 {
   toNumber = () => this.value
   toObject = (): Int32Value => ({ i32: this.toString(10) })
   toBytes = (): Uint8Array => {
-    const mask = (1 << 32) - 1
+    const mask = 0xff
     const v = unsigned(this.value)
     return new Uint8Array([
       v & mask,

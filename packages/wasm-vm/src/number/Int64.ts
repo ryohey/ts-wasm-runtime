@@ -15,14 +15,39 @@ export class Int64 {
   toNumber = () => Number(this.value)
   toObject = (): Int64Value => ({ i64: this.toString(10) })
   toBytes = (): Uint8Array => {
-    throw new Error("not implemented")
+    const mask = 0xffn
+    const num = BigInt.asIntN(64, this.value)
+    return new Uint8Array([
+      Number(num & mask),
+      Number((num >> 8n) & mask),
+      Number((num >> 16n) & mask),
+      Number((num >> 24n) & mask),
+      Number((num >> 32n) & mask),
+      Number((num >> 40n) & mask),
+      Number((num >> 48n) & mask),
+      Number((num >> 56n) & mask)
+    ])
   }
 
   static obj = (value: Int64Value): Int64 => new Int64(BigInt(value.i64))
   static hex = (value: string): Int64 => new Int64(BigInt(value))
   static bool = (value: boolean): Int64 => (value ? Int64.one : Int64.zero)
   static bytes = (v: Uint8Array): Int64 => {
-    throw new Error("not implemented")
+    return new Int64(
+      BigInt.asIntN(
+        64,
+        BigInt(
+          BigInt(v[0]) +
+            (BigInt(v[1]) << 8n) +
+            (BigInt(v[2]) << 16n) +
+            (BigInt(v[3]) << 24n) +
+            (BigInt(v[4]) << 32n) +
+            (BigInt(v[5]) << 40n) +
+            (BigInt(v[6]) << 48n) +
+            (BigInt(v[7]) << 56n)
+        )
+      )
+    )
   }
 
   static one: Int64 = new Int64(BigInt(1))

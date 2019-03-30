@@ -227,43 +227,43 @@ export interface F64_convert_i64_s extends Base<"f64.convert_i64_s"> {}
 export interface F64_convert_i32_u extends Base<"f64.convert_i32_u"> {}
 export interface F64_convert_i64_u extends Base<"f64.convert_i64_u"> {}
 
-interface Load<T extends string> extends Base<T> {
+export interface Mem<T extends string> extends Base<T> {
   align: number
   offset: number
 }
 
-export interface I32_load extends Load<"i32.load"> {}
-export interface I64_load extends Load<"i64.load"> {}
-export interface F32_load extends Load<"f32.load"> {}
-export interface F64_load extends Load<"f64.load"> {}
+export interface I32_load extends Mem<"i32.load"> {}
+export interface I64_load extends Mem<"i64.load"> {}
+export interface F32_load extends Mem<"f32.load"> {}
+export interface F64_load extends Mem<"f64.load"> {}
 
-export interface I32_load8_s extends Base<"i32.load8_s"> {}
-export interface I32_load8_u extends Base<"i32.load8_u"> {}
-export interface I32_load16_s extends Base<"i32.load16_s"> {}
-export interface I32_load16_u extends Base<"i32.load16_u"> {}
-export interface I64_load8_s extends Base<"i64.load8_s"> {}
-export interface I64_load8_u extends Base<"i64.load8_u"> {}
-export interface I64_load16_s extends Base<"i64.load16_s"> {}
-export interface I64_load16_u extends Base<"i64.load16_u"> {}
-export interface I64_load32_s extends Base<"i64.load32s"> {}
-export interface I64_load32_u extends Base<"i64.load32_u"> {}
-export interface F32_load8_s extends Base<"f32.load8_s"> {}
-export interface F32_load8_u extends Base<"f32.load8_u"> {}
-export interface F32_load16_s extends Base<"f32.load16_s"> {}
-export interface F32_load16_u extends Base<"f32.load16_u"> {}
-export interface F64_load8_s extends Base<"f64.load8_s"> {}
-export interface F64_load8_u extends Base<"f64.load8_u"> {}
-export interface F64_load16_s extends Base<"f64.load16_s"> {}
-export interface F64_load16_u extends Base<"f64.load16_u"> {}
-export interface I32_store extends Base<"i32.store"> {}
-export interface I64_store extends Base<"i64.store"> {}
-export interface F32_store extends Base<"f32.store"> {}
-export interface F64_store extends Base<"f64.store"> {}
-export interface I32_store8 extends Base<"i32.store8"> {}
-export interface I32_store16 extends Base<"i32.store16"> {}
-export interface I64_store8 extends Base<"i64.store8"> {}
-export interface I64_store16 extends Base<"i64.store16"> {}
-export interface I64_store32 extends Base<"i64.store32"> {}
+export interface I32_load8_s extends Mem<"i32.load8_s"> {}
+export interface I32_load8_u extends Mem<"i32.load8_u"> {}
+export interface I32_load16_s extends Mem<"i32.load16_s"> {}
+export interface I32_load16_u extends Mem<"i32.load16_u"> {}
+export interface I64_load8_s extends Mem<"i64.load8_s"> {}
+export interface I64_load8_u extends Mem<"i64.load8_u"> {}
+export interface I64_load16_s extends Mem<"i64.load16_s"> {}
+export interface I64_load16_u extends Mem<"i64.load16_u"> {}
+export interface I64_load32_s extends Mem<"i64.load32_s"> {}
+export interface I64_load32_u extends Mem<"i64.load32_u"> {}
+export interface F32_load8_s extends Mem<"f32.load8_s"> {}
+export interface F32_load8_u extends Mem<"f32.load8_u"> {}
+export interface F32_load16_s extends Mem<"f32.load16_s"> {}
+export interface F32_load16_u extends Mem<"f32.load16_u"> {}
+export interface F64_load8_s extends Mem<"f64.load8_s"> {}
+export interface F64_load8_u extends Mem<"f64.load8_u"> {}
+export interface F64_load16_s extends Mem<"f64.load16_s"> {}
+export interface F64_load16_u extends Mem<"f64.load16_u"> {}
+export interface I32_store extends Mem<"i32.store"> {}
+export interface I64_store extends Mem<"i64.store"> {}
+export interface F32_store extends Mem<"f32.store"> {}
+export interface F64_store extends Mem<"f64.store"> {}
+export interface I32_store8 extends Mem<"i32.store8"> {}
+export interface I32_store16 extends Mem<"i32.store16"> {}
+export interface I64_store8 extends Mem<"i64.store8"> {}
+export interface I64_store16 extends Mem<"i64.store16"> {}
+export interface I64_store32 extends Mem<"i64.store32"> {}
 
 export interface BlockBase<T extends string> extends Base<T> {
   identifier: string | null
