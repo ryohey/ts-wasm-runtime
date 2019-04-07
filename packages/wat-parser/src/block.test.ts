@@ -62,7 +62,10 @@ describe("block", () => {
         {
           body: [
             { opType: "call", parameter: "$dummy" },
-            { opType: "f32.const", parameter: { f32: "3" } }
+            {
+              opType: "f32.const",
+              parameter: { f32: "3" }
+            }
           ],
           identifier: null,
           opType: "block",
