@@ -2,10 +2,11 @@ import { or, seq, many, map, Parser, lazy, opt } from "@ryohey/fn-parser"
 import { Element } from "@ryohey/s-parser"
 import { Op } from "@ryohey/wasm-ast"
 import { keyword, array, regexp } from "./utils"
-import { int32, int64, float32, float64, indices, num } from "./types"
+import { int32, int64, float32, float64, indices } from "./types"
 import { blockInstructions } from "./block"
 import { flatten } from "@ryohey/array-helper"
 import { ifParser } from "./if"
+import * as TextOp from "./operationTypes"
 
 // operation with no parameters
 const op = <T extends Op.Any>(str: string): Parser<Element[], T> =>
@@ -59,14 +60,14 @@ const memOp = <S extends Op.Mem<any>>(str: string) =>
   )
 
 export const constInstructions = or(
-  op1<Op.I32_const>("i32.const", int32),
-  op1<Op.I64_const>("i64.const", int64),
-  op1<Op.F32_const>("f32.const", float32),
-  op1<Op.F64_const>("f64.const", float64)
+  op1<TextOp.I32_const>("i32.const", int32),
+  op1<TextOp.I64_const>("i64.const", int64),
+  op1<TextOp.F32_const>("f32.const", float32),
+  op1<TextOp.F64_const>("f64.const", float64)
 )
 
-const getGlobal = op1<Op.Get_global>("get_global", indices)
-const globalGet = op1<Op.Global_get>("global.get", indices)
+const getGlobal = op1<TextOp.Get_global>("get_global", indices)
+const globalGet = op1<TextOp.Global_get>("global.get", indices)
 
 export const initializerInstructions = or(
   constInstructions,
@@ -74,32 +75,32 @@ export const initializerInstructions = or(
   globalGet
 )
 
-export const plainInstructions = or<Element[], Op.Any>(
+export const plainInstructions = or<Element[], TextOp.Any>(
   constInstructions,
 
   op<Op.Nop>("nop"),
   op<Op.Unreachable>("unreachable"),
-  op1<Op.Br>("br", indices),
-  op1<Op.BrIf>("br_if", indices),
-  opN<Op.BrTable>("br_table", indices),
-  op1<Op.Call>("call", indices),
+  op1<TextOp.Br>("br", indices),
+  op1<TextOp.BrIf>("br_if", indices),
+  opN<TextOp.BrTable>("br_table", indices),
+  op1<TextOp.Call>("call", indices),
   op<Op.CallIndirect>("call_indirect"),
   op<Op.Drop>("drop"),
   op<Op.Select>("select"),
   op<Op.Return>("return"),
 
-  op1<Op.Local_get>("local.get", indices),
-  op1<Op.Local_set>("local.set", indices),
-  op1<Op.Get_local>("get_local", indices),
-  op1<Op.Set_local>("set_local", indices),
+  op1<TextOp.Local_get>("local.get", indices),
+  op1<TextOp.Local_set>("local.set", indices),
+  op1<TextOp.Get_local>("get_local", indices),
+  op1<TextOp.Set_local>("set_local", indices),
 
-  op1<Op.Local_tee>("local.tee", indices),
-  op1<Op.Tee_local>("tee_local", indices),
+  op1<TextOp.Local_tee>("local.tee", indices),
+  op1<TextOp.Tee_local>("tee_local", indices),
 
   globalGet,
-  op1<Op.Global_set>("global.set", indices),
+  op1<TextOp.Global_set>("global.set", indices),
   getGlobal,
-  op1<Op.Set_global>("set_global", indices),
+  op1<TextOp.Set_global>("set_global", indices),
 
   op<Op.I32_add>("i32.add"),
   op<Op.I64_add>("i64.add"),

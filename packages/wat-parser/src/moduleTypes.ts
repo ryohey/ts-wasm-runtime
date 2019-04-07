@@ -1,4 +1,5 @@
-import { ValType, Int32Value, NumberValue, Op } from "@ryohey/wasm-ast"
+import { ValType } from "@ryohey/wasm-ast"
+import * as TextOp from "./operationTypes"
 
 export interface WATModule {
   nodeType: "module"
@@ -26,7 +27,7 @@ export interface WATFunction {
   export: string | null
   parameters: WATFunctionParameter[]
   results: ValType[]
-  body: Op.Any[]
+  body: TextOp.Any[]
   locals: WATFunctionLocal[]
 }
 
@@ -45,12 +46,12 @@ export interface WATGlobal {
   export: string | null
   type: ValType
   mutable: boolean
-  init: Op.Initializer
+  init: TextOp.Initializer
 }
 
 export interface WATElem {
   nodeType: "elem"
-  offset: Op.Initializer
+  offset: TextOp.Initializer
   funcIds: (number | string)[]
 }
 

@@ -24,27 +24,27 @@ export interface ParamMany<S extends string, T> extends Base<S> {
   parameters: T[]
 }
 
-export interface Br extends Param1<"br", number | string> {}
-export interface BrIf extends Param1<"br_if", number | string> {}
-export interface BrTable extends ParamMany<"br_table", number | string> {}
+export interface Br extends Param1<"br", number> {}
+export interface BrIf extends Param1<"br_if", number> {}
+export interface BrTable extends ParamMany<"br_table", number> {}
 
-export interface Call extends Param1<"call", number | string> {}
+export interface Call extends Param1<"call", number> {}
 export interface CallIndirect extends Base<"call_indirect"> {}
 export interface Drop extends Base<"drop"> {}
 export interface Select extends Base<"select"> {}
 
-export interface Local_get extends Param1<"local.get", number | string> {}
-export interface Local_set extends Param1<"local.set", number | string> {}
-export interface Get_local extends Param1<"get_local", number | string> {}
-export interface Set_local extends Param1<"set_local", number | string> {}
+export interface Local_get extends Param1<"local.get", number> {}
+export interface Local_set extends Param1<"local.set", number> {}
+export interface Get_local extends Param1<"get_local", number> {}
+export interface Set_local extends Param1<"set_local", number> {}
 
-export interface Local_tee extends Param1<"local.tee", number | string> {}
-export interface Tee_local extends Param1<"tee_local", number | string> {}
+export interface Local_tee extends Param1<"local.tee", number> {}
+export interface Tee_local extends Param1<"tee_local", number> {}
 
-export interface Global_get extends Param1<"global.get", number | string> {}
-export interface Global_set extends Param1<"global.set", number | string> {}
-export interface Get_global extends Param1<"get_global", number | string> {}
-export interface Set_global extends Param1<"set_global", number | string> {}
+export interface Global_get extends Param1<"global.get", number> {}
+export interface Global_set extends Param1<"global.set", number> {}
+export interface Get_global extends Param1<"get_global", number> {}
+export interface Set_global extends Param1<"set_global", number> {}
 
 export interface I32_const extends Param1<"i32.const", Int32Value> {}
 export interface I64_const extends Param1<"i64.const", Int64Value> {}
@@ -266,7 +266,6 @@ export interface I64_store16 extends Mem<"i64.store16"> {}
 export interface I64_store32 extends Mem<"i64.store32"> {}
 
 export interface BlockBase<T extends string> extends Base<T> {
-  identifier: string | null
   results: ValType[]
   body: Any[]
 }
@@ -276,7 +275,6 @@ export interface Block extends BlockBase<"block"> {}
 export interface Loop extends BlockBase<"loop"> {}
 
 export interface If extends Base<"if"> {
-  identifier: string | null
   results: ValType[]
   then: Any[]
   else: Any[]
