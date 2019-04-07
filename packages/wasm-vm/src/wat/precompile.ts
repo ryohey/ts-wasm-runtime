@@ -1,7 +1,14 @@
 import { fromPairs } from "./array"
 import { WATFunction, WATElem, WATModule, TextOp } from "@ryohey/wat-parser"
-import { Op } from "@ryohey/wasm-ast"
+import { Op, Int32Value, Float64Value } from "@ryohey/wasm-ast"
 import { WASMFunction, WASMElem, WASMModule } from "../module"
+import { Int32String, Float64String } from "@ryohey/wat-parser/dist/types"
+import {
+  convertInt32String,
+  convertInt64String,
+  convertFloat64String,
+  convertFloat32String
+} from "./number"
 
 const isString = (x: any): x is string => typeof x === "string"
 
@@ -35,6 +42,7 @@ const processInstruction = (
   idTables: IdentifierTables,
   labelStack: string[]
 ): Op.Any => {
+  // 変数の identifier を index に置換
   const resolveBlockLabel = (p: string | number) =>
     isIdentifier(p) ? indexFromLast(labelStack, l => l === p) : p
   const resolveGlobalLabel = (p: string | number) =>
@@ -44,7 +52,6 @@ const processInstruction = (
   const resolveFuncLabel = (p: string | number) =>
     isIdentifier(p) ? idTables.funcs[p] : p
 
-  // 変数の identifier を index に置換
   switch (inst.opType) {
     case "text.if":
       return processIf(inst, idTables, labelStack)
@@ -70,9 +77,7 @@ const processInstruction = (
     case "text.br_table":
       return {
         opType: "br_table",
-        parameters: inst.parameters.map(p =>
-          isIdentifier(p) ? resolveBlockLabel(p) : p
-        )
+        parameters: inst.parameters.map(resolveBlockLabel)
       } as Op.BrTable
     case "text.local.get":
       return {
@@ -125,13 +130,25 @@ const processInstruction = (
         parameter: resolveGlobalLabel(inst.parameter)
       } as Op.Set_global
     case "text.i32.const":
-      throw new Error()
+      return {
+        opType: "i32.const",
+        parameter: convertInt32String(inst.parameter)
+      } as Op.I32_const
     case "text.i64.const":
-      throw new Error()
+      return {
+        opType: "i64.const",
+        parameter: convertInt64String(inst.parameter)
+      } as Op.I64_const
     case "text.f32.const":
-      throw new Error()
+      return {
+        opType: "f32.const",
+        parameter: convertFloat32String(inst.parameter)
+      } as Op.F32_const
     case "text.f64.const":
-      throw new Error()
+      return {
+        opType: "f64.const",
+        parameter: convertFloat64String(inst.parameter)
+      } as Op.F64_const
   }
 
   return inst
