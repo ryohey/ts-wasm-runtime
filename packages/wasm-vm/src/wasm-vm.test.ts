@@ -1,6 +1,7 @@
 import { watParser } from "@ryohey/wat-parser"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { watModuleToWasmModule } from "./wat"
+import { Int32 } from "./number"
 
 const wasmTextCompiler = (text: string) => {
   return watModuleToWasmModule(watParser(text, 0)[1])
@@ -16,7 +17,7 @@ describe("wasm-vm", () => {
       )`
     )
     const vm = new WASMVirtualMachine(module)
-    expect(vm.callFunction("hello")).toStrictEqual([{ i32: "42" }])
+    expect(vm.callFunction("hello")).toStrictEqual([new Int32(42).toObject()])
   })
 
   it("call add", () => {
@@ -31,7 +32,11 @@ describe("wasm-vm", () => {
     )
     const vm = new WASMVirtualMachine(module)
     expect(
-      vm.callFunction("add", { i32: "133" }, { i32: "234" })
-    ).toStrictEqual([{ i32: "367" }])
+      vm.callFunction(
+        "add",
+        new Int32(133).toObject(),
+        new Int32(234).toObject()
+      )
+    ).toStrictEqual([new Int32(367).toObject()])
   })
 })

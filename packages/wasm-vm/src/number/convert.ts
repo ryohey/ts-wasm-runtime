@@ -21,15 +21,15 @@ export const convertNumber = (num: NumberValue): WASMMemoryValue => {
   throw new Error("not supported number type")
 }
 
-export const numberValue = (type: ValType, value: string): NumberValue => {
+export const numberValue = (type: ValType, value: number): NumberValue => {
   switch (type) {
     case ValType.i32:
-      return { [type]: value }
+      return new Int32(value).toObject()
     case ValType.i64:
-      return { [type]: value }
+      return new Int64(BigInt(value)).toObject()
     case ValType.f32:
-      return { [type]: value }
+      return new Float32(value).toObject()
     case ValType.f64:
-      return { [type]: value }
+      return new Float64(value).toObject()
   }
 }

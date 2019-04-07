@@ -11,7 +11,7 @@ export class Int32 {
 
   toString = (radix: number) => this.value.toString(radix)
   toNumber = () => this.value
-  toObject = (): Int32Value => ({ i32: this.toString(10) })
+  toObject = (): Int32Value => ({ i32: this.toBytes() })
   toBytes = (): Uint8Array => {
     const mask = 0xff
     const v = unsigned(this.value)
@@ -23,8 +23,7 @@ export class Int32 {
     ])
   }
 
-  static obj = (value: Int32Value): Int32 =>
-    new Int32(parseInt(value.i32, value.isHex ? 16 : 10))
+  static obj = (value: Int32Value): Int32 => Int32.bytes(value.i32)
   static hex = (value: string): Int32 => new Int32(parseInt(value, 16))
   static bool = (value: boolean): Int32 => (value ? Int32.one : Int32.zero)
   static bytes = (v: Uint8Array): Int32 =>

@@ -1,16 +1,14 @@
 export interface Int32Value {
-  i32: string
-  isHex?: boolean
+  i32: Uint8Array
 }
 export interface Int64Value {
-  i64: string
-  isHex?: boolean
+  i64: Uint8Array
 }
 export interface Float32Value {
-  f32: string
+  f32: Uint8Array
 }
 export interface Float64Value {
-  f64: string
+  f64: Uint8Array
 }
 export type NumberValue = Int32Value | Int64Value | Float32Value | Float64Value
 

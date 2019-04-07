@@ -59,3 +59,28 @@ export const array = <T>(
   }
   return [false, null, position, result[3]]
 }
+
+export const match = <T>(parser: Parser<string, T>): Parser<Element[], T> => (
+  target,
+  position
+) => {
+  const str = target[position]
+  if (!isString(str)) {
+    return [
+      false,
+      null,
+      position,
+      `match@${position}: ${target[position]} is not string`
+    ]
+  }
+  const result = parser(str, 0)
+
+  return result[0] && result[2] === str.length
+    ? [true, result[1], position + 1]
+    : [
+        false,
+        null,
+        position,
+        `match@${position}: ${target[position]} does not match parser`
+      ]
+}

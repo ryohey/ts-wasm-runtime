@@ -31,7 +31,7 @@ export const createFunction = (fn: WASMFunction) => {
 
         // local を初期化する
         ...fn.locals
-          .map(type => numberValue(type, "0"))
+          .map(type => numberValue(type, 0))
           .map(num => convertNumber(num))
       ]
     }

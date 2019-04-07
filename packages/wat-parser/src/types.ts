@@ -1,36 +1,46 @@
 import { or, map, seq } from "@ryohey/fn-parser"
 import {
-  Int32Value,
-  Int64Value,
-  Float32Value,
+  ValType,
   Float64Value,
-  ValType
+  Float32Value,
+  Int32Value,
+  Int64Value
 } from "@ryohey/wasm-ast"
-import { regexp, keyword } from "./utils"
+import { regexp, keyword, match } from "./utils"
+import { float, Float } from "./float"
 
 const int = regexp(/^(-?[0-9]+)$/)
 const hex = regexp(/^(-?0x[0-9a-fA-F][0-9a-fA-F_]*)$/)
 
-export const int32 = or(
-  map(int, r => ({ i32: r } as Int32Value)),
-  map(hex, r => ({ i32: r, isHex: true } as Int32Value))
-)
-export const int64 = or(
-  map(int, r => ({ i64: r } as Int64Value)),
-  map(hex, r => ({ i64: r, isHex: true } as Int64Value))
-)
+const stringToInt32 = (str: string): Int32Value => {
+  throw new Error("")
+}
 
-export const float = regexp(/^(-?[0-9\.]+)$/)
-export const hexFloat = regexp(/^(-?0x[0-9a-fA-F]\.?[0-9a-fA-F_]*)$/)
+const hexStringToInt32 = (str: string): Int32Value => {
+  throw new Error("")
+}
 
-export const float32 = or(
-  map(float, r => ({ f32: r } as Float32Value)),
-  map(hexFloat, r => ({ f32: r, isHex: true } as Float32Value))
-)
-export const float64 = or(
-  map(float, r => ({ f64: r } as Float64Value)),
-  map(hexFloat, r => ({ f64: r, isHex: true } as Float64Value))
-)
+const stringToInt64 = (str: string): Int64Value => {
+  throw new Error("")
+}
+
+const hexStringToInt64 = (str: string): Int64Value => {
+  throw new Error("")
+}
+
+const convertToFloat32 = (value: Float): Float32Value => {
+  throw new Error("")
+}
+
+const convertToFloat64 = (value: Float): Float64Value => {
+  throw new Error("")
+}
+
+export const int32 = or(map(int, stringToInt32), map(hex, hexStringToInt32))
+export const int64 = or(map(int, stringToInt64), map(hex, hexStringToInt64))
+
+export const float32 = map(match(float), convertToFloat32)
+export const float64 = map(match(float), convertToFloat64)
 
 export const identifier = regexp(
   /^(\$[a-zA-Z_][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*)$/
