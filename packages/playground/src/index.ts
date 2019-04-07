@@ -1,18 +1,17 @@
 import { html, render } from "lit-html"
 import { unsafeHTML } from "lit-html/directives/unsafe-html"
 import { parser as sParser } from "@ryohey/s-parser"
-import { moduleParser as watParser, WATModule } from "@ryohey/wat-parser"
+import { moduleParser as watParser } from "@ryohey/wat-parser"
 import {
   WASMVirtualMachine,
   watModuleToWasmModule,
   wasmToVMModule
 } from "@ryohey/wasm-vm"
-import { moduleParser as wasmParser, Module } from "@ryohey/wasm-parser"
+import { moduleParser as wasmParser } from "@ryohey/wasm-parser"
 import * as formatHighlight from "json-format-highlight"
 
 import "./style.css"
 import { parseConsoleInput } from "./console-parser"
-import { WASMModule } from "../../wasm-vm/dist/module"
 
 enum InputMode {
   text,

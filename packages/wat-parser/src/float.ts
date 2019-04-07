@@ -1,7 +1,7 @@
 // https://webassembly.github.io/spec/core/text/values.html#text-frac
 
 import { or, map, seq, opt, Parser } from "@ryohey/fn-parser"
-import { regexp, token } from "../../s-parser/src/util"
+import { regexp, token } from "@ryohey/s-parser"
 
 export interface FloatingValue {
   type: "number"

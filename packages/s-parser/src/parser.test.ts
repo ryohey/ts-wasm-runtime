@@ -1,4 +1,4 @@
-import { parser, multiParser, expression } from "./index"
+import { parser, multiParser, expression } from "./parser"
 
 describe("parser", () => {
   it("parse text", () => {
