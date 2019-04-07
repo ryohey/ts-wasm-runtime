@@ -1,6 +1,7 @@
 import { fromPairs } from "./array"
-import { WATFunction, WATElem, WATModule } from "@ryohey/wat-parser"
+import { WATFunction, WATElem, WATModule, TextOp } from "@ryohey/wat-parser"
 import { Op } from "@ryohey/wasm-ast"
+import { WASMFunction, WASMElem, WASMModule } from "../module"
 
 const isString = (x: any): x is string => typeof x === "string"
 
@@ -25,92 +26,143 @@ const isIdentifier = (v: any): v is string => {
   return isString(v) && v.startsWith("$")
 }
 
-const isIfInstruction = (inst: Op.Any): inst is Op.If => inst.opType === "if"
+const resolveInitializer = (init: TextOp.Initializer): Op.Initializer => {
+  throw new Error()
+}
 
 const processInstruction = (
-  inst: Op.Any,
+  inst: TextOp.Any,
   idTables: IdentifierTables,
   labelStack: string[]
 ): Op.Any => {
-  if (isIfInstruction(inst)) {
-    return processIf(inst, idTables, labelStack)
-  }
-  if (inst.opType === "block" || inst.opType === "loop") {
-    return processBlock(inst, idTables, labelStack)
-  }
-
-  const labelToIndex = (p: string) => indexFromLast(labelStack, l => l === p)
-
-  if (inst.opType === "br_table") {
-    return {
-      ...inst,
-      parameters: inst.parameters.map(p =>
-        isIdentifier(p) ? labelToIndex(p) : p
-      )
-    }
-  }
+  const resolveBlockLabel = (p: string | number) =>
+    isIdentifier(p) ? indexFromLast(labelStack, l => l === p) : p
+  const resolveGlobalLabel = (p: string | number) =>
+    isIdentifier(p) ? idTables.globals[p] : p
+  const resolveLocalLabel = (p: string | number) =>
+    isIdentifier(p) ? idTables.locals[p] : p
+  const resolveFuncLabel = (p: string | number) =>
+    isIdentifier(p) ? idTables.funcs[p] : p
 
   // 変数の identifier を index に置換
-  if ("parameter" in inst) {
-    const p = inst.parameter
-    if (isIdentifier(p)) {
-      switch (inst.opType) {
-        case "call":
-          return {
-            ...inst,
-            parameter: idTables.funcs[p]
-          }
-        case "br":
-        case "br_if":
-          return { ...inst, parameter: labelToIndex(p) }
-        case "local.get":
-        case "local.set":
-        case "local.tee":
-        case "get_local":
-        case "set_local":
-        case "tee_local":
-          return {
-            ...inst,
-            parameter: idTables.locals[p]
-          }
-        case "global.get":
-        case "global.set":
-        case "get_global":
-        case "set_global":
-          return {
-            ...inst,
-            parameter: idTables.globals[p]
-          }
+  switch (inst.opType) {
+    case "text.if":
+      return processIf(inst, idTables, labelStack)
+    case "text.block":
+      return processBlock("block", inst, idTables, labelStack)
+    case "text.loop":
+      return processBlock("loop", inst, idTables, labelStack)
+    case "text.call":
+      return {
+        opType: "call",
+        parameter: resolveFuncLabel(inst.parameter)
       }
-    }
+    case "text.br":
+      return {
+        opType: "br",
+        parameter: resolveBlockLabel(inst.parameter)
+      } as Op.Br
+    case "text.br_if":
+      return {
+        opType: "br_if",
+        parameter: resolveBlockLabel(inst.parameter)
+      } as Op.BrIf
+    case "text.br_table":
+      return {
+        opType: "br_table",
+        parameters: inst.parameters.map(p =>
+          isIdentifier(p) ? resolveBlockLabel(p) : p
+        )
+      } as Op.BrTable
+    case "text.local.get":
+      return {
+        opType: "local.get",
+        parameter: resolveLocalLabel(inst.parameter)
+      } as Op.Local_get
+    case "text.local.set":
+      return {
+        opType: "local.set",
+        parameter: resolveLocalLabel(inst.parameter)
+      } as Op.Local_set
+    case "text.local.tee":
+      return {
+        opType: "local.tee",
+        parameter: resolveLocalLabel(inst.parameter)
+      } as Op.Local_tee
+    case "text.get_local":
+      return {
+        opType: "get_local",
+        parameter: resolveLocalLabel(inst.parameter)
+      } as Op.Get_local
+    case "text.set_local":
+      return {
+        opType: "set_local",
+        parameter: resolveLocalLabel(inst.parameter)
+      } as Op.Set_local
+    case "text.tee_local":
+      return {
+        opType: "tee_local",
+        parameter: resolveLocalLabel(inst.parameter)
+      } as Op.Tee_local
+    case "text.global.get":
+      return {
+        opType: "global.get",
+        parameter: resolveGlobalLabel(inst.parameter)
+      } as Op.Global_get
+    case "text.global.set":
+      return {
+        opType: "global.set",
+        parameter: resolveGlobalLabel(inst.parameter)
+      } as Op.Global_set
+    case "text.get_global":
+      return {
+        opType: "get_global",
+        parameter: resolveGlobalLabel(inst.parameter)
+      } as Op.Get_global
+    case "text.set_global":
+      return {
+        opType: "set_global",
+        parameter: resolveGlobalLabel(inst.parameter)
+      } as Op.Set_global
+    case "text.i32.const":
+      throw new Error()
+    case "text.i64.const":
+      throw new Error()
+    case "text.f32.const":
+      throw new Error()
+    case "text.f64.const":
+      throw new Error()
   }
 
   return inst
 }
 
-const processBlock = (
-  block: Op.Block | Op.Loop,
+const processBlock = <T extends Op.Block | Op.Loop>(
+  opType: T["opType"],
+  block: TextOp.Block | TextOp.Loop,
   idTables: IdentifierTables,
   labelStack: string[]
-): Op.Block | Op.Loop => {
+): T => {
   const labels = [...labelStack, block.identifier]
   const body = block.body.map(i => processInstruction(i, idTables, labels))
 
   return {
-    ...block,
-    body
-  }
+    opType,
+    body,
+    results: block.results
+  } as T
 }
 
 const processIf = (
-  block: Op.If,
+  block: TextOp.If,
   idTables: IdentifierTables,
   labelStack: string[]
 ): Op.If => {
   const labels = [...labelStack, block.identifier]
 
   return {
-    ...block,
+    opType: "if",
+    results: block.results,
     then: block.then.map(i => processInstruction(i, idTables, labels)),
     else: block.else.map(i => processInstruction(i, idTables, labels))
   }
@@ -135,31 +187,33 @@ const createLocalTables = (ast: WATFunction) => {
 }
 
 const processFunction = (
-  ast: WATFunction,
+  fn: WATFunction,
   funcs: IdentifierEntry,
   globals: IdentifierEntry
-): WATFunction => {
+): WASMFunction => {
   const idTables: IdentifierTables = {
-    locals: createLocalTables(ast),
+    locals: createLocalTables(fn),
     globals,
     funcs
   }
-  const body = ast.body.map(i => processInstruction(i, idTables, []))
   return {
-    ...ast,
-    body
+    body: fn.body.map(i => processInstruction(i, idTables, [])),
+    parameters: fn.parameters.map(p => p.type),
+    locals: fn.locals.map(r => r.type),
+    export: fn.export,
+    results: fn.results
   }
 }
 
-const processElem = (ast: WATElem, funcTable: IdentifierEntry): WATElem => {
+const processElem = (ast: WATElem, funcTable: IdentifierEntry): WASMElem => {
   const funcIds = ast.funcIds.map(id => (isIdentifier(id) ? funcTable[id] : id))
   return {
-    ...ast,
+    offset: resolveInitializer(ast.offset),
     funcIds
   }
 }
 
-export const replaceIdentifiers = (ast: WATModule): WATModule => {
+export const processModule = (ast: WATModule): WASMModule => {
   const funcTable: IdentifierEntry = fromPairs(
     ast.functions
       .map((fn, i) => [fn.identifier, i] as [string, number])
@@ -173,10 +227,13 @@ export const replaceIdentifiers = (ast: WATModule): WATModule => {
   )
 
   return {
-    ...ast,
     elems: ast.elems.map(elem => processElem(elem, funcTable)),
     functions: ast.functions.map(fn =>
       processFunction(fn, funcTable, globalTable)
-    )
+    ),
+    globals: ast.globals.map(g => ({
+      ...g,
+      init: resolveInitializer(g.init)
+    }))
   }
 }
