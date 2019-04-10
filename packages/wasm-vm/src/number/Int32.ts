@@ -13,21 +13,18 @@ export class Int32 {
   toNumber = () => this.value
   toObject = (): Int32Value => ({ i32: this.toBytes() })
   toBytes = (): Uint8Array => {
-    const mask = 0xff
-    const v = unsigned(this.value)
-    return new Uint8Array([
-      v & mask,
-      (v >> 8) & mask,
-      (v >> 16) & mask,
-      (v >> 24) & mask
-    ])
+    const data = new DataView(new ArrayBuffer(4))
+    data.setInt32(0, this.value)
+    return new Uint8Array(data.buffer)
   }
 
   static obj = (value: Int32Value): Int32 => Int32.bytes(value.i32)
   static hex = (value: string): Int32 => new Int32(parseInt(value, 16))
   static bool = (value: boolean): Int32 => (value ? Int32.one : Int32.zero)
-  static bytes = (v: Uint8Array): Int32 =>
-    new Int32(v[0] | (v[1] << 8) | (v[2] << 16) | (v[3] << 24))
+  static bytes = (v: Uint8Array): Int32 => {
+    const data = new DataView(v)
+    return new Int32(data.getInt32(0))
+  }
 
   static one: Int32 = new Int32(1)
   static zero: Int32 = new Int32(0)

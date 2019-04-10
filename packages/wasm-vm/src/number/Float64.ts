@@ -12,12 +12,15 @@ export class Float64 {
   toNumber = () => this.value
   toObject = (): Float64Value => ({ f64: this.toBytes() })
   toBytes = (): Uint8Array => {
-    throw new Error("not implemented")
+    const data = new DataView(new ArrayBuffer(8))
+    data.setFloat64(0, this.value)
+    return new Uint8Array(data.buffer)
   }
 
   static obj = (value: Float64Value): Float64 => Float64.bytes(value.f64)
   static bytes = (v: Uint8Array): Float64 => {
-    throw new Error("not implemented")
+    const data = new DataView(v)
+    return new Float64(data.getFloat64(0))
   }
 
   static add = (a: Float64, b: Float64) => new Float64(a.value + b.value)

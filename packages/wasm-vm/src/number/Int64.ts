@@ -15,39 +15,17 @@ export class Int64 {
   toNumber = () => Number(this.value)
   toObject = (): Int64Value => ({ i64: this.toBytes() })
   toBytes = (): Uint8Array => {
-    const mask = 0xffn
-    const num = BigInt.asIntN(64, this.value)
-    return new Uint8Array([
-      Number(num & mask),
-      Number((num >> 8n) & mask),
-      Number((num >> 16n) & mask),
-      Number((num >> 24n) & mask),
-      Number((num >> 32n) & mask),
-      Number((num >> 40n) & mask),
-      Number((num >> 48n) & mask),
-      Number((num >> 56n) & mask)
-    ])
+    const data = new DataView(new ArrayBuffer(8))
+    data.setBigInt64(0, this.value)
+    return new Uint8Array(data.buffer)
   }
 
   static obj = (value: Int64Value): Int64 => Int64.bytes(value.i64)
   static hex = (value: string): Int64 => new Int64(BigInt(value))
   static bool = (value: boolean): Int64 => (value ? Int64.one : Int64.zero)
   static bytes = (v: Uint8Array): Int64 => {
-    return new Int64(
-      BigInt.asIntN(
-        64,
-        BigInt(
-          BigInt(v[0]) +
-            (BigInt(v[1]) << 8n) +
-            (BigInt(v[2]) << 16n) +
-            (BigInt(v[3]) << 24n) +
-            (BigInt(v[4]) << 32n) +
-            (BigInt(v[5]) << 40n) +
-            (BigInt(v[6]) << 48n) +
-            (BigInt(v[7]) << 56n)
-        )
-      )
-    )
+    const data = new DataView(v)
+    return new Int64(data.getBigInt64(0))
   }
 
   static one: Int64 = new Int64(BigInt(1))

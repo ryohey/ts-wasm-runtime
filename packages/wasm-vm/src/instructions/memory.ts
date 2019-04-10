@@ -2,11 +2,9 @@ import {
   PartialInstructionSet,
   WASMCode,
   WASMLocalMemory,
-  WASMMemory,
   WASMMemoryValue
 } from "../wasm-memory"
 import { Int32, Int64, Float32, Float64 } from "../number"
-import { asSigned, unsigned } from "../number/integer"
 import { Op } from "@ryohey/wasm-ast"
 import { Stack } from "../stack"
 
@@ -20,7 +18,8 @@ const load8u = (
   code: Op.Mem<any>
 ) => {
   const addr = values.pop().toNumber() + (code.offset || 0)
-  return memory[addr]
+  const data = new DataView(memory)
+  return data.getUint8(addr)
 }
 
 const load8s = (
@@ -28,7 +27,9 @@ const load8s = (
   memory: Uint8Array,
   code: Op.Mem<any>
 ) => {
-  return asSigned(load8u(values, memory, code), 8)
+  const addr = values.pop().toNumber() + (code.offset || 0)
+  const data = new DataView(memory)
+  return data.getInt8(addr)
 }
 
 const load16u = (
@@ -37,8 +38,8 @@ const load16u = (
   code: Op.Mem<any>
 ) => {
   const addr = values.pop().toNumber() + (code.offset || 0)
-  const bytes = memory.slice(addr, addr + 2)
-  return bytes[0] + (bytes[1] << 8)
+  const data = new DataView(memory)
+  return data.getUint16(addr)
 }
 
 const load16s = (
@@ -46,7 +47,9 @@ const load16s = (
   memory: Uint8Array,
   code: Op.Mem<any>
 ) => {
-  return asSigned(load16u(values, memory, code), 16)
+  const addr = values.pop().toNumber() + (code.offset || 0)
+  const data = new DataView(memory)
+  return data.getInt16(addr)
 }
 
 const load32u = (
@@ -55,10 +58,8 @@ const load32u = (
   code: Op.Mem<any>
 ) => {
   const addr = values.pop().toNumber() + (code.offset || 0)
-  const bytes = memory.slice(addr, addr + 4)
-  return (
-    bytes[0] + (bytes[1] << 8) + (bytes[2] << 16) + unsigned(bytes[3] << 24)
-  )
+  const data = new DataView(memory)
+  return data.getUint32(addr)
 }
 
 const load32s = (
@@ -66,7 +67,9 @@ const load32s = (
   memory: Uint8Array,
   code: Op.Mem<any>
 ) => {
-  return asSigned(load32u(values, memory, code), 32)
+  const addr = values.pop().toNumber() + (code.offset || 0)
+  const data = new DataView(memory)
+  return data.getInt32(addr)
 }
 
 // https://webassembly.github.io/spec/core/text/instructions.html#memory-instructions

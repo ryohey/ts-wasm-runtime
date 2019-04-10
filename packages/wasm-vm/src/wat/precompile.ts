@@ -1,8 +1,7 @@
 import { fromPairs } from "./array"
 import { WATFunction, WATElem, WATModule, TextOp } from "@ryohey/wat-parser"
-import { Op, Int32Value, Float64Value } from "@ryohey/wasm-ast"
+import { Op } from "@ryohey/wasm-ast"
 import { WASMFunction, WASMElem, WASMModule } from "../module"
-import { Int32String, Float64String } from "@ryohey/wat-parser/dist/types"
 import {
   convertInt32String,
   convertInt64String,
