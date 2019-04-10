@@ -13,20 +13,11 @@ export class Int64 {
 
   toString = (radix: number) => this.value.toString(radix)
   toNumber = () => Number(this.value)
-  toObject = (): Int64Value => ({ i64: this.toBytes() })
-  toBytes = (): Uint8Array => {
-    const data = new DataView(new ArrayBuffer(8))
-    data.setBigInt64(0, this.value)
-    return new Uint8Array(data.buffer)
-  }
+  toObject = (): Int64Value => ({ i64: this.value })
 
-  static obj = (value: Int64Value): Int64 => Int64.bytes(value.i64)
+  static obj = (value: Int64Value): Int64 => new Int64(value.i64)
   static hex = (value: string): Int64 => new Int64(BigInt(value))
   static bool = (value: boolean): Int64 => (value ? Int64.one : Int64.zero)
-  static bytes = (v: Uint8Array): Int64 => {
-    const data = new DataView(v)
-    return new Int64(data.getBigInt64(0))
-  }
 
   static one: Int64 = new Int64(BigInt(1))
   static zero: Int64 = new Int64(BigInt(0))

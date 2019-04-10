@@ -53,7 +53,7 @@ const createTable = (elems: WASMElem[]) => {
     e.funcIds.forEach((id, i) => {
       // TODO: support global.get
       const init = e.offset as Op.Const
-      const offset = convertNumber(init.parameter).toNumber()
+      const offset = convertNumber(init.parameter).value as number
       table[offset + i] = id
     })
   })
@@ -88,7 +88,7 @@ export class WASMVirtualMachine {
       functions,
       table: this.table,
       values: new Stack<WASMMemoryValue>(),
-      memory: new Uint8Array(1024),
+      memory: new DataView(new ArrayBuffer(1024)),
       local: [],
       global: this.global,
       programCounter: 0,

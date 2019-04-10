@@ -9,19 +9,9 @@ export class Float32 {
 
   toString = (radix: number) => this.value.toString(radix)
   toNumber = () => this.value
-  toObject = (): Float32Value => ({ f32: this.toBytes() })
-  toBytes = (): Uint8Array => {
-    const data = new DataView(new ArrayBuffer(4))
-    data.setFloat32(0, this.value)
-    return new Uint8Array(data.buffer)
-  }
+  toObject = (): Float32Value => ({ f32: this.value })
 
-  static obj = (value: Float32Value): Float32 => Float32.bytes(value.f32)
-  static bytes = (v: Uint8Array): Float32 => {
-    const data = new DataView(v)
-    return new Float32(data.getFloat32(0))
-  }
-
+  static obj = (value: Float32Value): Float32 => new Float32(value.f32)
   static add = (a: Float32, b: Float32) => new Float32(a.value + b.value)
   static sub = (a: Float32, b: Float32) => new Float32(a.value - b.value)
   static mul = (a: Float32, b: Float32) => new Float32(a.value * b.value)

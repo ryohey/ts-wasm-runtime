@@ -63,7 +63,7 @@ export const controlInstructionSet = (
       return memory => {
         const labelIds = code.parameters as number[]
         const { values } = memory
-        const idx = (values.pop() as Int32).toNumber()
+        const idx = (values.pop() as Int32).value
         const label =
           idx < labelIds.length && idx >= 0
             ? labelIds[idx]
@@ -80,7 +80,7 @@ export const controlInstructionSet = (
     case "call_indirect":
       return memory => {
         const idx = memory.values.pop() as Int32
-        const funcId = memory.table[idx.toNumber()]
+        const funcId = memory.table[idx.value]
         callFunc(memory, funcId)
       }
     case "select":

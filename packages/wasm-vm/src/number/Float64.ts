@@ -10,19 +10,14 @@ export class Float64 {
 
   toString = (radix: number) => this.value.toString(radix)
   toNumber = () => this.value
-  toObject = (): Float64Value => ({ f64: this.toBytes() })
+  toObject = (): Float64Value => ({ f64: this.value })
   toBytes = (): Uint8Array => {
     const data = new DataView(new ArrayBuffer(8))
     data.setFloat64(0, this.value)
     return new Uint8Array(data.buffer)
   }
 
-  static obj = (value: Float64Value): Float64 => Float64.bytes(value.f64)
-  static bytes = (v: Uint8Array): Float64 => {
-    const data = new DataView(v)
-    return new Float64(data.getFloat64(0))
-  }
-
+  static obj = (value: Float64Value): Float64 => new Float64(value.f64)
   static add = (a: Float64, b: Float64) => new Float64(a.value + b.value)
   static sub = (a: Float64, b: Float64) => new Float64(a.value - b.value)
   static mul = (a: Float64, b: Float64) => new Float64(a.value * b.value)

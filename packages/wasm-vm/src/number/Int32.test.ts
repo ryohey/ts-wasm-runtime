@@ -52,24 +52,4 @@ describe("Int32", () => {
     expect(div("-1", "-1")).toBe("1")
     expect(div("0x1000", "0x10000000")).toBe("0")
   })
-
-  it("toBytes", () => {
-    expect(new Int32(1).toBytes()).toStrictEqual(new Uint8Array([1, 0, 0, 0]))
-    expect(new Int32(0x7fffffff).toBytes()).toStrictEqual(
-      new Uint8Array([0xff, 0xff, 0xff, 0x7f])
-    )
-    expect(new Int32(-1).toBytes()).toStrictEqual(
-      new Uint8Array([0xff, 0xff, 0xff, 0xff])
-    )
-  })
-
-  it("creates from bytes", () => {
-    expect(Int32.bytes(new Uint8Array([1, 0, 0, 0])).toNumber()).toBe(1)
-    expect(
-      Int32.bytes(new Uint8Array([0xff, 0xff, 0xff, 0xff])).toNumber()
-    ).toBe(-1)
-    expect(
-      Int32.bytes(new Uint8Array([0xff, 0xff, 0xff, 0x7f])).toNumber()
-    ).toBe(0x7fffffff)
-  })
 })

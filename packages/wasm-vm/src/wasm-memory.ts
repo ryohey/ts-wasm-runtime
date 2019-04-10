@@ -29,7 +29,7 @@ export type WASMTable = {
 export interface WASMMemory extends VMMemory {
   // control instruction のみが直接 stack を触るべき
   readonly values: Stack<WASMMemoryValue>
-  readonly memory: Uint8Array
+  readonly memory: DataView
   readonly global: WASMMemoryValue[]
   readonly local: WASMMemoryValue[]
   readonly functions: WASMFunction[]

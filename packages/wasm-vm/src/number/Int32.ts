@@ -11,14 +11,9 @@ export class Int32 {
 
   toString = (radix: number) => this.value.toString(radix)
   toNumber = () => this.value
-  toObject = (): Int32Value => ({ i32: this.toBytes() })
-  toBytes = (): Uint8Array => {
-    const data = new DataView(new ArrayBuffer(4))
-    data.setInt32(0, this.value)
-    return new Uint8Array(data.buffer)
-  }
+  toObject = (): Int32Value => ({ i32: this.value })
 
-  static obj = (value: Int32Value): Int32 => Int32.bytes(value.i32)
+  static obj = (value: Int32Value): Int32 => new Int32(value.i32)
   static hex = (value: string): Int32 => new Int32(parseInt(value, 16))
   static bool = (value: boolean): Int32 => (value ? Int32.one : Int32.zero)
   static bytes = (v: Uint8Array): Int32 => {
