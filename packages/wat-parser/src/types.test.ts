@@ -22,39 +22,23 @@ describe("type parser", () => {
     expect(r).toStrictEqual([true, "main", 1])
   })
   it("int32", () => {
-    expect(int32(["123"], 0)).toStrictEqual([true, { i32: "123" }, 1])
+    expect(int32(["123"], 0)).toStrictEqual([true, { i32: 123 }, 1])
 
-    expect(int32(["0x456"], 0)).toStrictEqual([
-      true,
-      { i32: "0x456", isHex: true },
-      1
-    ])
+    expect(int32(["0x456"], 0)).toStrictEqual([true, { i32: 0x456 }, 1])
   })
   it("int64", () => {
-    expect(int64(["123"], 0)).toStrictEqual([true, { i64: "123" }, 1])
+    expect(int64(["123"], 0)).toStrictEqual([true, { i64: 123n }, 1])
 
-    expect(int64(["0x456"], 0)).toStrictEqual([
-      true,
-      { i64: "0x456", isHex: true },
-      1
-    ])
+    expect(int64(["0x456"], 0)).toStrictEqual([true, { i64: 0x456n }, 1])
   })
   it("float32", () => {
-    expect(float32(["123"], 0)).toStrictEqual([true, { f32: "123" }, 1])
+    expect(float32(["123"], 0)).toStrictEqual([true, { f32: 123 }, 1])
 
-    expect(float32(["0x456"], 0)).toStrictEqual([
-      true,
-      { f32: "0x456", isHex: true },
-      1
-    ])
+    expect(float32(["0x456"], 0)).toStrictEqual([true, { f32: 0x456 }, 1])
   })
   it("float64", () => {
-    expect(float64(["123"], 0)).toStrictEqual([true, { f64: "123" }, 1])
+    expect(float64(["123"], 0)).toStrictEqual([true, { f64: 123 }, 1])
 
-    expect(float64(["0x456"], 0)).toStrictEqual([
-      true,
-      { f64: "0x456", isHex: true },
-      1
-    ])
+    expect(float64(["0x456"], 0)).toStrictEqual([true, { f64: 0x456 }, 1])
   })
 })

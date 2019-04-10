@@ -135,7 +135,7 @@ describe("parser", () => {
         body: [
           {
             opType: "i32.const",
-            parameter: { i32: "42" }
+            parameter: { i32: 42 }
           }
         ],
         export: "hello",
@@ -181,8 +181,8 @@ describe("parser", () => {
     expect(r).toStrictEqual([
       true,
       [
-        { opType: "i32.const", parameter: { i32: "2" } },
-        { opType: "i32.const", parameter: { i32: "3" } },
+        { opType: "i32.const", parameter: { i32: 2 } },
+        { opType: "i32.const", parameter: { i32: 3 } },
         { opType: "i32.add" }
       ],
       1
@@ -248,7 +248,7 @@ describe("parser", () => {
               { opType: "call", parameter: "$dummy" },
               {
                 opType: "f32.const",
-                parameter: { f32: "3" }
+                parameter: { f32: 3 }
               }
             ],
             identifier: null,
@@ -260,7 +260,7 @@ describe("parser", () => {
               { opType: "call", parameter: "$dummy" },
               {
                 opType: "f32.const",
-                parameter: { f32: "3" }
+                parameter: { f32: 3 }
               }
             ],
             identifier: null,
@@ -314,8 +314,8 @@ describe("parser", () => {
           {
             opType: "if",
             identifier: null,
-            then: [{ opType: "i32.const", parameter: { i32: "7" } }],
-            else: [{ opType: "i32.const", parameter: { i32: "8" } }],
+            then: [{ opType: "i32.const", parameter: { i32: 7 } }],
+            else: [{ opType: "i32.const", parameter: { i32: 8 } }],
             results: ["i32"]
           }
         ],

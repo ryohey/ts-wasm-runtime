@@ -60,10 +60,10 @@ const memOp = <S extends Op.Mem<any>>(str: string) =>
   )
 
 export const constInstructions = or(
-  op1<TextOp.I32_const>("i32.const", int32),
-  op1<TextOp.I64_const>("i64.const", int64),
-  op1<TextOp.F32_const>("f32.const", float32),
-  op1<TextOp.F64_const>("f64.const", float64)
+  op1<Op.I32_const>("i32.const", int32),
+  op1<Op.I64_const>("i64.const", int64),
+  op1<Op.F32_const>("f32.const", float32),
+  op1<Op.F64_const>("f64.const", float64)
 )
 
 const getGlobal = op1<TextOp.Get_global>("get_global", indices)

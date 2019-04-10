@@ -1,10 +1,4 @@
 import { Op, ValType } from "@ryohey/wasm-ast"
-import { Int32String, Int64String, Float32String, Float64String } from "./types"
-
-export interface I32_const extends Op.Param1<"text.i32.const", Int32String> {}
-export interface I64_const extends Op.Param1<"text.i64.const", Int64String> {}
-export interface F32_const extends Op.Param1<"text.f32.const", Float32String> {}
-export interface F64_const extends Op.Param1<"text.f64.const", Float64String> {}
 
 export interface Br extends Op.Param1<"text.br", number | string> {}
 export interface BrIf extends Op.Param1<"text.br_if", number | string> {}
@@ -51,13 +45,10 @@ export interface If extends Op.Base<"text.if"> {
   else: Any[]
 }
 
-export type Const = I32_const | I64_const | F32_const | F64_const
-
-export type Initializer = Const | Global_get | Get_global
+export type Initializer = Op.Const | Global_get | Get_global
 
 export type Any =
   | Op.Any
-  | Const
   | Br
   | BrIf
   | BrTable

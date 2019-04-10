@@ -37,8 +37,8 @@ describe("if", () => {
           opType: "if",
           identifier: null,
           results: ["i32"],
-          then: [{ opType: "i32.const", parameter: { i32: "10" } }],
-          else: [{ opType: "i32.const", parameter: { i32: "3" } }]
+          then: [{ opType: "i32.const", parameter: { i32: 10 } }],
+          else: [{ opType: "i32.const", parameter: { i32: 3 } }]
         }
       ],
       1
@@ -73,7 +73,7 @@ describe("if", () => {
           opType: "if",
           identifier: "$foo",
           results: [],
-          then: [{ opType: "i32.const", parameter: { i32: "10" } }],
+          then: [{ opType: "i32.const", parameter: { i32: 10 } }],
           else: []
         }
       ],
@@ -132,8 +132,8 @@ describe("if", () => {
         {
           opType: "if",
           identifier: null,
-          then: [{ opType: "i32.const", parameter: { i32: "7" } }],
-          else: [{ opType: "i32.const", parameter: { i32: "8" } }],
+          then: [{ opType: "i32.const", parameter: { i32: 7 } }],
+          else: [{ opType: "i32.const", parameter: { i32: 8 } }],
           results: ["i32"]
         }
       ],
@@ -161,8 +161,8 @@ describe("if", () => {
         {
           opType: "if",
           identifier: null,
-          then: [{ opType: "i32.const", parameter: { i32: "1" } }],
-          else: [{ opType: "i32.const", parameter: { i32: "0" } }],
+          then: [{ opType: "i32.const", parameter: { i32: 1 } }],
+          else: [{ opType: "i32.const", parameter: { i32: 0 } }],
           results: ["i32"]
         },
         {
@@ -170,11 +170,11 @@ describe("if", () => {
           identifier: null,
           then: [
             { opType: "call", parameter: "$dummy" },
-            { opType: "i32.const", parameter: { i32: "2" } }
+            { opType: "i32.const", parameter: { i32: 2 } }
           ],
           else: [
             { opType: "call", parameter: "$dummy" },
-            { opType: "i32.const", parameter: { i32: "3" } }
+            { opType: "i32.const", parameter: { i32: 3 } }
           ],
           results: ["i32"]
         }

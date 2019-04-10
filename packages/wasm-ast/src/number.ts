@@ -1,14 +1,14 @@
 export interface Int32Value {
-  i32: Uint8Array
+  i32: number
 }
 export interface Int64Value {
-  i64: Uint8Array
+  i64: bigint
 }
 export interface Float32Value {
-  f32: Uint8Array
+  f32: number
 }
 export interface Float64Value {
-  f64: Uint8Array
+  f64: number
 }
 export type NumberValue = Int32Value | Int64Value | Float32Value | Float64Value
 
