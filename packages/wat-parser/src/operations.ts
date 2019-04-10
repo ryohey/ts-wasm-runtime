@@ -9,7 +9,7 @@ import { ifParser } from "./if"
 import * as TextOp from "./operationTypes"
 
 // operation with no parameters
-const op = <T extends Op.Any>(str: string): Parser<Element[], T> =>
+const op = <T extends Op.Any>(str: T["opType"]): Parser<Element[], T> =>
   map(
     keyword(str),
     _ =>
@@ -20,7 +20,7 @@ const op = <T extends Op.Any>(str: string): Parser<Element[], T> =>
 
 // operation with single parameter
 const op1 = <T extends Op.Param1<string, any>>(
-  str: string,
+  str: T["opType"],
   parser: Parser<Element[], T["parameter"]>
 ): Parser<Element[], T> =>
   map(
@@ -33,7 +33,7 @@ const op1 = <T extends Op.Param1<string, any>>(
   )
 
 const opN = <T extends Op.ParamMany<string, any>>(
-  str: string,
+  str: T["opType"],
   parser: Parser<Element[], T["parameters"][0]>
 ): Parser<Element[], T> =>
   map(
@@ -48,7 +48,7 @@ const opN = <T extends Op.ParamMany<string, any>>(
 export const attr = (str: string) =>
   map(regexp(new RegExp(`^${str}=([0-9]+)`)), r => parseInt(r, 10))
 
-const memOp = <S extends Op.Mem<any>>(str: string) =>
+const memOp = <S extends Op.Mem<any>>(str: S["opType"]) =>
   map(
     seq(keyword(str), opt(attr("offset")), opt(attr("align"))),
     r =>
@@ -66,8 +66,8 @@ export const constInstructions = or(
   op1<Op.F64_const>("f64.const", float64)
 )
 
-const getGlobal = op1<TextOp.Get_global>("get_global", indices)
-const globalGet = op1<TextOp.Global_get>("global.get", indices)
+const getGlobal = op1<TextOp.Get_global>("text.get_global", indices)
+const globalGet = op1<TextOp.Global_get>("text.global.get", indices)
 
 export const initializerInstructions = or(
   constInstructions,
@@ -80,27 +80,27 @@ export const plainInstructions = or<Element[], TextOp.Any>(
 
   op<Op.Nop>("nop"),
   op<Op.Unreachable>("unreachable"),
-  op1<TextOp.Br>("br", indices),
-  op1<TextOp.BrIf>("br_if", indices),
-  opN<TextOp.BrTable>("br_table", indices),
-  op1<TextOp.Call>("call", indices),
+  op1<TextOp.Br>("text.br", indices),
+  op1<TextOp.BrIf>("text.br_if", indices),
+  opN<TextOp.BrTable>("text.br_table", indices),
+  op1<TextOp.Call>("text.call", indices),
   op<Op.CallIndirect>("call_indirect"),
   op<Op.Drop>("drop"),
   op<Op.Select>("select"),
   op<Op.Return>("return"),
 
-  op1<TextOp.Local_get>("local.get", indices),
-  op1<TextOp.Local_set>("local.set", indices),
-  op1<TextOp.Get_local>("get_local", indices),
-  op1<TextOp.Set_local>("set_local", indices),
+  op1<TextOp.Local_get>("text.local.get", indices),
+  op1<TextOp.Local_set>("text.local.set", indices),
+  op1<TextOp.Get_local>("text.get_local", indices),
+  op1<TextOp.Set_local>("text.set_local", indices),
 
-  op1<TextOp.Local_tee>("local.tee", indices),
-  op1<TextOp.Tee_local>("tee_local", indices),
+  op1<TextOp.Local_tee>("text.local.tee", indices),
+  op1<TextOp.Tee_local>("text.tee_local", indices),
 
   globalGet,
-  op1<TextOp.Global_set>("global.set", indices),
+  op1<TextOp.Global_set>("text.global.set", indices),
   getGlobal,
-  op1<TextOp.Set_global>("set_global", indices),
+  op1<TextOp.Set_global>("text.set_global", indices),
 
   op<Op.I32_add>("i32.add"),
   op<Op.I64_add>("i64.add"),
@@ -246,18 +246,18 @@ export const plainInstructions = or<Element[], TextOp.Any>(
 
   op<Op.I32_wrap_i64>("i32.wrap/i64"),
 
-  op<Op.I32_trunc_f32_s>("i32.trunc_s/f32"),
-  op<Op.I32_trunc_f64_s>("i32.trunc_s/f64"),
-  op<Op.I32_trunc_f32_u>("i32.trunc_u/f32"),
-  op<Op.I32_trunc_f64_u>("i32.trunc_u/f64"),
+  op<Op.I32_trunc_f32_s>("i32.trunc_f32_s"),
+  op<Op.I32_trunc_f64_s>("i32.trunc_f64_s"),
+  op<Op.I32_trunc_f32_u>("i32.trunc_f32_u"),
+  op<Op.I32_trunc_f64_u>("i32.trunc_f64_u"),
 
-  op<Op.I64_extend_i32_s>("i64.extend_s/i32"),
-  op<Op.I64_extend_i32_u>("i64.extend_u/i32"),
+  op<Op.I64_extend_i32_s>("i64.extend_i32_s"),
+  op<Op.I64_extend_i32_u>("i64.extend_i32_u"),
 
-  op<Op.I64_trunc_f32_s>("i64.trunc_s/f32"),
-  op<Op.I64_trunc_f64_s>("i64.trunc_s/f64"),
-  op<Op.I64_trunc_f32_u>("i64.trunc_u/f32"),
-  op<Op.I64_trunc_f64_u>("i64.trunc_u/f64"),
+  op<Op.I64_trunc_f32_s>("i64.trunc_f32_s"),
+  op<Op.I64_trunc_f64_s>("i64.trunc_f64_s"),
+  op<Op.I64_trunc_f32_u>("i64.trunc_f32_u"),
+  op<Op.I64_trunc_f64_u>("i64.trunc_f64_u"),
 
   op<Op.I32_reinterpret_f32>("i32.reinterpret/f32"),
   op<Op.I64_reinterpret_f64>("i64.reinterpret/f64"),
@@ -266,17 +266,17 @@ export const plainInstructions = or<Element[], TextOp.Any>(
 
   op<Op.F32_demote_f64>("f32.demote/f64"),
 
-  op<Op.F32_convert_i32_s>("f32.convert_s/i32"),
-  op<Op.F32_convert_i64_s>("f32.convert_s/i64"),
-  op<Op.F32_convert_i32_u>("f32.convert_u/i32"),
-  op<Op.F32_convert_i64_u>("f32.convert_u/i64"),
+  op<Op.F32_convert_i32_s>("f32.convert_i32_s"),
+  op<Op.F32_convert_i64_s>("f32.convert_i64_s"),
+  op<Op.F32_convert_i32_u>("f32.convert_i32_u"),
+  op<Op.F32_convert_i64_u>("f32.convert_i64_u"),
 
   op<Op.F64_promote_f32>("f64.promote/f32"),
 
-  op<Op.F64_convert_i32_s>("f64.convert_s/i32"),
-  op<Op.F64_convert_i64_s>("f64.convert_s/i64"),
-  op<Op.F64_convert_i32_u>("f64.convert_u/i32"),
-  op<Op.F64_convert_i64_u>("f64.convert_u/i64"),
+  op<Op.F64_convert_i32_s>("f64.convert_i32_s"),
+  op<Op.F64_convert_i64_s>("f64.convert_i64_s"),
+  op<Op.F64_convert_i32_u>("f64.convert_i32_u"),
+  op<Op.F64_convert_i64_u>("f64.convert_i64_u"),
 
   memOp<Op.I32_load>("i32.load"),
   memOp<Op.I64_load>("i64.load"),
@@ -292,8 +292,8 @@ export const plainInstructions = or<Element[], TextOp.Any>(
   memOp<Op.I64_load8_u>("i64.load8_u"),
   memOp<Op.I64_load16_s>("i64.load16_s"),
   memOp<Op.I64_load16_u>("i64.load16_u"),
-  memOp<Op.I64_load16_s>("i64.load32_s"),
-  memOp<Op.I64_load16_u>("i64.load32_u"),
+  memOp<Op.I64_load32_s>("i64.load32_s"),
+  memOp<Op.I64_load32_u>("i64.load32_u"),
 
   memOp<Op.F32_load8_s>("f32.load8_s"),
   memOp<Op.F32_load8_u>("f32.load8_u"),
@@ -316,7 +316,7 @@ export const plainInstructions = or<Element[], TextOp.Any>(
   memOp<Op.I64_store32>("i64.store32")
 )
 
-const foldedInstructions = map(
+const foldedInstructions: Parser<Element[], TextOp.Any[]> = map(
   array(
     seq(
       plainInstructions,
@@ -326,8 +326,8 @@ const foldedInstructions = map(
   r => [...(r[1] ? r[1] : []), r[0]]
 )
 
-export const operations: Parser<Element[], Op.Any[]> = or(
-  lazy(() => blockInstructions),
+export const operations: Parser<Element[], TextOp.Any[]> = or(
+  lazy(() => map(blockInstructions, r => [r])),
   lazy(() => ifParser),
   map(plainInstructions, r => [r]),
   foldedInstructions

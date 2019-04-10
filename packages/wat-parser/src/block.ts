@@ -1,14 +1,19 @@
 import { flatten } from "@ryohey/array-helper"
 import { lazy, many, map, opt, or, Parser, seq } from "@ryohey/fn-parser"
 import { Element } from "@ryohey/s-parser"
-import { Op } from "@ryohey/wasm-ast"
 import { operations } from "./operations"
 import { blockType, identifier } from "./types"
 import { array, keyword } from "./utils"
+import { TextOp } from "."
 
 const instructions = lazy(() => operations)
 
-const makeBlockBody = (word: string): Parser<Element[], Op.Any[]> =>
+type BlockOp = TextOp.Block | TextOp.Loop
+
+const makeBlockBody = <T extends BlockOp>(
+  word: string,
+  opType: T["opType"]
+): Parser<Element[], T> =>
   map(
     seq(
       keyword(word),
@@ -16,38 +21,26 @@ const makeBlockBody = (word: string): Parser<Element[], Op.Any[]> =>
       opt(array(blockType)),
       opt(many(instructions))
     ),
-    r => [
-      {
-        opType: word,
+    r =>
+      ({
+        opType,
         identifier: r[1],
         results: r[2] ? [r[2]] : [],
         body: flatten(r[3] || [])
-      } as Op.Block
-    ]
+      } as T)
   )
 
-const makePlainBlock = (word: string): Parser<Element[], Op.Any[]> =>
-  map(seq(makeBlockBody(word), keyword("end")), r => r[0])
+const makePlainBlock = <T extends BlockOp>(word: string, opType: T["opType"]) =>
+  map(seq(makeBlockBody<T>(word, opType), keyword("end")), r => r[0])
 
-const makeFoldedBlock = (word: string) => array(makeBlockBody(word))
-const makeBlock = (word: string) =>
-  or(makePlainBlock(word), makeFoldedBlock(word))
+const makeFoldedBlock = <T extends BlockOp>(
+  word: string,
+  opType: T["opType"]
+) => array(makeBlockBody<T>(word, opType))
+const makeBlock = <T extends BlockOp>(word: string, opType: T["opType"]) =>
+  or(makePlainBlock<T>(word, opType), makeFoldedBlock<T>(word, opType))
 
-export const block = makeBlock("block")
-export const loop = makeBlock("loop")
+export const block = makeBlock<TextOp.Block>("block", "text.block")
+export const loop = makeBlock<TextOp.Loop>("loop", "text.loop")
 
-export const ifend: Parser<Element[], any> = seq(
-  keyword("if"),
-  many(instructions),
-  keyword("end")
-)
-
-export const ifelse: Parser<Element[], any> = seq(
-  keyword("if"),
-  many(instructions),
-  keyword("else"),
-  many(instructions),
-  keyword("end")
-)
-
-export const blockInstructions = or(block, loop, ifend, ifelse)
+export const blockInstructions = or(block, loop)

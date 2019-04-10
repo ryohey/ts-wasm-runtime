@@ -1,9 +1,9 @@
 import { seq, many, lazy, opt, map, or } from "@ryohey/fn-parser"
-import { Op } from "@ryohey/wasm-ast"
 import { keyword, array } from "./utils"
 import { operations } from "./operations"
 import { blockType, identifier } from "./types"
 import { flatten } from "@ryohey/array-helper"
+import * as TextOp from "./operationTypes"
 
 const instructions = lazy(() => operations)
 
@@ -19,12 +19,12 @@ const ifPlain = map(
   ),
   r => [
     {
-      opType: "if",
+      opType: "text.if",
       identifier: r[1],
       results: r[2] ? [r[2]] : [],
       then: flatten(r[3] || []),
       else: flatten(r[5] || [])
-    } as Op.If
+    } as TextOp.If
   ]
 )
 
@@ -42,12 +42,12 @@ const ifBlock = map(
   r => [
     ...(r[3] || []),
     {
-      opType: "if",
+      opType: "text.if",
       identifier: r[1],
       results: r[2] ? [r[2]] : [],
       then: flatten(r[4][1] || []),
       else: flatten(r[5][1] || [])
-    } as Op.If
+    } as TextOp.If
   ]
 )
 
@@ -56,12 +56,12 @@ const ifPlain2 = map(
   seq(keyword("if"), opt(identifier), opt(many(instructions)), keyword("end")),
   r => [
     {
-      opType: "if",
+      opType: "text.if",
       results: [],
       identifier: r[1],
       then: flatten(r[2] || []),
       else: []
-    } as Op.If
+    } as TextOp.If
   ]
 )
 
@@ -78,12 +78,12 @@ const ifBlock2 = map(
   r => [
     ...(r[2] || []),
     {
-      opType: "if",
+      opType: "text.if",
       results: [],
       identifier: r[1],
       then: flatten(r[3][1] || []),
       else: []
-    } as Op.If
+    } as TextOp.If
   ]
 )
 
