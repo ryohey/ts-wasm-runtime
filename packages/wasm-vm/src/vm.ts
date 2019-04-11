@@ -16,16 +16,16 @@ export const virtualMachine = <Code, Memory extends VMMemory>(
   instructionSet: InstructionSet<Code, Memory>,
   verbose: boolean = false
 ) => (program: Code[], memory: Memory) => {
-  const log = (msg: string) => {
+  const log = (...args: any) => {
     if (verbose) {
-      console.log(msg)
+      console.log(...args)
     }
   }
 
   while (memory.programCounter < program.length && !memory.programTerminated) {
     const code = program[memory.programCounter++]
     const instr = instructionSet(code)
-    log(`[${memory.programCounter}] run ${JSON.stringify(code)}`)
+    log("[%d] run %o", memory.programCounter, code)
     try {
       instr(memory)
     } catch (e) {

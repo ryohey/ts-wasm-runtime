@@ -2,12 +2,6 @@ import { fromPairs } from "./array"
 import { WATFunction, WATElem, WATModule, TextOp } from "@ryohey/wat-parser"
 import { Op } from "@ryohey/wasm-ast"
 import { WASMFunction, WASMElem, WASMModule } from "../module"
-import {
-  convertInt32String,
-  convertInt64String,
-  convertFloat64String,
-  convertFloat32String
-} from "./number"
 
 const isString = (x: any): x is string => typeof x === "string"
 
@@ -33,7 +27,12 @@ const isIdentifier = (v: any): v is string => {
 }
 
 const resolveInitializer = (init: TextOp.Initializer): Op.Initializer => {
-  throw new Error()
+  switch (init.opType) {
+    case "text.get_global":
+    case "text.global.get":
+      throw new Error("not implemented")
+  }
+  return init
 }
 
 const processInstruction = (
@@ -128,26 +127,6 @@ const processInstruction = (
         opType: "set_global",
         parameter: resolveGlobalLabel(inst.parameter)
       } as Op.Set_global
-    case "text.i32.const":
-      return {
-        opType: "i32.const",
-        parameter: convertInt32String(inst.parameter)
-      } as Op.I32_const
-    case "text.i64.const":
-      return {
-        opType: "i64.const",
-        parameter: convertInt64String(inst.parameter)
-      } as Op.I64_const
-    case "text.f32.const":
-      return {
-        opType: "f32.const",
-        parameter: convertFloat32String(inst.parameter)
-      } as Op.F32_const
-    case "text.f64.const":
-      return {
-        opType: "f64.const",
-        parameter: convertFloat64String(inst.parameter)
-      } as Op.F64_const
   }
 
   return inst

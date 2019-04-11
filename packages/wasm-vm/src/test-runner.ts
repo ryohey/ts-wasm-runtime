@@ -30,16 +30,7 @@ const runTestCase = (
     const exp = ast.expected[i]
     const receivedValue = convertNumber(received[i]).toObject()
     const expectedValue = convertNumber(exp.parameter).toObject()
-    const debugName = `${ast.invoke}(${ast.args
-      .map(a => JSON.stringify(a.parameter))
-      .join(", ")})`
-    assert.deepStrictEqual(
-      receivedValue,
-      expectedValue,
-      `${debugName}: expected ${JSON.stringify(
-        exp.parameter
-      )}. but received ${JSON.stringify(received[i])}`
-    )
+    expect(receivedValue).toStrictEqual(expectedValue)
   }
   log(`PASS: ${ast.invoke}`)
 }
