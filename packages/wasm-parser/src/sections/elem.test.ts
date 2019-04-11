@@ -40,7 +40,7 @@ describe("elem", () => {
         sections: [
           {
             init: [2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 2, 2],
-            offset: { opType: "i32.const", parameter: { i32: "0x0" } },
+            offset: { opType: "i32.const", parameter: { i32: 0x0 } },
             table: 0
           }
         ],
