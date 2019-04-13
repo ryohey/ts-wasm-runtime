@@ -13,6 +13,7 @@ describe("float", () => {
   })
 
   it("parses hex", () => {
+    // TODO: implement
     expect(float("-0x1.921fb6p+2", 0)).toStrictEqual([true, 0, 14])
     expect(float("-0x0p+0", 0)).toStrictEqual([true, 0, 7])
   })

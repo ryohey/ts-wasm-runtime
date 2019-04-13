@@ -18,7 +18,7 @@ describe("plainInstructions", () => {
     expect(r).toStrictEqual([
       true,
       {
-        opType: "get_local",
+        opType: "text.get_local",
         parameter: "$lhs"
       },
       2

@@ -2,7 +2,15 @@ import { or, seq, many, map, Parser, lazy, opt } from "@ryohey/fn-parser"
 import { Element } from "@ryohey/s-parser"
 import { Op } from "@ryohey/wasm-ast"
 import { keyword, array, regexp } from "./utils"
-import { int32, int64, float32, float64, indices } from "./types"
+import {
+  int32,
+  int64,
+  float32,
+  float64,
+  indices,
+  num,
+  identifier
+} from "./types"
 import { blockInstructions } from "./block"
 import { flatten } from "@ryohey/array-helper"
 import { ifParser } from "./if"
@@ -19,16 +27,36 @@ const op = <T extends Op.Any>(str: T["opType"]): Parser<Element[], T> =>
   )
 
 // operation with single parameter
-const op1 = <T extends Op.Param1<string, any>>(
-  str: T["opType"],
+const _op1 = <T extends Op.Param1<string, any>>(
+  opType: T["opType"],
+  str: string,
   parser: Parser<Element[], T["parameter"]>
 ): Parser<Element[], T> =>
   map(
     seq(keyword(str), parser),
     r =>
       ({
-        opType: str,
+        opType,
         parameter: r[1]
+      } as T)
+  )
+
+const op1 = <T extends Op.Param1<string, any>>(
+  str: T["opType"],
+  parser: Parser<Element[], T["parameter"]>
+) => _op1(str, str, parser)
+
+const _opN = <T extends Op.ParamMany<string, any>>(
+  opType: T["opType"],
+  str: string,
+  parser: Parser<Element[], T["parameters"][0]>
+): Parser<Element[], T> =>
+  map(
+    seq(keyword(str), many(parser)),
+    r =>
+      ({
+        opType,
+        parameters: r[1]
       } as T)
   )
 
@@ -66,8 +94,15 @@ export const constInstructions = or(
   op1<Op.F64_const>("f64.const", float64)
 )
 
-const getGlobal = op1<TextOp.Get_global>("text.get_global", indices)
-const globalGet = op1<TextOp.Global_get>("text.global.get", indices)
+const getGlobal = or(
+  op1<Op.Get_global>("get_global", num),
+  _op1<TextOp.Get_global>("text.get_global", "get_global", identifier)
+)
+
+const globalGet = or(
+  op1<Op.Global_get>("global.get", num),
+  _op1<TextOp.Global_get>("text.global.get", "global.get", identifier)
+)
 
 export const initializerInstructions = or(
   constInstructions,
@@ -80,27 +115,50 @@ export const plainInstructions = or<Element[], TextOp.Any>(
 
   op<Op.Nop>("nop"),
   op<Op.Unreachable>("unreachable"),
-  op1<TextOp.Br>("text.br", indices),
-  op1<TextOp.BrIf>("text.br_if", indices),
-  opN<TextOp.BrTable>("text.br_table", indices),
-  op1<TextOp.Call>("text.call", indices),
+
+  op1<Op.Br>("br", num),
+  _op1<TextOp.Br>("text.br", "br", identifier),
+
+  op1<Op.BrIf>("br_if", num),
+  _op1<TextOp.BrIf>("text.br_if", "br_if", identifier),
+
+  opN<Op.BrTable>("br_table", num),
+  _opN<TextOp.BrTable>("text.br_table", "br_table", identifier),
+
+  op1<Op.Call>("call", num),
+  _op1<TextOp.Call>("text.call", "call", identifier),
+
   op<Op.CallIndirect>("call_indirect"),
   op<Op.Drop>("drop"),
   op<Op.Select>("select"),
   op<Op.Return>("return"),
 
-  op1<TextOp.Local_get>("text.local.get", indices),
-  op1<TextOp.Local_set>("text.local.set", indices),
-  op1<TextOp.Get_local>("text.get_local", indices),
-  op1<TextOp.Set_local>("text.set_local", indices),
+  op1<Op.Local_get>("local.get", num),
+  _op1<TextOp.Local_get>("text.local.get", "local.get", identifier),
 
-  op1<TextOp.Local_tee>("text.local.tee", indices),
-  op1<TextOp.Tee_local>("text.tee_local", indices),
+  op1<Op.Local_set>("local.set", num),
+  _op1<TextOp.Local_set>("text.local.set", "local.set", identifier),
+
+  op1<Op.Get_local>("get_local", num),
+  _op1<TextOp.Get_local>("text.get_local", "get_local", identifier),
+
+  op1<Op.Set_local>("set_local", num),
+  _op1<TextOp.Set_local>("text.set_local", "set_local", identifier),
+
+  op1<Op.Local_tee>("local.tee", num),
+  _op1<TextOp.Local_tee>("text.local.tee", "local.tee", identifier),
+
+  op1<Op.Tee_local>("tee_local", num),
+  _op1<TextOp.Tee_local>("text.tee_local", "tee_local", identifier),
 
   globalGet,
-  op1<TextOp.Global_set>("text.global.set", indices),
   getGlobal,
-  op1<TextOp.Set_global>("text.set_global", indices),
+
+  op1<Op.Global_set>("global.set", num),
+  _op1<TextOp.Global_set>("text.global.set", "global.set", identifier),
+
+  op1<Op.Set_global>("set_global", num),
+  _op1<TextOp.Set_global>("text.set_global", "set_global", identifier),
 
   op<Op.I32_add>("i32.add"),
   op<Op.I64_add>("i64.add"),

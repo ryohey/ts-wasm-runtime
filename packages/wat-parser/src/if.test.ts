@@ -9,7 +9,7 @@ describe("if", () => {
       true,
       [
         {
-          opType: "if",
+          opType: "text.if",
           identifier: null,
           results: [],
           then: [{ opType: "nop" }],
@@ -34,7 +34,7 @@ describe("if", () => {
       true,
       [
         {
-          opType: "if",
+          opType: "text.if",
           identifier: null,
           results: ["i32"],
           then: [{ opType: "i32.const", parameter: { i32: 10 } }],
@@ -52,7 +52,7 @@ describe("if", () => {
       true,
       [
         {
-          opType: "if",
+          opType: "text.if",
           identifier: null,
           results: [],
           then: [{ opType: "nop" }],
@@ -70,7 +70,7 @@ describe("if", () => {
       true,
       [
         {
-          opType: "if",
+          opType: "text.if",
           identifier: "$foo",
           results: [],
           then: [{ opType: "i32.const", parameter: { i32: 10 } }],
@@ -89,7 +89,7 @@ describe("if", () => {
       [
         { opType: "local.get", parameter: 0 },
         {
-          opType: "if",
+          opType: "text.if",
           identifier: null,
           then: [{ opType: "nop" }],
           else: [],
@@ -108,7 +108,7 @@ describe("if", () => {
       [
         { opType: "local.get", parameter: 0 },
         {
-          opType: "if",
+          opType: "text.if",
           identifier: null,
           then: [{ opType: "nop" }],
           else: [{ opType: "nop" }],
@@ -130,7 +130,7 @@ describe("if", () => {
       [
         { opType: "local.get", parameter: 0 },
         {
-          opType: "if",
+          opType: "text.if",
           identifier: null,
           then: [{ opType: "i32.const", parameter: { i32: 7 } }],
           else: [{ opType: "i32.const", parameter: { i32: 8 } }],
@@ -159,21 +159,21 @@ describe("if", () => {
       [
         { opType: "local.get", parameter: 0 },
         {
-          opType: "if",
+          opType: "text.if",
           identifier: null,
           then: [{ opType: "i32.const", parameter: { i32: 1 } }],
           else: [{ opType: "i32.const", parameter: { i32: 0 } }],
           results: ["i32"]
         },
         {
-          opType: "if",
+          opType: "text.if",
           identifier: null,
           then: [
-            { opType: "call", parameter: "$dummy" },
+            { opType: "text.call", parameter: "$dummy" },
             { opType: "i32.const", parameter: { i32: 2 } }
           ],
           else: [
-            { opType: "call", parameter: "$dummy" },
+            { opType: "text.call", parameter: "$dummy" },
             { opType: "i32.const", parameter: { i32: 3 } }
           ],
           results: ["i32"]

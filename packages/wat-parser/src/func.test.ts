@@ -18,11 +18,11 @@ describe("parser", () => {
       true,
       [
         {
-          opType: "get_local",
+          opType: "text.get_local",
           parameter: "$lhs"
         },
         {
-          opType: "get_local",
+          opType: "text.get_local",
           parameter: "$rhs"
         }
       ],
@@ -59,11 +59,11 @@ describe("parser", () => {
         locals: [],
         body: [
           {
-            opType: "get_local",
+            opType: "text.get_local",
             parameter: "$lhs"
           },
           {
-            opType: "get_local",
+            opType: "text.get_local",
             parameter: "$rhs"
           },
           {
@@ -106,11 +106,11 @@ describe("parser", () => {
         locals: [],
         body: [
           {
-            opType: "get_local",
+            opType: "text.get_local",
             parameter: "$lhs"
           },
           {
-            opType: "get_local",
+            opType: "text.get_local",
             parameter: "$rhs"
           },
           {
@@ -245,26 +245,26 @@ describe("parser", () => {
         body: [
           {
             body: [
-              { opType: "call", parameter: "$dummy" },
+              { opType: "text.call", parameter: "$dummy" },
               {
                 opType: "f32.const",
                 parameter: { f32: 3 }
               }
             ],
             identifier: null,
-            opType: "block",
+            opType: "text.block",
             results: ["f32"]
           },
           {
             body: [
-              { opType: "call", parameter: "$dummy" },
+              { opType: "text.call", parameter: "$dummy" },
               {
                 opType: "f32.const",
                 parameter: { f32: 3 }
               }
             ],
             identifier: null,
-            opType: "block",
+            opType: "text.block",
             results: ["f32"]
           },
           { opType: "f32.gt" }
@@ -296,7 +296,7 @@ describe("parser", () => {
         body: [
           { opType: "local.get", parameter: 0 },
           {
-            opType: "if",
+            opType: "text.if",
             identifier: null,
             then: [{ opType: "nop" }],
             else: [],
@@ -304,7 +304,7 @@ describe("parser", () => {
           },
           { opType: "local.get", parameter: 0 },
           {
-            opType: "if",
+            opType: "text.if",
             identifier: null,
             then: [{ opType: "nop" }],
             else: [{ opType: "nop" }],
@@ -312,7 +312,7 @@ describe("parser", () => {
           },
           { opType: "local.get", parameter: 0 },
           {
-            opType: "if",
+            opType: "text.if",
             identifier: null,
             then: [{ opType: "i32.const", parameter: { i32: 7 } }],
             else: [{ opType: "i32.const", parameter: { i32: 8 } }],

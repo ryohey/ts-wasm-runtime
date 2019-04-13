@@ -6,14 +6,12 @@ describe("block", () => {
     const r = blockInstructions(["block", "i32.const", "42", "end"], 0)
     expect(r).toStrictEqual([
       true,
-      [
-        {
-          opType: "block",
-          identifier: null,
-          results: [],
-          body: [{ opType: "i32.const", parameter: { i32: 42 } }]
-        }
-      ],
+      {
+        opType: "text.block",
+        identifier: null,
+        results: [],
+        body: [{ opType: "i32.const", parameter: { i32: 42 } }]
+      },
       4
     ])
   })
@@ -21,14 +19,13 @@ describe("block", () => {
     const r = blockInstructions(["block", "$lbl", "i32.const", "42", "end"], 0)
     expect(r).toStrictEqual([
       true,
-      [
-        {
-          opType: "block",
-          identifier: "$lbl",
-          results: [],
-          body: [{ opType: "i32.const", parameter: { i32: 42 } }]
-        }
-      ],
+
+      {
+        opType: "text.block",
+        identifier: "$lbl",
+        results: [],
+        body: [{ opType: "i32.const", parameter: { i32: 42 } }]
+      },
       5
     ])
   })
@@ -39,14 +36,12 @@ describe("block", () => {
     )
     expect(r).toStrictEqual([
       true,
-      [
-        {
-          opType: "block",
-          identifier: null,
-          results: ["i32"],
-          body: [{ opType: "i32.const", parameter: { i32: 42 } }]
-        }
-      ],
+      {
+        opType: "text.block",
+        identifier: null,
+        results: ["i32"],
+        body: [{ opType: "i32.const", parameter: { i32: 42 } }]
+      },
       1
     ])
   })
@@ -58,20 +53,18 @@ describe("block", () => {
     const r = blockInstructions(sExp[1], 0)
     expect(r).toStrictEqual([
       true,
-      [
-        {
-          body: [
-            { opType: "call", parameter: "$dummy" },
-            {
-              opType: "f32.const",
-              parameter: { f32: 3 }
-            }
-          ],
-          identifier: null,
-          opType: "block",
-          results: ["f32"]
-        }
-      ],
+      {
+        body: [
+          { opType: "text.call", parameter: "$dummy" },
+          {
+            opType: "f32.const",
+            parameter: { f32: 3 }
+          }
+        ],
+        identifier: null,
+        opType: "text.block",
+        results: ["f32"]
+      },
       1
     ])
   })
