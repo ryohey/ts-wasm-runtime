@@ -1,6 +1,6 @@
 import { Parser, seqMap, map, terminate } from "@ryohey/fn-parser"
 import { Bytes } from "./types"
-import { var1 } from "./utils"
+import { var1, variable } from "./utils"
 import {
   Int32Value,
   Int64Value,
@@ -37,15 +37,15 @@ export const leb128Str: Parser<Bytes, string> = map(uLEB128Bytes, r => {
 // TODO: Implement sLEB128
 
 // https://webassembly.github.io/spec/core/binary/values.html#binary-int
-export const i32: Parser<Bytes, Int32Value> = map(leb128Str, i32 => ({
-  i32
+export const i32: Parser<Bytes, Int32Value> = map(leb128Str, value => ({
+  i32: parseInt(value)
 }))
-export const i64: Parser<Bytes, Int64Value> = map(leb128Str, i64 => ({
-  i64
+export const i64: Parser<Bytes, Int64Value> = map(leb128Str, value => ({
+  i64: BigInt(value)
 }))
-export const f32: Parser<Bytes, Float32Value> = map(leb128Str, f32 => ({
-  f32
+export const f32: Parser<Bytes, Float32Value> = map(variable(4), arr => ({
+  f32: new DataView(new Uint8Array(arr).buffer).getFloat32(0, true)
 }))
-export const f64: Parser<Bytes, Float64Value> = map(leb128Str, f64 => ({
-  f64
+export const f64: Parser<Bytes, Float64Value> = map(variable(8), arr => ({
+  f64: new DataView(new Uint8Array(arr).buffer).getFloat64(0, true)
 }))
