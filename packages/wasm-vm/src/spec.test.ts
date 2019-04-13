@@ -11,7 +11,7 @@ describe("spec test", () => {
     .map(f => path.join(SPEC_DIR, f))
 
   files.forEach(file => {
-    it(`${file}`, () => {
+    describe(`${file}`, () => {
       const code = fs.readFileSync(file, "utf8")
       console.log(`Testing ${file}:`)
       runTests(code)

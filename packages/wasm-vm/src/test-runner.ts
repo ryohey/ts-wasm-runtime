@@ -1,4 +1,3 @@
-import * as assert from "assert"
 import { wastParser, WATAssertReturn, WATModule } from "@ryohey/wat-parser"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { convertNumber } from "./number/convert"
@@ -51,6 +50,8 @@ export const runTests = (code: string) => {
   }
 
   for (const test of testCases) {
-    runTestCase(vm, test)
+    it(test.invoke, () => {
+      runTestCase(vm, test)
+    })
   }
 }

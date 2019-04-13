@@ -2,7 +2,10 @@ module.exports = {
   projects: ["packages/*"],
   globals: {
     "ts-jest": {
-      tsConfig: "tsconfig.json"
+      tsConfig: "tsconfig.json",
+      babelConfig: {
+        plugins: ["@babel/plugin-syntax-bigint"]
+      }
     }
   },
   moduleFileExtensions: ["ts", "js"],

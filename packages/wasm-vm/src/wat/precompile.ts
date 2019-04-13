@@ -41,14 +41,11 @@ const processInstruction = (
   labelStack: string[]
 ): Op.Any => {
   // 変数の identifier を index に置換
-  const resolveBlockLabel = (p: string | number) =>
-    isIdentifier(p) ? indexFromLast(labelStack, l => l === p) : p
-  const resolveGlobalLabel = (p: string | number) =>
-    isIdentifier(p) ? idTables.globals[p] : p
-  const resolveLocalLabel = (p: string | number) =>
-    isIdentifier(p) ? idTables.locals[p] : p
-  const resolveFuncLabel = (p: string | number) =>
-    isIdentifier(p) ? idTables.funcs[p] : p
+  const resolveBlockLabel = (p: string) =>
+    indexFromLast(labelStack, l => l === p)
+  const resolveGlobalLabel = (p: string) => idTables.globals[p]
+  const resolveLocalLabel = (p: string) => idTables.locals[p]
+  const resolveFuncLabel = (p: string) => idTables.funcs[p]
 
   switch (inst.opType) {
     case "text.if":
