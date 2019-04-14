@@ -76,4 +76,6 @@ export interface WATTable {
 export interface WATType {
   nodeType: "type"
   identifier: string | null
+  parameters: WATFunctionParameter[]
+  results: ValType[]
 }

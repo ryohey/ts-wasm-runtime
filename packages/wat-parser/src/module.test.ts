@@ -201,8 +201,13 @@ describe("module parser", () => {
         nodeType: "module",
         tables: [{ export: null, identifier: "$T0", nodeType: "table" }],
         types: [
-          { identifier: "$t0", nodeType: "type" },
-          { identifier: "$t1", nodeType: "type" }
+          { identifier: "$t0", nodeType: "type", parameters: [], results: [] },
+          {
+            identifier: "$t1",
+            nodeType: "type",
+            parameters: [],
+            results: ["i32"]
+          }
         ]
       },
       10
