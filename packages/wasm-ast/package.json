@@ -11,6 +11,6 @@
   "author": "ryohey",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "3.3.3"
+    "typescript": "3.5.3"
   }
 }

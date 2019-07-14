@@ -12,10 +12,10 @@
   "author": "ryohey",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "24.0.11",
-    "jest": "24.1.0",
-    "ts-jest": "24.0.0",
-    "typescript": "3.3.3"
+    "@types/jest": "24.0.15",
+    "jest": "24.8.0",
+    "ts-jest": "24.0.2",
+    "typescript": "3.5.3"
   },
   "dependencies": {
     "@ryohey/fn-parser": "file:../fn-parser"
