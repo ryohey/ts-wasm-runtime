@@ -169,7 +169,7 @@ const App = () => {
       const input = parsedInput[1]
       const result = vm.callFunction(
         input.name,
-        ...input.arguments.map(i32 => ({ i32 }))
+        ...input.arguments.map(i32 => ({ i32: parseInt(i32) }))
       )
       const resultStr = result.map(x => JSON.stringify(x)).join(", ")
 
