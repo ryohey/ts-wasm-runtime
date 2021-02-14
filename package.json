@@ -6,7 +6,6 @@
     "packages/*"
   ],
   "scripts": {
-    "install": "node ./scripts/run-all.js npm install",
     "test": "node ./scripts/run-all.js npm run test",
     "build": "node ./scripts/run-all.js npm run build"
   },

@@ -1,0 +1,89 @@
+{
+  // IntelliSense を使用して利用可能な属性を学べます。
+  // 既存の属性の説明をホバーして表示します。
+  // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+
+  "configurations": [
+    {
+      "type": "node",
+      "name": "test: s-parser",
+      "request": "launch",
+      "args": ["--runInBand"],
+      "cwd": "${workspaceFolder}/packages/s-parser",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/packages/s-parser/node_modules/jest/bin/jest"
+    },
+    {
+      "type": "node",
+      "name": "test: wasm-parser",
+      "request": "launch",
+      "args": ["--runInBand"],
+      "cwd": "${workspaceFolder}/packages/wasm-parser",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/packages/wasm-parser/node_modules/jest/bin/jest"
+    },
+    {
+      "type": "node",
+      "name": "test: array-helper",
+      "request": "launch",
+      "args": ["--runInBand"],
+      "cwd": "${workspaceFolder}/packages/array-helper",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/packages/array-helper/node_modules/jest/bin/jest"
+    },
+    {
+      "type": "node",
+      "name": "test: wasm-ast",
+      "request": "launch",
+      "args": ["--runInBand"],
+      "cwd": "${workspaceFolder}/packages/wasm-ast",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/packages/wasm-ast/node_modules/jest/bin/jest"
+    },
+    {
+      "type": "node",
+      "name": "test: fn-parser",
+      "request": "launch",
+      "args": ["--runInBand"],
+      "cwd": "${workspaceFolder}/packages/fn-parser",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/packages/fn-parser/node_modules/jest/bin/jest"
+    },
+    {
+      "type": "node",
+      "name": "test: wat-parser",
+      "request": "launch",
+      "args": ["--runInBand"],
+      "cwd": "${workspaceFolder}/packages/wat-parser",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/packages/wat-parser/node_modules/jest/bin/jest"
+    },
+    {
+      "type": "node",
+      "name": "test: wasm-vm",
+      "request": "launch",
+      "args": ["--runInBand"],
+      "cwd": "${workspaceFolder}/packages/wasm-vm",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/packages/wasm-vm/node_modules/jest/bin/jest"
+    },
+    {
+      "type": "node",
+      "name": "test: playground",
+      "request": "launch",
+      "args": ["--runInBand"],
+      "cwd": "${workspaceFolder}/packages/playground",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/packages/playground/node_modules/jest/bin/jest"
+    }
+  ]
+}
