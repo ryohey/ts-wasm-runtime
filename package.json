@@ -2,6 +2,9 @@
   "name": "ts-wasm-runtime",
   "version": "1.0.0",
   "description": "A toolkit for WebAssembly written in TypeScript",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "install": "node ./scripts/run-all.js npm install",
     "test": "node ./scripts/run-all.js npm run test",

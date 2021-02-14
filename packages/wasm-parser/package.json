@@ -20,8 +20,8 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
-    "@ryohey/fn-parser": "file:../fn-parser",
-    "@ryohey/wasm-ast": "file:../wasm-ast",
-    "@ryohey/array-helper": "file:../array-helper"
+    "@ryohey/array-helper": "^1.0.0",
+    "@ryohey/fn-parser": "^1.0.0",
+    "@ryohey/wasm-ast": "^1.0.0"
   }
 }

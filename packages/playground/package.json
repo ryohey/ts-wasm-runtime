@@ -12,11 +12,11 @@
   "author": "ryohey",
   "license": "MIT",
   "dependencies": {
-    "@ryohey/fn-parser": "file:../fn-parser",
-    "@ryohey/s-parser": "file:../s-parser",
-    "@ryohey/wat-parser": "file:../wat-parser",
-    "@ryohey/wasm-parser": "file:../wasm-parser",
-    "@ryohey/wasm-vm": "file:../wasm-vm",
+    "@ryohey/fn-parser": "^1.0.0",
+    "@ryohey/s-parser": "^1.0.0",
+    "@ryohey/wasm-parser": "^1.0.0",
+    "@ryohey/wasm-vm": "^1.0.0",
+    "@ryohey/wat-parser": "^1.0.0",
     "json-format-highlight": "1.0.1",
     "lit-html": "1.1.1"
   },

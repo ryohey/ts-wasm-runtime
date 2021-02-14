@@ -18,6 +18,6 @@
     "typescript": "3.5.3"
   },
   "dependencies": {
-    "@ryohey/fn-parser": "file:../fn-parser"
+    "@ryohey/fn-parser": "^1.0.0"
   }
 }

@@ -13,10 +13,10 @@
   "author": "ryohey",
   "license": "MIT",
   "dependencies": {
-    "@ryohey/array-helper": "file:../array-helper",
-    "@ryohey/wasm-ast": "file:../wasm-ast",
-    "@ryohey/wasm-parser": "file:../wasm-parser",
-    "@ryohey/wat-parser": "file:../wat-parser"
+    "@ryohey/array-helper": "^1.0.0",
+    "@ryohey/wasm-ast": "^1.0.0",
+    "@ryohey/wasm-parser": "^1.0.0",
+    "@ryohey/wat-parser": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "7.5.4",
