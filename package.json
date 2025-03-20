@@ -6,8 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "node ./scripts/run-all.js npm run test",
-    "build": "node ./scripts/run-all.js npm run build"
+    "test": "npm run test --workspaces",
+    "build": "npm run build --workspaces"
   },
   "repository": {
     "type": "git",
