@@ -15,6 +15,25 @@ This is a hobby project for learning about WASM.
 - wasm-vm - WebAssembly runtime
 - playground - Interactive testing environment for browsers
 
+## Run Playground
+
+```sh
+npm install
+npm run dev
+```
+
+## Build
+
+```sh
+npm run build
+```
+
+## Test
+
+```sh
+npm test
+```
+
 ## [Playground](https://ryohey.github.io/ts-wasm-runtime/)
 
 ![playground screen shot](https://user-images.githubusercontent.com/5355966/52725085-d7777780-2ff3-11e9-98a4-3cdd0d425f05.png)

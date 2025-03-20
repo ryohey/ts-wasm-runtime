@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
+    "outDir": "dist",
     "target": "esnext",
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": false,
     "declaration": true,

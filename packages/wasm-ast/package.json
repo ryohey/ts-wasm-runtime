@@ -2,6 +2,7 @@
   "name": "@ryohey/wasm-ast",
   "version": "1.0.0",
   "description": "WebAssembly AST type definitions.",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

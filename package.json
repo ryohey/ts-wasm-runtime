@@ -3,16 +3,24 @@
   "version": "1.0.0",
   "description": "A toolkit for WebAssembly written in TypeScript",
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "test": "npm run test --workspaces",
-    "build": "npm run build --workspaces"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "test": "turbo run test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ryohey/ts-wasm-runtime.git"
   },
   "author": "ryohey",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "turbo": "^2.4.4"
+  },
+  "packageManager": "npm@10.8.1"
 }

@@ -5,17 +5,17 @@ import { moduleParser as watParser } from "@ryohey/wat-parser"
 import {
   WASMVirtualMachine,
   watModuleToWasmModule,
-  wasmToVMModule
+  wasmToVMModule,
 } from "@ryohey/wasm-vm"
 import { moduleParser as wasmParser } from "@ryohey/wasm-parser"
-import * as formatHighlight from "json-format-highlight"
+import formatHighlight from "json-format-highlight"
 
 import "./style.css"
 import { parseConsoleInput } from "./console-parser"
 
 enum InputMode {
   text,
-  binary
+  binary,
 }
 
 interface State {
@@ -28,7 +28,7 @@ interface State {
 
 let store: (update?: any) => State
 
-const JSONView = json =>
+const JSONView = (json) =>
   Code(
     unsafeHTML(
       formatHighlight(json, {
@@ -37,16 +37,14 @@ const JSONView = json =>
         nullColor: "#929292",
         numberColor: "white",
         trueColor: "white",
-        falseColor: "white"
+        falseColor: "white",
       })
     )
   )
 
-const Code = code => html`
-  <pre class="Code"><code>${code}</code></pre>
-`
+const Code = (code) => html` <pre class="Code"><code>${code}</code></pre> `
 
-const Error = message => html`
+const Error = (message) => html`
   <pre class="Code Error"><code>${message}</code></pre>
 `
 
@@ -118,13 +116,13 @@ const App = () => {
     consoleInput,
     consoleOutput,
     inputMode,
-    wasmBinary
+    wasmBinary,
   } = store()
   const parsedS = sParser(sParserInput, 0)
   const watModule = parsedS[0] ? watParser(parsedS[1], 0) : null
 
   const wasmHexString = wasmBinary
-    ? wasmBinary.map(n => n.toString(16)).join(" ")
+    ? wasmBinary.map((n) => n.toString(16)).join(" ")
     : ""
   const wasmModule = wasmBinary ? wasmParser(wasmBinary, 0) : null
   const module = (() => {
@@ -140,15 +138,15 @@ const App = () => {
     }
   })()
 
-  const onChangeText = e => {
+  const onChangeText = (e) => {
     store({ sParserInput: e.target.value })
   }
 
-  const onChangeConsoleInput = e => {
+  const onChangeConsoleInput = (e) => {
     store({ consoleInput: e.target.value })
   }
 
-  const onKeyPressConsoleInput = e => {
+  const onKeyPressConsoleInput = (e) => {
     if (e.key === "Enter") {
       if (module === null) {
         return
@@ -162,22 +160,22 @@ const App = () => {
         const output = `> ${consoleInput}\ninvalid command: ${parsedInput[3]}`
         store({
           consoleInput: "",
-          consoleOutput: [...consoleOutput, output]
+          consoleOutput: [...consoleOutput, output],
         })
         return
       }
       const input = parsedInput[1]
       const result = vm.callFunction(
         input.name,
-        ...input.arguments.map(i32 => ({ i32: parseInt(i32) }))
+        ...input.arguments.map((i32) => ({ i32: parseInt(i32) }))
       )
-      const resultStr = result.map(x => JSON.stringify(x)).join(", ")
+      const resultStr = result.map((x) => JSON.stringify(x)).join(", ")
 
       const output = `> ${consoleInput}\n${resultStr}`
 
       store({
         consoleInput: "",
-        consoleOutput: [...consoleOutput, output]
+        consoleOutput: [...consoleOutput, output],
       })
     }
   }
@@ -188,7 +186,7 @@ const App = () => {
       const arrayBuffer = reader.result as ArrayBuffer
       const array = Array.from(new Uint8Array(arrayBuffer))
       store({
-        wasmBinary: array
+        wasmBinary: array,
       })
     }
     reader.readAsArrayBuffer((e.currentTarget as HTMLInputElement).files[0])
@@ -205,12 +203,12 @@ const App = () => {
           [
             {
               label: "Text",
-              data: InputMode.text
+              data: InputMode.text,
             },
             {
               label: "Binary",
-              data: InputMode.binary
-            }
+              data: InputMode.binary,
+            },
           ],
           "input-select",
           inputMode,
@@ -238,9 +236,7 @@ const App = () => {
                 <section>
                   <h2>WebAssembly Text Format Parser</h2>
                   ${watModule &&
-                    (watModule[0]
-                      ? JSONView(watModule[1])
-                      : Error(watModule[3]))}
+                  (watModule[0] ? JSONView(watModule[1]) : Error(watModule[3]))}
                 </section>
               `
             : null
@@ -260,9 +256,9 @@ const App = () => {
                 <section>
                   <h2>WebAssembly Binary Format Parser</h2>
                   ${wasmModule &&
-                    (wasmModule[0]
-                      ? JSONView(wasmModule[1])
-                      : Error(wasmModule[3]))}
+                  (wasmModule[0]
+                    ? JSONView(wasmModule[1])
+                    : Error(wasmModule[3]))}
                 </section>
               `
             : null
@@ -286,13 +282,11 @@ const App = () => {
               ${
                 module !== null
                   ? module.functions
-                      .filter(fn => fn.export)
+                      .filter((fn) => fn.export)
                       .map(
-                        fn =>
+                        (fn) =>
                           html`
-                            <li>
-                              ${fn.export}(${fn.parameters.join(", ")})
-                            </li>
+                            <li>${fn.export}(${fn.parameters.join(", ")})</li>
                           `
                       )
                   : null
@@ -329,6 +323,6 @@ store = createStore({
   wasmBinary: null,
   sParserInput: placeholder,
   consoleInput: "",
-  consoleOutput: []
+  consoleOutput: [],
 })
 renderApp()

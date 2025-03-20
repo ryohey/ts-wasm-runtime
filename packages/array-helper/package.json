@@ -2,6 +2,7 @@
   "name": "@ryohey/array-helper",
   "version": "1.0.0",
   "description": "Minimum array helper library",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

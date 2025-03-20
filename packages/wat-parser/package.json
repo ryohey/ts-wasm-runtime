@@ -2,6 +2,7 @@
   "name": "@ryohey/wat-parser",
   "version": "1.0.0",
   "description": "WebAssembly text format parser",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
