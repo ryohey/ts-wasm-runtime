@@ -23,6 +23,8 @@ interface State {
   wasmBinary: number[]
   sParserInput: string
   consoleInput: string
+  consoleHistory: string[]
+  consoleHistoryIndex: number
   consoleOutput: string[]
 }
 
@@ -152,7 +154,7 @@ const App = () => {
         return
       }
 
-      const { consoleInput, consoleOutput } = store()
+      const { consoleInput, consoleOutput, consoleHistory } = store()
 
       const vm = new WASMVirtualMachine(module)
       const parsedInput = parseConsoleInput(consoleInput, 0)
@@ -164,6 +166,12 @@ const App = () => {
         })
         return
       }
+
+      store( {
+        consoleHistory: [...consoleHistory, consoleInput],
+        consoleHistoryIndex: consoleHistory.length + 1,
+      })
+
       const input = parsedInput[1]
       const result = vm.callFunction(
         input.name,
@@ -178,6 +186,28 @@ const App = () => {
         consoleOutput: [...consoleOutput, output],
       })
     }
+
+    else if (e.key === "ArrowUp") {
+      const { consoleHistory, consoleHistoryIndex } = store();
+      if (consoleHistory.length > 0) {
+        const historyIndex = Math.max(0, consoleHistoryIndex - 1);
+        const lastInput = consoleHistory[historyIndex];
+        store({
+          consoleInput: lastInput,
+          consoleHistoryIndex: historyIndex,
+        });
+      }
+    }
+    else if (e.key === "ArrowDown") {
+      const { consoleHistory, consoleHistoryIndex } = store();
+      const historyIndex = Math.min( consoleHistory.length - 1, consoleHistoryIndex + 1);
+      const nextInput = consoleHistory[historyIndex];
+      store({
+        consoleInput: nextInput,
+        consoleHistoryIndex: historyIndex,
+      });
+    }
+
   }
 
   const onChangeFile = (e: Event) => {
@@ -273,7 +303,7 @@ const App = () => {
                 type="text" 
                 .value=${consoleInput} 
                 @input=${onChangeConsoleInput}
-                @keypress=${onKeyPressConsoleInput}
+                @keydown=${onKeyPressConsoleInput}
               />
             </div>
             <div class="section functions">
@@ -323,6 +353,8 @@ store = createStore({
   wasmBinary: null,
   sParserInput: placeholder,
   consoleInput: "",
+  consoleHistory: [],
+  consoleHistoryIndex: 0,
   consoleOutput: [],
 })
 renderApp()
