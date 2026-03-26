@@ -2,9 +2,11 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "strict": false,
+    "noUncheckedIndexedAccess": false,
+    "useUnknownInCatchVariables": false,
     "types": [],
-    "allowSyntheticDefaultImports": false,
     "declaration": true,
     "sourceMap": true
   },

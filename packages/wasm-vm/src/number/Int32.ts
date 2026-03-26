@@ -17,7 +17,7 @@ export class Int32 {
   static hex = (value: string): Int32 => new Int32(Number.parseInt(value, 16))
   static bool = (value: boolean): Int32 => (value ? Int32.one : Int32.zero)
   static bytes = (v: Uint8Array): Int32 => {
-    const data = new DataView(v)
+    const data = new DataView(v.buffer, v.byteOffset, v.byteLength)
     return new Int32(data.getInt32(0))
   }
 

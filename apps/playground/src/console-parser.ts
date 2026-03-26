@@ -27,7 +27,7 @@ const separated = <T>(
 
 const functionCall = map(
   seq(
-    regexp(/[a-zA-Z0-9!#$%&'*+\-\./:<=>?@\\\^_`|~]+/),
+    regexp(/[a-zA-Z0-9!#$%&'*+\-./:<=>?@\\^_`|~]+/),
     token("\\("),
     opt(separated(number, ",")),
     token("\\)"),

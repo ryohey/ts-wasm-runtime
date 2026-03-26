@@ -1,8 +1,9 @@
 // 戻り値の最後はデバッグ情報
-export type Parser<T, S> = (
-  target: T,
-  position: number,
-) => [boolean, S, number, string?]
+export type ParseResult<S> =
+  | [true, S, number, string?]
+  | [false, null, number, string?]
+
+export type Parser<T, S> = (target: T, position: number) => ParseResult<S>
 
 export function seq<T, P0, P1>(
   ...parsers: [Parser<T, P0>, Parser<T, P1>]
@@ -96,9 +97,8 @@ export function or<T>(...parsers: Parser<T, any>[]): Parser<T, any> {
       const parsed = parser(target, position)
       if (parsed[0]) {
         return parsed
-      } else {
-        errors.push(parser[2])
       }
+      errors.push(parsed[3] ?? "unknown")
     }
     return [
       false,
@@ -154,9 +154,8 @@ export const map =
     const result = parser(target, position)
     if (result[0]) {
       return [result[0], transform(result[1]), result[2]]
-    } else {
-      return [false, null, result[2], `map@${position}: ${result[3]}`]
     }
+    return [false, null, result[2], `map@${position}: ${result[3]}`]
   }
 
 export const transform =

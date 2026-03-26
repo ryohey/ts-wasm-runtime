@@ -47,7 +47,7 @@ describe("block", () => {
   })
   it("parses multiple instructions", () => {
     const sExp = sParser(
-      `((block (result f32) (call $dummy) (f32.const 3)))`,
+      "((block (result f32) (call $dummy) (f32.const 3)))",
       0,
     )
     const r = blockInstructions(sExp[1], 0)

@@ -1,5 +1,5 @@
 import { html, render } from "lit-html"
-import { unsafeHTML } from "lit-html/directives/unsafe-html"
+import { unsafeHTML } from "lit-html/directives/unsafe-html.js"
 import { parser as sParser } from "@ryohey/s-parser"
 import { moduleParser as watParser } from "@ryohey/wat-parser"
 import {

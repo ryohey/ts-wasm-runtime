@@ -119,7 +119,7 @@ describe("parser", () => {
   })
 
   it("parses i32.load", () => {
-    const r = parser(`(i32.load offset=123 align=456)`, 0)
+    const r = parser("(i32.load offset=123 align=456)", 0)
     expect(r).toStrictEqual([true, ["i32.load", "offset=123", "align=456"], 31])
   })
 })

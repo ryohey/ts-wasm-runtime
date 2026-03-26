@@ -2,7 +2,10 @@
   "name": "ts-wasm-runtime",
   "version": "1.0.0",
   "description": "A toolkit for WebAssembly written in TypeScript",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -22,7 +25,7 @@
     "esbuild": "^0.27.4",
     "rollup": "^4.60.0",
     "turbo": "^2.8.20",
-    "vitest": "^4.1.1"
+    "vitest": "2.1.9"
   },
   "packageManager": "npm@11.12.0"
 }

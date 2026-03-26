@@ -29,7 +29,7 @@ export const variable =
     if (target.length < position + size) {
       return [
         false,
-        target,
+        null,
         position,
         `target is smaller than ${position + size}`,
       ]

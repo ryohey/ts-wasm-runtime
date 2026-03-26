@@ -20,7 +20,7 @@ export const identifier = regexp(
   /^(\$[a-zA-Z_][a-zA-Z0-9_.+-\\*/\\^~=<>!?@#$%&|:'`]*)$/,
 )
 export const name = regexp(/^([a-zA-Z]+)$/)
-export const string = regexp(/^\"(.+)\"/)
+export const string = regexp(/^"(.+)"/)
 
 export const num = map(intOrHex, Number.parseInt)
 export const indices = or(num, identifier)
