@@ -1,5 +1,5 @@
 import { byte, var1, variable } from "./utils"
-import { or, map, seqMap, Parser, seq } from "@ryohey/fn-parser"
+import { or, map, seqMap, type Parser, seq } from "@ryohey/fn-parser"
 import { ValType } from "@ryohey/wasm-ast"
 import { u32 } from "./number"
 

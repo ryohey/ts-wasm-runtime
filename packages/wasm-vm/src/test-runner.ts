@@ -1,4 +1,8 @@
-import { wastParser, WATAssertReturn, WATModule } from "@ryohey/wat-parser"
+import {
+  wastParser,
+  type WATAssertReturn,
+  type WATModule,
+} from "@ryohey/wat-parser"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { convertNumber } from "./number/convert"
 import { watModuleToWasmModule } from "./wat"
@@ -14,7 +18,7 @@ const isModule = (n: ASTTopNode): n is WATModule => n.nodeType === "module"
 const runTestCase = (
   vm: WASMVirtualMachine,
   ast: WATAssertReturn,
-  verbose: boolean = false,
+  verbose = false,
 ) => {
   const log = (msg: string) => {
     if (verbose) {

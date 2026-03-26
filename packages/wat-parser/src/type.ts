@@ -1,5 +1,5 @@
 import { map, seq, opt, many } from "@ryohey/fn-parser"
-import { WATType } from "./moduleTypes"
+import type { WATType } from "./moduleTypes"
 import { identifier, blockType } from "./types"
 import { keyword, array } from "./utils"
 import { param } from "./func"

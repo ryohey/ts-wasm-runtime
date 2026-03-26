@@ -1,5 +1,5 @@
-import { WASMMemoryValue, WASMCode, WASMMemory } from "../wasm-memory"
-import { Instruction } from "../vm"
+import { type WASMMemoryValue, WASMCode, type WASMMemory } from "../wasm-memory"
+import type { Instruction } from "../vm"
 import { Int32 } from "../number"
 
 export const monop =

@@ -1,4 +1,4 @@
-import { NumberValue, Op } from "@ryohey/wasm-ast"
+import type { NumberValue, Op } from "@ryohey/wasm-ast"
 import { f32InstructionSet } from "./instructions/f32"
 import { f64InstructionSet } from "./instructions/f64"
 import { i32InstructionSet } from "./instructions/i32"
@@ -7,8 +7,8 @@ import { memoryInstructionSet } from "./instructions/memory"
 import { variableInstructionSet } from "./instructions/variable"
 import { convertNumber } from "./number/convert"
 import { Stack } from "./stack"
-import { InstructionSet, virtualMachine } from "./vm"
-import {
+import { type InstructionSet, virtualMachine } from "./vm"
+import type {
   PartialInstructionSet,
   WASMCode,
   WASMMemory,
@@ -16,7 +16,7 @@ import {
   WASMTable,
 } from "./wasm-memory"
 import { createFunction } from "./block"
-import { WASMElem, WASMGlobal, WASMFunction, WASMModule } from "./module"
+import type { WASMElem, WASMGlobal, WASMFunction, WASMModule } from "./module"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 

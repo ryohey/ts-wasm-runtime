@@ -2,14 +2,14 @@ import { float } from "./float"
 
 describe("float", () => {
   it("parses nan", () => {
-    expect(float("nan", 0)).toStrictEqual([true, NaN, 3])
-    expect(float("-nan", 0)).toStrictEqual([true, NaN, 4])
-    expect(float("-nan:0x200000", 0)).toStrictEqual([true, NaN, 13])
+    expect(float("nan", 0)).toStrictEqual([true, Number.NaN, 3])
+    expect(float("-nan", 0)).toStrictEqual([true, Number.NaN, 4])
+    expect(float("-nan:0x200000", 0)).toStrictEqual([true, Number.NaN, 13])
   })
 
   it("parses inf", () => {
-    expect(float("inf", 0)).toStrictEqual([true, Infinity, 3])
-    expect(float("-inf", 0)).toStrictEqual([true, -Infinity, 4])
+    expect(float("inf", 0)).toStrictEqual([true, Number.POSITIVE_INFINITY, 3])
+    expect(float("-inf", 0)).toStrictEqual([true, Number.NEGATIVE_INFINITY, 4])
   })
 
   it("parses hex", () => {

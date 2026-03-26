@@ -1,7 +1,7 @@
-import { map, seq, Parser, seqMap } from "@ryohey/fn-parser"
+import { map, seq, type Parser, seqMap } from "@ryohey/fn-parser"
 import { byte, variable } from "../utils"
 import { u32 } from "../number"
-import { Bytes } from "../types"
+import type { Bytes } from "../types"
 
 export interface SectionStart {
   id: number

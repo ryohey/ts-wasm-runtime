@@ -1,4 +1,4 @@
-import { seq, Parser, many, map, or, opt } from "@ryohey/fn-parser"
+import { seq, type Parser, many, map, or, opt } from "@ryohey/fn-parser"
 
 const regexp =
   (reg: RegExp): Parser<string, string> =>

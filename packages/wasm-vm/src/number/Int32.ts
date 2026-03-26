@@ -1,4 +1,4 @@
-import { Int32Value } from "@ryohey/wasm-ast"
+import type { Int32Value } from "@ryohey/wasm-ast"
 import { countTrailingZeros, countLeadingZeros, popCount } from "./bin"
 import { signed, unsigned } from "./integer"
 
@@ -14,7 +14,7 @@ export class Int32 {
   toObject = (): Int32Value => ({ i32: this.value })
 
   static obj = (value: Int32Value): Int32 => new Int32(value.i32)
-  static hex = (value: string): Int32 => new Int32(parseInt(value, 16))
+  static hex = (value: string): Int32 => new Int32(Number.parseInt(value, 16))
   static bool = (value: boolean): Int32 => (value ? Int32.one : Int32.zero)
   static bytes = (v: Uint8Array): Int32 => {
     const data = new DataView(v)

@@ -1,11 +1,15 @@
-import { ValType } from "@ryohey/wasm-ast"
+import type { ValType } from "@ryohey/wasm-ast"
 import { Int32, Int64 } from "../number"
-import { PartialInstructionSet, WASMCode, WASMMemory } from "../wasm-memory"
+import type {
+  PartialInstructionSet,
+  WASMCode,
+  WASMMemory,
+} from "../wasm-memory"
 import {
   BreakPosition,
   createBlock,
   createFunction,
-  FlowControl,
+  type FlowControl,
 } from "../block"
 
 const callFunc = (memory: WASMMemory, funcId: number) => {

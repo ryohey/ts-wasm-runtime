@@ -1,5 +1,5 @@
-import { Parser, seq, seqMap, vec, pass } from "@ryohey/fn-parser"
-import { Bytes, Byte } from "./types"
+import { type Parser, seq, seqMap, vec, pass } from "@ryohey/fn-parser"
+import type { Bytes, Byte } from "./types"
 
 export const char =
   (chr: string): Parser<Bytes, Byte> =>

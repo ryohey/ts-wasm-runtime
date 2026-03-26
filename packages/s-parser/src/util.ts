@@ -1,4 +1,4 @@
-import { Parser } from "@ryohey/fn-parser"
+import type { Parser } from "@ryohey/fn-parser"
 
 export const token =
   <T extends string>(word: T): Parser<string, T> =>

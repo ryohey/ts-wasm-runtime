@@ -1,7 +1,7 @@
-import { or, map, Parser, seq } from "@ryohey/fn-parser"
+import { or, map, type Parser, seq } from "@ryohey/fn-parser"
 import { byte, vector } from "../utils"
-import { ValType, Op } from "@ryohey/wasm-ast"
-import { Bytes, valType } from "../types"
+import type { ValType, Op } from "@ryohey/wasm-ast"
+import { type Bytes, valType } from "../types"
 import { initializer } from "../operations"
 import { section } from "./section"
 

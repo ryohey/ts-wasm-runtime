@@ -1,7 +1,7 @@
-import { Op } from "@ryohey/wasm-ast"
-import { map, seq, or, many, lazy, opt, Parser } from "@ryohey/fn-parser"
+import type { Op } from "@ryohey/wasm-ast"
+import { map, seq, or, many, lazy, opt, type Parser } from "@ryohey/fn-parser"
 import { byte, var1, vector } from "./utils"
-import { valType, Bytes } from "./types"
+import { valType, type Bytes } from "./types"
 import { i64, i32, f32, f64, u32 } from "./number"
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>

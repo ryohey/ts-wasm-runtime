@@ -1,5 +1,5 @@
-import { Module } from "@ryohey/wasm-parser"
-import { WASMModule, WASMFunction } from "./module"
+import type { Module } from "@ryohey/wasm-parser"
+import type { WASMModule, WASMFunction } from "./module"
 
 export const wasmToVMModule = (wasm: Module): WASMModule => {
   const functions = wasm.funcs.map((f, i) => {

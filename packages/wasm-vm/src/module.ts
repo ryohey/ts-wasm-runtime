@@ -1,4 +1,4 @@
-import { ValType, Op } from "@ryohey/wasm-ast"
+import type { ValType, Op } from "@ryohey/wasm-ast"
 
 export interface WASMElem {
   offset: Op.Initializer

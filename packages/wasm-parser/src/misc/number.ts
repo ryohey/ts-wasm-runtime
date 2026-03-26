@@ -11,5 +11,5 @@ export const zeroPad = (binary: string, bitWidth: number): string => {
 export const binToHex = (str: string) =>
   zeroPad(str, Math.ceil(str.length / 8) * 8)
     .match(/.{8}/g)
-    .map((n) => parseInt(n, 2).toString(16))
+    .map((n) => Number.parseInt(n, 2).toString(16))
     .join("")

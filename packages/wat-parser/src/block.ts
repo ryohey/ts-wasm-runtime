@@ -1,10 +1,10 @@
 import { flatten } from "@ryohey/array-helper"
-import { lazy, many, map, opt, or, Parser, seq } from "@ryohey/fn-parser"
-import { Element } from "@ryohey/s-parser"
+import { lazy, many, map, opt, or, type Parser, seq } from "@ryohey/fn-parser"
+import type { Element } from "@ryohey/s-parser"
 import { operations } from "./operations"
 import { blockType, identifier } from "./types"
 import { array, keyword } from "./utils"
-import { TextOp } from "."
+import type { TextOp } from "."
 
 const instructions = lazy(() => operations)
 

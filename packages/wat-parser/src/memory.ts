@@ -1,7 +1,7 @@
 import { map, seq, opt } from "@ryohey/fn-parser"
 import { string, identifier, num } from "./types"
 import { keyword, array } from "./utils"
-import { WATMemory } from "./moduleTypes"
+import type { WATMemory } from "./moduleTypes"
 
 export const moduleMemory = map(
   seq(

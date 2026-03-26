@@ -1,6 +1,6 @@
-import { ValType } from "@ryohey/wasm-ast"
-import { Parser, map, seq } from "@ryohey/fn-parser"
-import { Bytes, valType } from "../types"
+import type { ValType } from "@ryohey/wasm-ast"
+import { type Parser, map, seq } from "@ryohey/fn-parser"
+import { type Bytes, valType } from "../types"
 import { byte, vector } from "../utils"
 import { section } from "./section"
 

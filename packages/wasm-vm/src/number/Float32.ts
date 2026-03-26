@@ -1,4 +1,4 @@
-import { Float32Value } from "@ryohey/wasm-ast"
+import type { Float32Value } from "@ryohey/wasm-ast"
 
 export class Float32 {
   readonly value: number

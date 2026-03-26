@@ -1,6 +1,6 @@
-import { FuncRef } from "./import"
-import { Parser, map } from "@ryohey/fn-parser"
-import { Bytes, funcIdx } from "../types"
+import type { FuncRef } from "./import"
+import { type Parser, map } from "@ryohey/fn-parser"
+import { type Bytes, funcIdx } from "../types"
 import { section } from "./section"
 import { vector } from "../utils"
 

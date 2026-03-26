@@ -1,7 +1,7 @@
 // Utilities for Parser<Element[]>
 
-import { Parser } from "@ryohey/fn-parser"
-import { Element } from "@ryohey/s-parser"
+import type { Parser } from "@ryohey/fn-parser"
+import type { Element } from "@ryohey/s-parser"
 
 const isString = (x: any): x is string => typeof x === "string"
 

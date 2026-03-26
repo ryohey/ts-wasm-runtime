@@ -1,5 +1,5 @@
 import { map, seq, or } from "@ryohey/fn-parser"
-import { WATExport } from "./moduleTypes"
+import type { WATExport } from "./moduleTypes"
 import { string, identifier } from "./types"
 import { keyword, array } from "./utils"
 

@@ -1,5 +1,5 @@
 import { map, seq, or, opt } from "@ryohey/fn-parser"
-import { WATGlobal } from "./moduleTypes"
+import type { WATGlobal } from "./moduleTypes"
 import { string, identifier, valType } from "./types"
 import { keyword, array } from "./utils"
 import { initializerInstructions } from "./operations"

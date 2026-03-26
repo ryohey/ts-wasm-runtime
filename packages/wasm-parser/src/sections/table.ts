@@ -1,5 +1,5 @@
-import { Parser, map, seq } from "@ryohey/fn-parser"
-import { Bytes, Limits, limits } from "../types"
+import { type Parser, map, seq } from "@ryohey/fn-parser"
+import { type Bytes, type Limits, limits } from "../types"
 import { byte, vector } from "../utils"
 import { section } from "./section"
 

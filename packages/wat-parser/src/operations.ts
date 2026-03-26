@@ -1,6 +1,6 @@
-import { or, seq, many, map, Parser, lazy, opt } from "@ryohey/fn-parser"
-import { Element } from "@ryohey/s-parser"
-import { Op } from "@ryohey/wasm-ast"
+import { or, seq, many, map, type Parser, lazy, opt } from "@ryohey/fn-parser"
+import type { Element } from "@ryohey/s-parser"
+import type { Op } from "@ryohey/wasm-ast"
 import { keyword, array, regexp } from "./utils"
 import {
   int32,
@@ -14,7 +14,7 @@ import {
 import { blockInstructions } from "./block"
 import { flatten } from "@ryohey/array-helper"
 import { ifParser } from "./if"
-import * as TextOp from "./operationTypes"
+import type * as TextOp from "./operationTypes"
 
 // operation with no parameters
 const op = <T extends Op.Any>(str: T["opType"]): Parser<Element[], T> =>
@@ -74,7 +74,7 @@ const opN = <T extends Op.ParamMany<string, any>>(
   )
 
 export const attr = (str: string) =>
-  map(regexp(new RegExp(`^${str}=([0-9]+)`)), (r) => parseInt(r, 10))
+  map(regexp(new RegExp(`^${str}=([0-9]+)`)), (r) => Number.parseInt(r, 10))
 
 const memOp = <S extends Op.Mem<any>>(str: S["opType"]) =>
   map(

@@ -1,11 +1,11 @@
-import { ValType } from "@ryohey/wasm-ast"
-import { WASMMemory, WASMCode, WASMMemoryValue } from "./wasm-memory"
+import type { ValType } from "@ryohey/wasm-ast"
+import type { WASMMemory, WASMCode, WASMMemoryValue } from "./wasm-memory"
 import { range } from "@ryohey/array-helper"
 import { numberValue, convertNumber } from "./number/convert"
 import { Stack } from "./stack"
 import { createWASMVM } from "./wasm-vm"
 import { controlInstructionSet } from "./instructions/control"
-import { WASMFunction } from "./module"
+import type { WASMFunction } from "./module"
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
@@ -15,8 +15,8 @@ export interface FlowControl {
 }
 
 export enum BreakPosition {
-  tail,
-  head,
+  tail = 0,
+  head = 1,
 }
 
 export const createFunction = (fn: WASMFunction) => {

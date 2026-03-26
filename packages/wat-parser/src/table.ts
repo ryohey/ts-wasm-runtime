@@ -1,5 +1,5 @@
 import { map, seq, opt } from "@ryohey/fn-parser"
-import { WATTable } from "./moduleTypes"
+import type { WATTable } from "./moduleTypes"
 import { string, identifier, name, num } from "./types"
 import { keyword, array } from "./utils"
 

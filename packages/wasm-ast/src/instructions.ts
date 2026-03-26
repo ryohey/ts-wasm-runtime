@@ -1,4 +1,4 @@
-import {
+import type {
   Int32Value,
   Int64Value,
   Float32Value,

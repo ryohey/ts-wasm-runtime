@@ -1,7 +1,7 @@
-import { map, seq, opt, Parser, many } from "@ryohey/fn-parser"
-import { Element } from "@ryohey/s-parser"
+import { map, seq, opt, type Parser, many } from "@ryohey/fn-parser"
+import type { Element } from "@ryohey/s-parser"
 import { flatten } from "@ryohey/array-helper"
-import {
+import type {
   WATFunctionParameter,
   WATFunctionLocal,
   WATFunction,

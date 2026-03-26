@@ -1,5 +1,5 @@
 import { seq, or, map, many } from "@ryohey/fn-parser"
-import { Element } from "@ryohey/s-parser"
+import type { Element } from "@ryohey/s-parser"
 import { func } from "./func"
 import { keyword, array } from "./utils"
 import { moduleExport } from "./export"
@@ -8,7 +8,7 @@ import { moduleMemory } from "./memory"
 import { moduleTable } from "./table"
 import { moduleType } from "./type"
 import { moduleElem } from "./elem"
-import {
+import type {
   WATSection,
   WATExport,
   WATFunction,

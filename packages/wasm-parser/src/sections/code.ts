@@ -1,4 +1,4 @@
-import { ValType, Op } from "@ryohey/wasm-ast"
+import type { ValType, Op } from "@ryohey/wasm-ast"
 import { map, seq } from "@ryohey/fn-parser"
 import { u32 } from "../number"
 import { valType } from "../types"

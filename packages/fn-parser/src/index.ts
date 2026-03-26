@@ -47,7 +47,7 @@ export function seq<T, P0>(...parsers: Parser<T, P0>[]): Parser<T, P0[]>
 export function seq<T, S>(...parsers: Parser<T, S>[]): Parser<T, S[]> {
   return (target, position) => {
     const result = []
-    for (let parser of parsers) {
+    for (const parser of parsers) {
       const parsed = parser(target, position)
       if (parsed[0]) {
         result.push(parsed[1])
@@ -92,7 +92,7 @@ export function or<T, P0, P1, P2, P3, P4, P5>(
 export function or<T>(...parsers: Parser<T, any>[]): Parser<T, any> {
   return (target, position) => {
     const errors: string[] = []
-    for (let parser of parsers) {
+    for (const parser of parsers) {
       const parsed = parser(target, position)
       if (parsed[0]) {
         return parsed

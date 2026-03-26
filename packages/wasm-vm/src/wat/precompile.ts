@@ -1,7 +1,12 @@
 import { fromPairs } from "./array"
-import { WATFunction, WATElem, WATModule, TextOp } from "@ryohey/wat-parser"
-import { Op } from "@ryohey/wasm-ast"
-import { WASMFunction, WASMElem, WASMModule } from "../module"
+import type {
+  WATFunction,
+  WATElem,
+  WATModule,
+  TextOp,
+} from "@ryohey/wat-parser"
+import type { Op } from "@ryohey/wasm-ast"
+import type { WASMFunction, WASMElem, WASMModule } from "../module"
 
 const isString = (x: any): x is string => typeof x === "string"
 

@@ -1,4 +1,4 @@
-import { Parser, or, seq, lazy, opt, many, map } from "@ryohey/fn-parser"
+import { type Parser, or, seq, lazy, opt, many, map } from "@ryohey/fn-parser"
 import { regexp, token } from "./util"
 
 export type Element = string | ElementArray

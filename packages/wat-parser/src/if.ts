@@ -3,7 +3,7 @@ import { keyword, array } from "./utils"
 import { operations } from "./operations"
 import { blockType, identifier } from "./types"
 import { flatten } from "@ryohey/array-helper"
-import * as TextOp from "./operationTypes"
+import type * as TextOp from "./operationTypes"
 
 const instructions = lazy(() => operations)
 

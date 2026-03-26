@@ -16,7 +16,28 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "a11y": {
+        "useGenericFontNames": "warn"
+      },
+      "complexity": {
+        "noForEach": "warn",
+        "useOptionalChain": "warn"
+      },
+      "style": {
+        "noParameterAssign": "warn",
+        "noUnusedTemplateLiteral": "warn",
+        "noUselessElse": "warn",
+        "useConst": "warn",
+        "useExponentiationOperator": "warn",
+        "useNodejsImportProtocol": "warn",
+        "useTemplate": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn",
+        "noShadowRestrictedNames": "warn",
+        "noThenProperty": "warn"
+      }
     }
   }
 }

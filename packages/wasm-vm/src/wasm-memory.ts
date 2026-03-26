@@ -1,14 +1,14 @@
-import { Instruction, VMMemory } from "./vm"
-import { Stack } from "./stack"
-import {
+import type { Instruction, VMMemory } from "./vm"
+import type { Stack } from "./stack"
+import type {
   Int32Value,
   Int64Value,
   Float32Value,
   Float64Value,
   Op,
 } from "@ryohey/wasm-ast"
-import { Int32, Float32, Int64, Float64 } from "./number"
-import { WASMFunction } from "./module"
+import type { Int32, Float32, Int64, Float64 } from "./number"
+import type { WASMFunction } from "./module"
 
 export type WASMCodeParameter =
   | number

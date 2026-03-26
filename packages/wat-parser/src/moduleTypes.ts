@@ -1,5 +1,5 @@
-import { ValType } from "@ryohey/wasm-ast"
-import * as TextOp from "./operationTypes"
+import type { ValType } from "@ryohey/wasm-ast"
+import type * as TextOp from "./operationTypes"
 
 export interface WATModule {
   nodeType: "module"

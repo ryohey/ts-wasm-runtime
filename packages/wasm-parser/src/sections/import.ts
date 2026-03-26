@@ -1,7 +1,14 @@
 import { section } from "./section"
 import { vector, byte } from "../utils"
-import { Parser, map, seq, or } from "@ryohey/fn-parser"
-import { Bytes, name, typeIdx, tableIdx, memIdx, globalIdx } from "../types"
+import { type Parser, map, seq, or } from "@ryohey/fn-parser"
+import {
+  type Bytes,
+  name,
+  typeIdx,
+  tableIdx,
+  memIdx,
+  globalIdx,
+} from "../types"
 
 export interface FuncRef {
   func: number

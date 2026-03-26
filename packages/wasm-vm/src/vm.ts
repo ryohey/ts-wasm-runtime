@@ -15,7 +15,7 @@ export interface VMMemory {
 export const virtualMachine =
   <Code, Memory extends VMMemory>(
     instructionSet: InstructionSet<Code, Memory>,
-    verbose: boolean = false,
+    verbose = false,
   ) =>
   (program: Code[], memory: Memory) => {
     const log = (...args: any) => {

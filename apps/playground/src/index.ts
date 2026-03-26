@@ -14,8 +14,8 @@ import "./style.css"
 import { parseConsoleInput } from "./console-parser"
 
 enum InputMode {
-  text,
-  binary,
+  text = 0,
+  binary = 1,
 }
 
 interface State {
@@ -94,7 +94,7 @@ interface RadioItem<T> {
 
 const RadioSelect = <T>(
   items: RadioItem<T>[],
-  name: String,
+  name: string,
   value: T,
   onSelect: (item: T) => void,
 ) =>
@@ -170,7 +170,7 @@ const App = () => {
       const input = parsedInput[1]
       const result = vm.callFunction(
         input.name,
-        ...input.arguments.map((i32) => ({ i32: parseInt(i32) })),
+        ...input.arguments.map((i32) => ({ i32: Number.parseInt(i32) })),
       )
       const resultStr = result.map((x) => JSON.stringify(x)).join(", ")
 
@@ -259,8 +259,12 @@ const App = () => {
 
                 <section>
                   <h2>WebAssembly Text Format Parser</h2>
-                  ${watModule &&
-                  (watModule[0] ? JSONView(watModule[1]) : Error(watModule[3]))}
+                  ${
+                    watModule &&
+                    (watModule[0]
+                      ? JSONView(watModule[1])
+                      : Error(watModule[3]))
+                  }
                 </section>
               `
             : null
@@ -279,10 +283,12 @@ const App = () => {
 
                 <section>
                   <h2>WebAssembly Binary Format Parser</h2>
-                  ${wasmModule &&
-                  (wasmModule[0]
-                    ? JSONView(wasmModule[1])
-                    : Error(wasmModule[3]))}
+                  ${
+                    wasmModule &&
+                    (wasmModule[0]
+                      ? JSONView(wasmModule[1])
+                      : Error(wasmModule[3]))
+                  }
                 </section>
               `
             : null
