@@ -9,7 +9,9 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --fix .",
     "test": "turbo run test"
   },
   "repository": {
@@ -19,8 +21,8 @@
   "author": "ryohey",
   "license": "MIT",
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "esbuild": "^0.25.2",
-    "prettier": "^3.5.3",
     "rollup": "^4.36.0",
     "turbo": "^2.4.4",
     "vitest": "^2.1.8"
