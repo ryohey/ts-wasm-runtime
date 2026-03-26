@@ -20,9 +20,10 @@
   "license": "MIT",
   "devDependencies": {
     "esbuild": "^0.25.2",
-    "rollup": "^4.36.0",
     "prettier": "^3.5.3",
-    "turbo": "^2.4.4"
+    "rollup": "^4.36.0",
+    "turbo": "^2.4.4",
+    "vitest": "^2.1.8"
   },
   "packageManager": "npm@10.8.1"
 }

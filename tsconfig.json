@@ -3,6 +3,7 @@
     "target": "esnext",
     "module": "ESNext",
     "moduleResolution": "node",
+    "types": ["vitest/globals"],
     "allowSyntheticDefaultImports": false,
     "declaration": true,
     "sourceMap": true
