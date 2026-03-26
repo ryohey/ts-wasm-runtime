@@ -5,7 +5,7 @@ import { assertionParser } from "./assert"
 import { array } from "./utils"
 
 export const combinedParser = many(
-  or(array(moduleParser), array(assertionParser))
+  or(array(moduleParser), array(assertionParser)),
 )
 
 // wasm spec test parser

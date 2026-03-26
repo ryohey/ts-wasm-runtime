@@ -1,7 +1,7 @@
-import {
+import type {
   PartialInstructionSet,
   WASMCode,
-  WASMLocalMemory
+  WASMLocalMemory,
 } from "../wasm-memory"
 import { Int32, Int64, Float32, Float64 } from "../number"
 
@@ -15,7 +15,7 @@ const bigintToDataView = (num: bigint) => {
 export const memoryInstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
-> = code => {
+> = (code) => {
   switch (code.opType) {
     case "i32.load":
       return ({ memory, values }) => {
@@ -176,7 +176,7 @@ export const memoryInstructionSet: PartialInstructionSet<
         memory.setInt16(
           addr,
           bigintToDataView(num.value).getInt16(0, true),
-          true
+          true,
         )
       }
     case "i64.store32":
@@ -186,7 +186,7 @@ export const memoryInstructionSet: PartialInstructionSet<
         memory.setInt32(
           addr,
           bigintToDataView(num.value).getInt32(0, true),
-          true
+          true,
         )
       }
   }

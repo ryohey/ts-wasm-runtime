@@ -1,7 +1,7 @@
-import {
+import type {
   PartialInstructionSet,
   WASMCode,
-  WASMLocalMemory
+  WASMLocalMemory,
 } from "../wasm-memory"
 import { binop, monop, boolBinop } from "./helpers"
 import { Float64 } from "../number"
@@ -9,7 +9,7 @@ import { Float64 } from "../number"
 export const f64InstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
-> = code => {
+> = (code) => {
   switch (code.opType) {
     case "f64.const":
       return ({ values }) => values.push(Float64.obj(code.parameter))

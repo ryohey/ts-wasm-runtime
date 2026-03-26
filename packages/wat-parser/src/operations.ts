@@ -1,6 +1,6 @@
-import { or, seq, many, map, Parser, lazy, opt } from "@ryohey/fn-parser"
-import { Element } from "@ryohey/s-parser"
-import { Op } from "@ryohey/wasm-ast"
+import { or, seq, many, map, type Parser, lazy, opt } from "@ryohey/fn-parser"
+import type { Element } from "@ryohey/s-parser"
+import type { Op } from "@ryohey/wasm-ast"
 import { keyword, array, regexp } from "./utils"
 import {
   int32,
@@ -9,105 +9,105 @@ import {
   float64,
   indices,
   num,
-  identifier
+  identifier,
 } from "./types"
 import { blockInstructions } from "./block"
 import { flatten } from "@ryohey/array-helper"
 import { ifParser } from "./if"
-import * as TextOp from "./operationTypes"
+import type * as TextOp from "./operationTypes"
 
 // operation with no parameters
 const op = <T extends Op.Any>(str: T["opType"]): Parser<Element[], T> =>
   map(
     keyword(str),
-    _ =>
+    (_) =>
       ({
-        opType: str
-      } as T)
+        opType: str,
+      }) as T,
   )
 
 // operation with single parameter
 const _op1 = <T extends Op.Param1<string, any>>(
   opType: T["opType"],
   str: string,
-  parser: Parser<Element[], T["parameter"]>
+  parser: Parser<Element[], T["parameter"]>,
 ): Parser<Element[], T> =>
   map(
     seq(keyword(str), parser),
-    r =>
+    (r) =>
       ({
         opType,
-        parameter: r[1]
-      } as T)
+        parameter: r[1],
+      }) as T,
   )
 
 const op1 = <T extends Op.Param1<string, any>>(
   str: T["opType"],
-  parser: Parser<Element[], T["parameter"]>
+  parser: Parser<Element[], T["parameter"]>,
 ) => _op1(str, str, parser)
 
 const _opN = <T extends Op.ParamMany<string, any>>(
   opType: T["opType"],
   str: string,
-  parser: Parser<Element[], T["parameters"][0]>
+  parser: Parser<Element[], T["parameters"][0]>,
 ): Parser<Element[], T> =>
   map(
     seq(keyword(str), many(parser)),
-    r =>
+    (r) =>
       ({
         opType,
-        parameters: r[1]
-      } as T)
+        parameters: r[1],
+      }) as T,
   )
 
 const opN = <T extends Op.ParamMany<string, any>>(
   str: T["opType"],
-  parser: Parser<Element[], T["parameters"][0]>
+  parser: Parser<Element[], T["parameters"][0]>,
 ): Parser<Element[], T> =>
   map(
     seq(keyword(str), many(parser)),
-    r =>
+    (r) =>
       ({
         opType: str,
-        parameters: r[1]
-      } as T)
+        parameters: r[1],
+      }) as T,
   )
 
 export const attr = (str: string) =>
-  map(regexp(new RegExp(`^${str}=([0-9]+)`)), r => parseInt(r, 10))
+  map(regexp(new RegExp(`^${str}=([0-9]+)`)), (r) => Number.parseInt(r, 10))
 
 const memOp = <S extends Op.Mem<any>>(str: S["opType"]) =>
   map(
     seq(keyword(str), opt(attr("offset")), opt(attr("align"))),
-    r =>
+    (r) =>
       ({
         opType: r[0],
         offset: r[1],
-        align: r[2]
-      } as S)
+        align: r[2],
+      }) as S,
   )
 
 export const constInstructions = or(
   op1<Op.I32_const>("i32.const", int32),
   op1<Op.I64_const>("i64.const", int64),
   op1<Op.F32_const>("f32.const", float32),
-  op1<Op.F64_const>("f64.const", float64)
+  op1<Op.F64_const>("f64.const", float64),
 )
 
 const getGlobal = or(
   op1<Op.Get_global>("get_global", num),
-  _op1<TextOp.Get_global>("text.get_global", "get_global", identifier)
+  _op1<TextOp.Get_global>("text.get_global", "get_global", identifier),
 )
 
 const globalGet = or(
   op1<Op.Global_get>("global.get", num),
-  _op1<TextOp.Global_get>("text.global.get", "global.get", identifier)
+  _op1<TextOp.Global_get>("text.global.get", "global.get", identifier),
 )
 
 export const initializerInstructions = or(
   constInstructions,
   getGlobal,
-  globalGet
+  globalGet,
 )
 
 export const plainInstructions = or<Element[], TextOp.Any>(
@@ -371,22 +371,22 @@ export const plainInstructions = or<Element[], TextOp.Any>(
   memOp<Op.I32_store16>("i32.store16"),
   memOp<Op.I64_store8>("i64.store8"),
   memOp<Op.I64_store16>("i64.store16"),
-  memOp<Op.I64_store32>("i64.store32")
+  memOp<Op.I64_store32>("i64.store32"),
 )
 
 const foldedInstructions: Parser<Element[], TextOp.Any[]> = map(
   array(
     seq(
       plainInstructions,
-      opt(map(many(lazy(() => operations)), r => flatten(r)))
-    )
+      opt(map(many(lazy(() => operations)), (r) => flatten(r))),
+    ),
   ),
-  r => [...(r[1] ? r[1] : []), r[0]]
+  (r) => [...(r[1] ? r[1] : []), r[0]],
 )
 
 export const operations: Parser<Element[], TextOp.Any[]> = or(
-  lazy(() => map(blockInstructions, r => [r])),
+  lazy(() => map(blockInstructions, (r) => [r])),
   lazy(() => ifParser),
-  map(plainInstructions, r => [r]),
-  foldedInstructions
+  map(plainInstructions, (r) => [r]),
+  foldedInstructions,
 )

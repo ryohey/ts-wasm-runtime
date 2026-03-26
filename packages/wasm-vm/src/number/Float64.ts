@@ -1,4 +1,4 @@
-import { Float64Value } from "@ryohey/wasm-ast"
+import type { Float64Value } from "@ryohey/wasm-ast"
 
 // fake f64
 export class Float64 {

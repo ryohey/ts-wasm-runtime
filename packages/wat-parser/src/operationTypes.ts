@@ -1,4 +1,4 @@
-import { Op, ValType } from "@ryohey/wasm-ast"
+import type { Op, ValType } from "@ryohey/wasm-ast"
 
 export interface Br extends Op.Param1<"text.br", string> {}
 export interface BrIf extends Op.Param1<"text.br_if", string> {}

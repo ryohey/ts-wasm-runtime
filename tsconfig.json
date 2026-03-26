@@ -2,9 +2,13 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "ESNext",
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": false,
+    "moduleResolution": "bundler",
+    "strict": false,
+    "noUncheckedIndexedAccess": false,
+    "useUnknownInCatchVariables": false,
+    "types": [],
     "declaration": true,
     "sourceMap": true
-  }
+  },
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/dist/**", "**/test-runner.ts"]
 }

@@ -17,7 +17,7 @@ describe("binary", () => {
     const received = vm.callFunction(
       "add",
       new Int32(234).toObject(),
-      new Int32(346).toObject()
+      new Int32(346).toObject(),
     )
     expect(received).toStrictEqual([new Int32(580).toObject()])
   })

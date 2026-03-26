@@ -1,7 +1,7 @@
 export const unsigned = (a: number): number => a >>> 0
 export const signed = (a: number): number => a >> 0
 
-const bitMask = (width: number) => Math.pow(2, width) - 1
+const bitMask = (width: number) => 2 ** width - 1
 
 export const asSigned = (value: number, bitWidth: number) => {
   const mask = bitMask(bitWidth)

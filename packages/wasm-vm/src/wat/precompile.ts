@@ -1,7 +1,12 @@
 import { fromPairs } from "./array"
-import { WATFunction, WATElem, WATModule, TextOp } from "@ryohey/wat-parser"
-import { Op } from "@ryohey/wasm-ast"
-import { WASMFunction, WASMElem, WASMModule } from "../module"
+import type {
+  WATFunction,
+  WATElem,
+  WATModule,
+  TextOp,
+} from "@ryohey/wat-parser"
+import type { Op } from "@ryohey/wasm-ast"
+import type { WASMFunction, WASMElem, WASMModule } from "../module"
 
 const isString = (x: any): x is string => typeof x === "string"
 
@@ -38,11 +43,11 @@ const resolveInitializer = (init: TextOp.Initializer): Op.Initializer => {
 const processInstruction = (
   inst: TextOp.Any,
   idTables: IdentifierTables,
-  labelStack: string[]
+  labelStack: string[],
 ): Op.Any => {
   // 変数の identifier を index に置換
   const resolveBlockLabel = (p: string) =>
-    indexFromLast(labelStack, l => l === p)
+    indexFromLast(labelStack, (l) => l === p)
   const resolveGlobalLabel = (p: string) => idTables.globals[p]
   const resolveLocalLabel = (p: string) => idTables.locals[p]
   const resolveFuncLabel = (p: string) => idTables.funcs[p]
@@ -57,72 +62,72 @@ const processInstruction = (
     case "text.call":
       return {
         opType: "call",
-        parameter: resolveFuncLabel(inst.parameter)
+        parameter: resolveFuncLabel(inst.parameter),
       }
     case "text.br":
       return {
         opType: "br",
-        parameter: resolveBlockLabel(inst.parameter)
+        parameter: resolveBlockLabel(inst.parameter),
       } as Op.Br
     case "text.br_if":
       return {
         opType: "br_if",
-        parameter: resolveBlockLabel(inst.parameter)
+        parameter: resolveBlockLabel(inst.parameter),
       } as Op.BrIf
     case "text.br_table":
       return {
         opType: "br_table",
-        parameters: inst.parameters.map(resolveBlockLabel)
+        parameters: inst.parameters.map(resolveBlockLabel),
       } as Op.BrTable
     case "text.local.get":
       return {
         opType: "local.get",
-        parameter: resolveLocalLabel(inst.parameter)
+        parameter: resolveLocalLabel(inst.parameter),
       } as Op.Local_get
     case "text.local.set":
       return {
         opType: "local.set",
-        parameter: resolveLocalLabel(inst.parameter)
+        parameter: resolveLocalLabel(inst.parameter),
       } as Op.Local_set
     case "text.local.tee":
       return {
         opType: "local.tee",
-        parameter: resolveLocalLabel(inst.parameter)
+        parameter: resolveLocalLabel(inst.parameter),
       } as Op.Local_tee
     case "text.get_local":
       return {
         opType: "get_local",
-        parameter: resolveLocalLabel(inst.parameter)
+        parameter: resolveLocalLabel(inst.parameter),
       } as Op.Get_local
     case "text.set_local":
       return {
         opType: "set_local",
-        parameter: resolveLocalLabel(inst.parameter)
+        parameter: resolveLocalLabel(inst.parameter),
       } as Op.Set_local
     case "text.tee_local":
       return {
         opType: "tee_local",
-        parameter: resolveLocalLabel(inst.parameter)
+        parameter: resolveLocalLabel(inst.parameter),
       } as Op.Tee_local
     case "text.global.get":
       return {
         opType: "global.get",
-        parameter: resolveGlobalLabel(inst.parameter)
+        parameter: resolveGlobalLabel(inst.parameter),
       } as Op.Global_get
     case "text.global.set":
       return {
         opType: "global.set",
-        parameter: resolveGlobalLabel(inst.parameter)
+        parameter: resolveGlobalLabel(inst.parameter),
       } as Op.Global_set
     case "text.get_global":
       return {
         opType: "get_global",
-        parameter: resolveGlobalLabel(inst.parameter)
+        parameter: resolveGlobalLabel(inst.parameter),
       } as Op.Get_global
     case "text.set_global":
       return {
         opType: "set_global",
-        parameter: resolveGlobalLabel(inst.parameter)
+        parameter: resolveGlobalLabel(inst.parameter),
       } as Op.Set_global
   }
 
@@ -133,30 +138,30 @@ const processBlock = <T extends Op.Block | Op.Loop>(
   opType: T["opType"],
   block: TextOp.Block | TextOp.Loop,
   idTables: IdentifierTables,
-  labelStack: string[]
+  labelStack: string[],
 ): T => {
   const labels = [...labelStack, block.identifier]
-  const body = block.body.map(i => processInstruction(i, idTables, labels))
+  const body = block.body.map((i) => processInstruction(i, idTables, labels))
 
   return {
     opType,
     body,
-    results: block.results
+    results: block.results,
   } as T
 }
 
 const processIf = (
   block: TextOp.If,
   idTables: IdentifierTables,
-  labelStack: string[]
+  labelStack: string[],
 ): Op.If => {
   const labels = [...labelStack, block.identifier]
 
   return {
     opType: "if",
     results: block.results,
-    then: block.then.map(i => processInstruction(i, idTables, labels)),
-    else: block.else.map(i => processInstruction(i, idTables, labels))
+    then: block.then.map((i) => processInstruction(i, idTables, labels)),
+    else: block.else.map((i) => processInstruction(i, idTables, labels)),
   }
 }
 
@@ -164,15 +169,15 @@ const createLocalTables = (ast: WATFunction) => {
   const params = fromPairs(
     ast.parameters
       .map((p, i) => [p.identifier, i] as [string, number])
-      .filter(e => e[0])
+      .filter((e) => e[0]),
   )
 
   const locals = fromPairs(
     ast.locals
       .map(
-        (p, i) => [p.identifier, ast.parameters.length + i] as [string, number]
+        (p, i) => [p.identifier, ast.parameters.length + i] as [string, number],
       )
-      .filter(e => e[0])
+      .filter((e) => e[0]),
   )
 
   return { ...params, ...locals }
@@ -181,27 +186,29 @@ const createLocalTables = (ast: WATFunction) => {
 const processFunction = (
   fn: WATFunction,
   funcs: IdentifierEntry,
-  globals: IdentifierEntry
+  globals: IdentifierEntry,
 ): WASMFunction => {
   const idTables: IdentifierTables = {
     locals: createLocalTables(fn),
     globals,
-    funcs
+    funcs,
   }
   return {
-    body: fn.body.map(i => processInstruction(i, idTables, [])),
-    parameters: fn.parameters.map(p => p.type),
-    locals: fn.locals.map(r => r.type),
+    body: fn.body.map((i) => processInstruction(i, idTables, [])),
+    parameters: fn.parameters.map((p) => p.type),
+    locals: fn.locals.map((r) => r.type),
     export: fn.export,
-    results: fn.results
+    results: fn.results,
   }
 }
 
 const processElem = (ast: WATElem, funcTable: IdentifierEntry): WASMElem => {
-  const funcIds = ast.funcIds.map(id => (isIdentifier(id) ? funcTable[id] : id))
+  const funcIds = ast.funcIds.map((id) =>
+    isIdentifier(id) ? funcTable[id] : id,
+  )
   return {
     offset: resolveInitializer(ast.offset),
-    funcIds
+    funcIds,
   }
 }
 
@@ -209,23 +216,23 @@ export const processModule = (ast: WATModule): WASMModule => {
   const funcTable: IdentifierEntry = fromPairs(
     ast.functions
       .map((fn, i) => [fn.identifier, i] as [string, number])
-      .filter(e => e[0])
+      .filter((e) => e[0]),
   )
 
   const globalTable: IdentifierEntry = fromPairs(
     ast.globals
       .map((fn, i) => [fn.identifier, i] as [string, number])
-      .filter(e => e[0])
+      .filter((e) => e[0]),
   )
 
   return {
-    elems: ast.elems.map(elem => processElem(elem, funcTable)),
-    functions: ast.functions.map(fn =>
-      processFunction(fn, funcTable, globalTable)
+    elems: ast.elems.map((elem) => processElem(elem, funcTable)),
+    functions: ast.functions.map((fn) =>
+      processFunction(fn, funcTable, globalTable),
     ),
-    globals: ast.globals.map(g => ({
+    globals: ast.globals.map((g) => ({
       ...g,
-      init: resolveInitializer(g.init)
-    }))
+      init: resolveInitializer(g.init),
+    })),
   }
 }

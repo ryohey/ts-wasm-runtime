@@ -1,4 +1,4 @@
-import { Int64Value } from "@ryohey/wasm-ast"
+import type { Int64Value } from "@ryohey/wasm-ast"
 import { countTrailingZeros, countLeadingZeros, popCount } from "./bin"
 
 const unsigned = (a: bigint): bigint => BigInt.asUintN(64, a)

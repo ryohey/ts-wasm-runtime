@@ -9,7 +9,9 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --fix .",
     "test": "turbo run test"
   },
   "repository": {
@@ -19,10 +21,15 @@
   "author": "ryohey",
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.25.2",
-    "rollup": "^4.36.0",
-    "prettier": "^3.5.3",
-    "turbo": "^2.4.4"
+    "@biomejs/biome": "^2.4.9",
+    "esbuild": "^0.27.4",
+    "rollup": "^4.60.0",
+    "turbo": "^2.8.20",
+    "vitest": "2.1.9"
   },
-  "packageManager": "npm@10.8.1"
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "0.27.3",
+    "@rollup/rollup-linux-x64-gnu": "^4.59.0"
+  },
+  "packageManager": "npm@11.12.0"
 }

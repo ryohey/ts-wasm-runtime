@@ -7,9 +7,9 @@ describe("plainInstructions", () => {
       true,
       {
         opType: "get_local",
-        parameter: 0
+        parameter: 0,
       },
-      2
+      2,
     ])
   })
 
@@ -19,9 +19,9 @@ describe("plainInstructions", () => {
       true,
       {
         opType: "text.get_local",
-        parameter: "$lhs"
+        parameter: "$lhs",
       },
-      2
+      2,
     ])
   })
   it("parses attributes", () => {
@@ -35,9 +35,9 @@ describe("plainInstructions", () => {
       {
         opType: "i32.load",
         offset: 8,
-        align: 7
+        align: 7,
       },
-      3
+      3,
     ])
   })
 })

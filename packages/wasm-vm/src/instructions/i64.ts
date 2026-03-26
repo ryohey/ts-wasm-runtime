@@ -1,7 +1,7 @@
-import {
+import type {
   PartialInstructionSet,
   WASMCode,
-  WASMLocalMemory
+  WASMLocalMemory,
 } from "../wasm-memory"
 import { Int64 } from "../number"
 import { binop, boolBinop, boolMonop, monop } from "./helpers"
@@ -10,7 +10,7 @@ import { binop, boolBinop, boolMonop, monop } from "./helpers"
 export const i64InstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
-> = code => {
+> = (code) => {
   switch (code.opType) {
     case "i64.const":
       return ({ values }) => values.push(Int64.obj(code.parameter))

@@ -1,19 +1,19 @@
 import { map, seq, opt } from "@ryohey/fn-parser"
 import { string, identifier, num } from "./types"
 import { keyword, array } from "./utils"
-import { WATMemory } from "./moduleTypes"
+import type { WATMemory } from "./moduleTypes"
 
 export const moduleMemory = map(
   seq(
     keyword("memory"),
     opt(identifier),
-    opt(map(array(seq(keyword("export"), string)), r => r[1])),
-    num
+    opt(map(array(seq(keyword("export"), string)), (r) => r[1])),
+    num,
   ),
-  r =>
+  (r) =>
     ({
       nodeType: "memory",
       identifier: r[1],
-      export: r[2]
-    } as WATMemory)
+      export: r[2],
+    }) as WATMemory,
 )

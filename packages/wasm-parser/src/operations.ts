@@ -1,29 +1,29 @@
-import { Op } from "@ryohey/wasm-ast"
-import { map, seq, or, many, lazy, opt, Parser } from "@ryohey/fn-parser"
+import type { Op } from "@ryohey/wasm-ast"
+import { map, seq, or, many, lazy, opt, type Parser } from "@ryohey/fn-parser"
 import { byte, var1, vector } from "./utils"
-import { valType, Bytes } from "./types"
+import { valType, type Bytes } from "./types"
 import { i64, i32, f32, f64, u32 } from "./number"
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 const op = <T extends Op.Base<string>>(
   opcode: number,
-  opType: string
-): Parser<Bytes, T> => map(byte(opcode), _ => ({ opType } as T))
+  opType: string,
+): Parser<Bytes, T> => map(byte(opcode), (_) => ({ opType }) as T)
 
 const opV = <T extends Op.Base<string>>(
   opcode: number,
   opType: string,
-  value: Parser<Bytes, Omit<T, "opType">>
+  value: Parser<Bytes, Omit<T, "opType">>,
 ): Parser<Bytes, T> =>
-  map(seq(byte(opcode), value), r => ({ opType, ...r[1] } as T))
+  map(seq(byte(opcode), value), (r) => ({ opType, ...r[1] }) as T)
 
 const op1 = <T extends Op.Param1<string, any>>(
   opcode: number,
   opType: string,
-  value: Parser<Bytes, T["parameter"]> = var1
+  value: Parser<Bytes, T["parameter"]> = var1,
 ): Parser<Bytes, T> =>
-  map(seq(byte(opcode), value), r => ({ opType, parameter: r[1] } as T))
+  map(seq(byte(opcode), value), (r) => ({ opType, parameter: r[1] }) as T)
 
 const globalGet = op1<Op.Global_get>(0x23, "global.get")
 
@@ -31,12 +31,12 @@ const constants = or(
   op1<Op.I32_const>(0x41, "i32.const", i32),
   op1<Op.I64_const>(0x42, "i64.const", i64),
   op1<Op.F32_const>(0x43, "f32.const", f32),
-  op1<Op.F64_const>(0x44, "f64.const", f64)
+  op1<Op.F64_const>(0x44, "f64.const", f64),
 )
 
 export const initializer = map(
   seq(or(constants, globalGet), byte(0x0b)),
-  r => r[0]
+  (r) => r[0],
 )
 
 // https://webassembly.github.io/spec/core/binary/instructions.html#binary-expr
@@ -46,51 +46,51 @@ export const instr: Parser<Bytes, Op.Any> = lazy(() =>
     op<Op.Nop>(0x01, "nop"),
     map(
       seq(byte(0x02), blockType, expr),
-      r =>
+      (r) =>
         ({
           opType: "block",
           results: r[1],
-          body: r[2]
-        } as Op.Block)
+          body: r[2],
+        }) as Op.Block,
     ),
     map(
       seq(byte(0x03), blockType, expr),
-      r =>
+      (r) =>
         ({
           opType: "loop",
           results: r[1],
-          body: r[2]
-        } as Op.Loop)
+          body: r[2],
+        }) as Op.Loop,
     ),
     map(
       seq(byte(0x04), blockType, opt(then_), expr),
-      r =>
+      (r) =>
         ({
           opType: "if",
           results: r[1],
           then: r[2],
-          else: r[2]
-        } as Op.If)
+          else: r[2],
+        }) as Op.If,
     ),
     op1<Op.Br>(0x0c, "br"),
     op1<Op.BrIf>(0x0d, "br_if"),
     map(
       seq(byte(0x0e), vector(var1)),
-      r =>
+      (r) =>
         ({
           opType: "br_table",
-          parameters: r[1]
-        } as Op.BrTable)
+          parameters: r[1],
+        }) as Op.BrTable,
     ),
     op<Op.Return>(0x0f, "return"),
     op1<Op.Call>(0x10, "call"),
     map(
       seq(byte(0x11), var1, byte(0x00)),
-      r =>
+      (r) =>
         ({
           opType: "call_indirect",
-          typeIndex: r[1]
-        } as Op.CallIndirect)
+          typeIndex: r[1],
+        }) as Op.CallIndirect,
     ),
 
     op<Op.Drop>(0x1a, "drop"),
@@ -129,11 +129,11 @@ export const instr: Parser<Bytes, Op.Any> = lazy(() =>
 
     map(
       seq(byte(0x3f), byte(0x00)),
-      _ => ({ opType: "memory.size" } as Op.Memory_size)
+      (_) => ({ opType: "memory.size" }) as Op.Memory_size,
     ),
     map(
       seq(byte(0x40), byte(0x00)),
-      _ => ({ opType: "memory.grow" } as Op.Memory_grow)
+      (_) => ({ opType: "memory.grow" }) as Op.Memory_grow,
     ),
 
     op<Op.I32_eqz>(0x45, "i32.eqz"),
@@ -266,17 +266,17 @@ export const instr: Parser<Bytes, Op.Any> = lazy(() =>
     op<Op.I32_reinterpret_f32>(0xbc, "i32.reinterpret_f32"),
     op<Op.I64_reinterpret_f64>(0xbd, "i64.reinterpret_f64"),
     op<Op.F32_reinterpret_i32>(0xbe, "f32.reinterpret_i32"),
-    op<Op.F64_reinterpret_i64>(0xbf, "f64.reinterpret_i64")
-  )
+    op<Op.F64_reinterpret_i64>(0xbf, "f64.reinterpret_i64"),
+  ),
 )
 
-const memarg = map(seq(u32, u32), r => ({ align: r[0], offset: r[1] }))
+const memarg = map(seq(u32, u32), (r) => ({ align: r[0], offset: r[1] }))
 
 const blockType = or(
   // void
-  map(byte(0x40), _ => []),
-  map(valType, t => [t])
+  map(byte(0x40), (_) => []),
+  map(valType, (t) => [t]),
 )
 
-const then_ = map(seq(many(instr), byte(0x05)), r => r[0])
-export const expr = map(seq(many(instr), byte(0x0b)), r => r[0])
+const then_ = map(seq(many(instr), byte(0x05)), (r) => r[0])
+export const expr = map(seq(many(instr), byte(0x0b)), (r) => r[0])

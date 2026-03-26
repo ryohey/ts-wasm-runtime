@@ -6,7 +6,7 @@ describe("table", () => {
     expect(r).toStrictEqual([
       true,
       { export: null, identifier: "$T0", nodeType: "table" },
-      5
+      5,
     ])
   })
 })

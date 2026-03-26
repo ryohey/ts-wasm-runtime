@@ -13,6 +13,6 @@
   "author": "ryohey",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "4.1.5"
+    "typescript": "6.0.2"
   }
 }

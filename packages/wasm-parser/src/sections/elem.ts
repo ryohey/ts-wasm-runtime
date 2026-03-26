@@ -1,6 +1,6 @@
-import { Op } from "@ryohey/wasm-ast"
-import { Parser, map, seq } from "@ryohey/fn-parser"
-import { Bytes, tableIdx, funcIdx } from "../types"
+import type { Op } from "@ryohey/wasm-ast"
+import { type Parser, map, seq } from "@ryohey/fn-parser"
+import { type Bytes, tableIdx, funcIdx } from "../types"
 import { initializer } from "../operations"
 import { vector } from "../utils"
 import { section } from "./section"
@@ -13,11 +13,11 @@ export interface Elem {
 
 const elem: Parser<Bytes, Elem> = map(
   seq(tableIdx, initializer, vector(funcIdx)),
-  r => ({
+  (r) => ({
     table: r[0],
     offset: r[1],
-    init: r[2]
-  })
+    init: r[2],
+  }),
 )
 
 export const elemSection = section(9, "elem", vector(elem))

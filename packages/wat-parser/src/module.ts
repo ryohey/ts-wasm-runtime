@@ -1,5 +1,5 @@
 import { seq, or, map, many } from "@ryohey/fn-parser"
-import { Element } from "@ryohey/s-parser"
+import type { Element } from "@ryohey/s-parser"
 import { func } from "./func"
 import { keyword, array } from "./utils"
 import { moduleExport } from "./export"
@@ -8,7 +8,7 @@ import { moduleMemory } from "./memory"
 import { moduleTable } from "./table"
 import { moduleType } from "./type"
 import { moduleElem } from "./elem"
-import {
+import type {
   WATSection,
   WATExport,
   WATFunction,
@@ -17,7 +17,7 @@ import {
   WATTable,
   WATType,
   WATElem,
-  WATModule
+  WATModule,
 } from "./moduleTypes"
 
 const isExport = (x: WATSection): x is WATExport => x.nodeType === "export"
@@ -39,11 +39,11 @@ export const moduleParser = map(
         array(moduleMemory),
         array(moduleTable),
         array(moduleType),
-        array(moduleElem)
-      )
-    )
+        array(moduleElem),
+      ),
+    ),
   ),
-  r =>
+  (r) =>
     ({
       nodeType: "module",
       functions: r[1].filter(isFunc),
@@ -52,6 +52,6 @@ export const moduleParser = map(
       memories: r[1].filter(isMemory),
       tables: r[1].filter(isTable),
       types: r[1].filter(isType),
-      elems: r[1].filter(isElem)
-    } as WATModule)
+      elems: r[1].filter(isElem),
+    }) as WATModule,
 )

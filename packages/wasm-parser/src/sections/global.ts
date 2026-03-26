@@ -1,20 +1,23 @@
-import { or, map, Parser, seq } from "@ryohey/fn-parser"
+import { or, map, type Parser, seq } from "@ryohey/fn-parser"
 import { byte, vector } from "../utils"
-import { ValType, Op } from "@ryohey/wasm-ast"
-import { Bytes, valType } from "../types"
+import type { ValType, Op } from "@ryohey/wasm-ast"
+import { type Bytes, valType } from "../types"
 import { initializer } from "../operations"
 import { section } from "./section"
 
-const mut = or(map(byte(0x00), _ => false), map(byte(0x01), _ => true))
+const mut = or(
+  map(byte(0x00), (_) => false),
+  map(byte(0x01), (_) => true),
+)
 
 export interface GlobalType {
   type: ValType
   isMutable: boolean
 }
 
-const globalType: Parser<Bytes, GlobalType> = map(seq(valType, mut), r => ({
+const globalType: Parser<Bytes, GlobalType> = map(seq(valType, mut), (r) => ({
   type: r[0],
-  isMutable: r[1]
+  isMutable: r[1],
 }))
 
 export interface Global {
@@ -22,9 +25,12 @@ export interface Global {
   init: Op.Initializer
 }
 
-const global_: Parser<Bytes, Global> = map(seq(globalType, initializer), r => ({
-  type: r[0],
-  init: r[1]
-}))
+const global_: Parser<Bytes, Global> = map(
+  seq(globalType, initializer),
+  (r) => ({
+    type: r[0],
+    init: r[1],
+  }),
+)
 
 export const globalSection = section(6, "global", vector(global_))

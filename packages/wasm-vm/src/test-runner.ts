@@ -1,7 +1,12 @@
-import { wastParser, WATAssertReturn, WATModule } from "@ryohey/wat-parser"
+import {
+  wastParser,
+  type WATAssertReturn,
+  type WATModule,
+} from "@ryohey/wat-parser"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { convertNumber } from "./number/convert"
 import { watModuleToWasmModule } from "./wat"
+import { expect, it } from "vitest"
 
 type ASTTopNode = WATModule | WATAssertReturn
 
@@ -13,7 +18,7 @@ const isModule = (n: ASTTopNode): n is WATModule => n.nodeType === "module"
 const runTestCase = (
   vm: WASMVirtualMachine,
   ast: WATAssertReturn,
-  verbose: boolean = false
+  verbose = false,
 ) => {
   const log = (msg: string) => {
     if (verbose) {
@@ -23,7 +28,7 @@ const runTestCase = (
   log(`Testing ${ast.invoke}...`)
   const received = vm.callFunction(
     ast.invoke,
-    ...ast.args.map(a => a.parameter)
+    ...ast.args.map((a) => a.parameter),
   )
   for (let i = 0; i < received.length; i++) {
     const exp = ast.expected[i]

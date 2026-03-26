@@ -1,25 +1,25 @@
 import { flatten } from "@ryohey/array-helper"
-import { many, map, opt, Parser, seq } from "@ryohey/fn-parser"
-import { Code, codeSection } from "./sections/code"
+import { many, map, opt, type Parser, seq } from "@ryohey/fn-parser"
+import { type Code, codeSection } from "./sections/code"
 import { customSection } from "./sections/custom"
-import { Data, dataSection } from "./sections/data"
-import { Elem, elemSection } from "./sections/elem"
-import { Export, exportSection } from "./sections/export"
+import { type Data, dataSection } from "./sections/data"
+import { type Elem, elemSection } from "./sections/elem"
+import { type Export, exportSection } from "./sections/export"
 import { funcSection } from "./sections/func"
-import { Global, globalSection } from "./sections/global"
-import { Import, importSection } from "./sections/import"
-import { Mem, memorySection } from "./sections/mem"
-import { Section } from "./sections/section"
-import { Start, startsSection } from "./sections/start"
-import { Table, tableSection } from "./sections/table"
-import { Type, typeSection } from "./sections/type"
-import { Bytes } from "./types"
+import { type Global, globalSection } from "./sections/global"
+import { type Import, importSection } from "./sections/import"
+import { type Mem, memorySection } from "./sections/mem"
+import type { Section } from "./sections/section"
+import { type Start, startsSection } from "./sections/start"
+import { type Table, tableSection } from "./sections/table"
+import { type Type, typeSection } from "./sections/type"
+import type { Bytes } from "./types"
 import { bytes, string, var1 } from "./utils"
 
 // https://webassembly.github.io/spec/core/binary/index.html
 
-const beginWASM = map(seq(string("\0asm"), var1, bytes([0, 0, 0])), r => ({
-  version: r[1]
+const beginWASM = map(seq(string("\0asm"), var1, bytes([0, 0, 0])), (r) => ({
+  version: r[1],
 }))
 
 export interface Module {
@@ -38,7 +38,7 @@ export interface Module {
 }
 
 const getSections = <T>(obj: Section<T>[] | undefined | null): T[] =>
-  obj === null || obj === undefined ? [] : flatten(obj.map(s => s.sections))
+  obj === null || obj === undefined ? [] : flatten(obj.map((s) => s.sections))
 
 export const moduleParser: Parser<Bytes, Module> = map(
   seq<Bytes, any>(
@@ -64,9 +64,9 @@ export const moduleParser: Parser<Bytes, Module> = map(
     opt(many(codeSection)),
     opt(many(customSection)),
     opt(many(dataSection)),
-    opt(many(customSection))
+    opt(many(customSection)),
   ),
-  r => ({
+  (r) => ({
     version: r[0].version,
     types: getSections<Type>(r[1]),
     imports: getSections<Import>(r[3]),
@@ -78,6 +78,6 @@ export const moduleParser: Parser<Bytes, Module> = map(
     starts: getSections<Start>(r[15]),
     elems: getSections<Elem>(r[17]),
     codes: getSections<Code>(r[19]),
-    data: getSections<Data>(r[21])
-  })
+    data: getSections<Data>(r[21]),
+  }),
 )
