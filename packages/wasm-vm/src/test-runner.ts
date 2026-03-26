@@ -2,6 +2,7 @@ import { wastParser, WATAssertReturn, WATModule } from "@ryohey/wat-parser"
 import { WASMVirtualMachine } from "./wasm-vm"
 import { convertNumber } from "./number/convert"
 import { watModuleToWasmModule } from "./wat"
+import { expect, it } from "vitest"
 
 type ASTTopNode = WATModule | WATAssertReturn
 

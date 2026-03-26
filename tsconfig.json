@@ -3,9 +3,10 @@
     "target": "esnext",
     "module": "ESNext",
     "moduleResolution": "node",
-    "types": ["vitest/globals"],
+    "types": [],
     "allowSyntheticDefaultImports": false,
     "declaration": true,
     "sourceMap": true
-  }
+  },
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/dist/**", "**/test-runner.ts"]
 }
