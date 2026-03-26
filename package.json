@@ -27,5 +27,9 @@
     "turbo": "^2.8.20",
     "vitest": "2.1.9"
   },
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "0.27.3",
+    "@rollup/rollup-linux-x64-gnu": "^4.59.0"
+  },
   "packageManager": "npm@11.12.0"
 }
