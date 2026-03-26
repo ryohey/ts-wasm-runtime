@@ -4,7 +4,7 @@ describe("type section", () => {
   it("func", () => {
     const r = moduleType(
       ["type", "$check", ["func", ["param", "i32", "i32"], ["result", "i32"]]],
-      0
+      0,
     )
     expect(r).toStrictEqual([
       true,
@@ -12,12 +12,12 @@ describe("type section", () => {
         identifier: "$check",
         parameters: [
           { identifier: null, type: "i32" },
-          { identifier: null, type: "i32" }
+          { identifier: null, type: "i32" },
         ],
         results: ["i32"],
-        nodeType: "type"
+        nodeType: "type",
       },
-      3
+      3,
     ])
   })
 })

@@ -41,7 +41,7 @@ describe("parser", () => {
       `(a
       (b c)
       )`,
-      0
+      0,
     )
     expect(r).toStrictEqual([true, ["a", ["b", "c"]], 22])
   })
@@ -52,7 +52,7 @@ describe("parser", () => {
     get_local $lhs
     get_local $rhs
     i32.add)`,
-      0
+      0,
     )
     expect(r).toStrictEqual([
       true,
@@ -65,9 +65,9 @@ describe("parser", () => {
         "$lhs",
         "get_local",
         "$rhs",
-        "i32.add"
+        "i32.add",
       ],
-      103
+      103,
     ])
   })
 
@@ -78,15 +78,15 @@ describe("parser", () => {
         i32.const 42
       )
     )`,
-      0
+      0,
     )
     expect(r).toStrictEqual([
       true,
       [
         "module",
-        ["func", ["export", '"hello"'], ["result", "i32"], "i32.const", "42"]
+        ["func", ["export", '"hello"'], ["result", "i32"], "i32.const", "42"],
       ],
-      85
+      85,
     ])
   })
 
@@ -95,9 +95,16 @@ describe("parser", () => {
       `(aa bb)
       (c d)
       `,
-      0
+      0,
     )
-    expect(r).toStrictEqual([true, [["aa", "bb"], ["c", "d"]], 26])
+    expect(r).toStrictEqual([
+      true,
+      [
+        ["aa", "bb"],
+        ["c", "d"],
+      ],
+      26,
+    ])
   })
 
   it("parses with comments", () => {
@@ -106,7 +113,7 @@ describe("parser", () => {
          (a (b ;;yes (x y)
           c))
       `,
-      0
+      0,
     )
     expect(r).toStrictEqual([true, ["a", ["b", "c"]], 51])
   })

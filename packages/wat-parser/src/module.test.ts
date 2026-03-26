@@ -16,10 +16,10 @@ describe("module parser", () => {
           "0",
           "get_local",
           "1",
-          "i32.add"
-        ]
+          "i32.add",
+        ],
       ],
-      0
+      0,
     )
     expect(r).toStrictEqual([
       true,
@@ -39,32 +39,32 @@ describe("module parser", () => {
             parameters: [
               {
                 identifier: null,
-                type: "i32"
+                type: "i32",
               },
               {
                 identifier: null,
-                type: "i32"
-              }
+                type: "i32",
+              },
             ],
             results: ["i32"],
             locals: [],
             body: [
               {
                 opType: "get_local",
-                parameter: 0
+                parameter: 0,
               },
               {
                 opType: "get_local",
-                parameter: 1
+                parameter: 1,
               },
               {
-                opType: "i32.add"
-              }
-            ]
-          }
-        ]
+                opType: "i32.add",
+              },
+            ],
+          },
+        ],
       },
-      2
+      2,
     ])
   })
   it("parses modules from string", () => {
@@ -76,7 +76,7 @@ describe("module parser", () => {
           i32.add
         )
       )`,
-      0
+      0,
     )
 
     const r = moduleParser(sExp[1], 0)
@@ -99,32 +99,32 @@ describe("module parser", () => {
             parameters: [
               {
                 identifier: null,
-                type: "i32"
+                type: "i32",
               },
               {
                 identifier: null,
-                type: "i32"
-              }
+                type: "i32",
+              },
             ],
             results: ["i32"],
             locals: [],
             body: [
               {
                 opType: "get_local",
-                parameter: 0
+                parameter: 0,
               },
               {
                 opType: "get_local",
-                parameter: 1
+                parameter: 1,
               },
               {
-                opType: "i32.add"
-              }
-            ]
-          }
-        ]
+                opType: "i32.add",
+              },
+            ],
+          },
+        ],
       },
-      2
+      2,
     ])
   })
   it("parses global, memory, tables", () => {
@@ -141,7 +141,7 @@ describe("module parser", () => {
         (global $__heap_base (export "__heap_base") i32 (i32.const 66560))
         (global $__data_end (export "__data_end") i32 (i32.const 1024))
       )`,
-      0
+      0,
     )
     const r = moduleParser(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -157,7 +157,7 @@ describe("module parser", () => {
             locals: [],
             nodeType: "func",
             parameters: [],
-            results: []
+            results: [],
           },
           {
             body: [],
@@ -166,8 +166,8 @@ describe("module parser", () => {
             locals: [],
             nodeType: "func",
             parameters: [],
-            results: []
-          }
+            results: [],
+          },
         ],
         globals: [
           {
@@ -176,7 +176,7 @@ describe("module parser", () => {
             mutable: true,
             nodeType: "global",
             init: { opType: "i32.const", parameter: { i32: 66560 } },
-            type: "i32"
+            type: "i32",
           },
           {
             export: "__heap_base",
@@ -184,7 +184,7 @@ describe("module parser", () => {
             mutable: false,
             nodeType: "global",
             init: { opType: "i32.const", parameter: { i32: 66560 } },
-            type: "i32"
+            type: "i32",
           },
           {
             export: "__data_end",
@@ -192,11 +192,11 @@ describe("module parser", () => {
             init: { opType: "i32.const", parameter: { i32: 1024 } },
             mutable: false,
             nodeType: "global",
-            type: "i32"
-          }
+            type: "i32",
+          },
         ],
         memories: [
-          { export: "memory", identifier: "$memory", nodeType: "memory" }
+          { export: "memory", identifier: "$memory", nodeType: "memory" },
         ],
         nodeType: "module",
         tables: [{ export: null, identifier: "$T0", nodeType: "table" }],
@@ -206,11 +206,11 @@ describe("module parser", () => {
             identifier: "$t1",
             nodeType: "type",
             parameters: [],
-            results: ["i32"]
-          }
-        ]
+            results: ["i32"],
+          },
+        ],
       },
-      10
+      10,
     ])
   })
 })

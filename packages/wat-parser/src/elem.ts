@@ -6,10 +6,10 @@ import { WATElem } from "./moduleTypes"
 
 export const moduleElem = map(
   seq(keyword("elem"), array(initializerInstructions), many(identifier)),
-  r =>
+  (r) =>
     ({
       nodeType: "elem",
       offset: r[1],
-      funcIds: r[2]
-    } as WATElem)
+      funcIds: r[2],
+    }) as WATElem,
 )

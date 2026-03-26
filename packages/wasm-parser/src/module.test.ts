@@ -12,7 +12,7 @@ describe("module", () => {
         types: [
           { parameters: ["i32", "i32"], results: ["i32"] },
           { parameters: ["i32"], results: [] },
-          { parameters: [], results: [] }
+          { parameters: [], results: [] },
         ],
         imports: [{ desc: { func: 1 }, module: "console", name: "log" }],
         funcs: [0, 2],
@@ -20,8 +20,8 @@ describe("module", () => {
         globals: [
           {
             init: { opType: "i32.const", parameter: { i32: 0x0 } },
-            type: { type: "i32", isMutable: true }
-          }
+            type: { type: "i32", isMutable: true },
+          },
         ],
         exports: [{ desc: { func: 1 }, name: "add" }],
         starts: [{ func: 0 }, { func: 0 }],
@@ -30,31 +30,31 @@ describe("module", () => {
             body: [
               { opType: "local.get", parameter: 0 },
               { opType: "local.get", parameter: 1 },
-              { opType: "i32.add" }
+              { opType: "i32.add" },
             ],
             locals: [],
-            size: 7
+            size: 7,
           },
           {
             body: [
               { opType: "i32.const", parameter: { i32: 0x2a } },
-              { opType: "call", parameter: 0 }
+              { opType: "call", parameter: 0 },
             ],
             locals: [],
-            size: 6
-          }
+            size: 6,
+          },
         ],
         data: [
           {
             data: 0,
             init: [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100],
-            offset: { opType: "i32.const", parameter: { i32: 0x08 } }
-          }
+            offset: { opType: "i32.const", parameter: { i32: 0x08 } },
+          },
         ],
         elems: [],
-        tables: []
+        tables: [],
       },
-      159
+      159,
     ])
   })
 })

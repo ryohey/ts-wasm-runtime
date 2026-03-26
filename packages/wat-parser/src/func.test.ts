@@ -19,14 +19,14 @@ describe("parser", () => {
       [
         {
           opType: "text.get_local",
-          parameter: "$lhs"
+          parameter: "$lhs",
         },
         {
           opType: "text.get_local",
-          parameter: "$rhs"
-        }
+          parameter: "$rhs",
+        },
       ],
-      4
+      4,
     ])
   })
 
@@ -41,9 +41,9 @@ describe("parser", () => {
         "$lhs",
         "get_local",
         "$rhs",
-        "i32.add"
+        "i32.add",
       ],
-      0
+      0,
     )
     expect(r).toStrictEqual([
       true,
@@ -53,25 +53,25 @@ describe("parser", () => {
         export: null,
         parameters: [
           { identifier: "$lhs", type: "i32" },
-          { identifier: "$rhs", type: "i32" }
+          { identifier: "$rhs", type: "i32" },
         ],
         results: ["i32"],
         locals: [],
         body: [
           {
             opType: "text.get_local",
-            parameter: "$lhs"
+            parameter: "$lhs",
           },
           {
             opType: "text.get_local",
-            parameter: "$rhs"
+            parameter: "$rhs",
           },
           {
-            opType: "i32.add"
-          }
-        ]
+            opType: "i32.add",
+          },
+        ],
       },
-      9
+      9,
     ])
   })
 
@@ -88,9 +88,9 @@ describe("parser", () => {
         "$lhs",
         "get_local",
         "$rhs",
-        "i32.add"
+        "i32.add",
       ],
-      0
+      0,
     )
     expect(r).toStrictEqual([
       true,
@@ -100,25 +100,25 @@ describe("parser", () => {
         export: "add",
         parameters: [
           { identifier: "$lhs", type: "i32" },
-          { identifier: "$rhs", type: "i32" }
+          { identifier: "$rhs", type: "i32" },
         ],
         results: ["i32"],
         locals: [],
         body: [
           {
             opType: "text.get_local",
-            parameter: "$lhs"
+            parameter: "$lhs",
           },
           {
             opType: "text.get_local",
-            parameter: "$rhs"
+            parameter: "$rhs",
           },
           {
-            opType: "i32.add"
-          }
-        ]
+            opType: "i32.add",
+          },
+        ],
       },
-      11
+      11,
     ])
   })
   it("parses function", () => {
@@ -126,7 +126,7 @@ describe("parser", () => {
       `(func (export "hello") (result i32)
         i32.const 42
       )`,
-      0
+      0,
     )
     const r = func(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -135,17 +135,17 @@ describe("parser", () => {
         body: [
           {
             opType: "i32.const",
-            parameter: { i32: 42 }
-          }
+            parameter: { i32: 42 },
+          },
         ],
         export: "hello",
         identifier: null,
         nodeType: "func",
         parameters: [],
         results: ["i32"],
-        locals: []
+        locals: [],
       },
-      5
+      5,
     ])
   })
   it("parses function with local", () => {
@@ -153,7 +153,7 @@ describe("parser", () => {
       `(func (export "hello") (result i32) (local i32)
         get_local 0
       )`,
-      0
+      0,
     )
     const r = func(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -165,9 +165,9 @@ describe("parser", () => {
         nodeType: "func",
         parameters: [],
         results: ["i32"],
-        locals: [{ type: "i32", identifier: null }]
+        locals: [{ type: "i32", identifier: null }],
       },
-      6
+      6,
     ])
   })
 
@@ -183,9 +183,9 @@ describe("parser", () => {
       [
         { opType: "i32.const", parameter: { i32: 2 } },
         { opType: "i32.const", parameter: { i32: 3 } },
-        { opType: "i32.add" }
+        { opType: "i32.add" },
       ],
-      1
+      1,
     ])
   })
 
@@ -195,7 +195,7 @@ describe("parser", () => {
       (local f32 i64 i64 f64)
       (drop (i64.eqz (local.get 0)))
     )`,
-      0
+      0,
     )
     const r = func(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -204,7 +204,7 @@ describe("parser", () => {
         body: [
           { opType: "local.get", parameter: 0 },
           { opType: "i64.eqz" },
-          { opType: "drop" }
+          { opType: "drop" },
         ],
         export: "type-mixed",
         identifier: null,
@@ -212,7 +212,7 @@ describe("parser", () => {
           { identifier: null, type: "f32" },
           { identifier: null, type: "i64" },
           { identifier: null, type: "i64" },
-          { identifier: null, type: "f64" }
+          { identifier: null, type: "f64" },
         ],
         nodeType: "func",
         parameters: [
@@ -220,11 +220,11 @@ describe("parser", () => {
           { identifier: null, type: "f32" },
           { identifier: null, type: "f64" },
           { identifier: null, type: "i32" },
-          { identifier: null, type: "i32" }
+          { identifier: null, type: "i32" },
         ],
-        results: []
+        results: [],
       },
-      5
+      5,
     ])
   })
 
@@ -236,7 +236,7 @@ describe("parser", () => {
           (block (result f32) (call $dummy) (f32.const 3))
         )
       )`,
-      0
+      0,
     )
     const r = func(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -248,35 +248,35 @@ describe("parser", () => {
               { opType: "text.call", parameter: "$dummy" },
               {
                 opType: "f32.const",
-                parameter: { f32: 3 }
-              }
+                parameter: { f32: 3 },
+              },
             ],
             identifier: null,
             opType: "text.block",
-            results: ["f32"]
+            results: ["f32"],
           },
           {
             body: [
               { opType: "text.call", parameter: "$dummy" },
               {
                 opType: "f32.const",
-                parameter: { f32: 3 }
-              }
+                parameter: { f32: 3 },
+              },
             ],
             identifier: null,
             opType: "text.block",
-            results: ["f32"]
+            results: ["f32"],
           },
-          { opType: "f32.gt" }
+          { opType: "f32.gt" },
         ],
         export: "as-compare-operand",
         identifier: null,
         locals: [],
         nodeType: "func",
         parameters: [],
-        results: ["i32"]
+        results: ["i32"],
       },
-      4
+      4,
     ])
   })
 
@@ -287,7 +287,7 @@ describe("parser", () => {
         (if (local.get 0) (then (nop)) (else (nop)))
         (if (result i32) (local.get 0) (then (i32.const 7)) (else (i32.const 8)))
       )`,
-      0
+      0,
     )
     const r = func(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -300,7 +300,7 @@ describe("parser", () => {
             identifier: null,
             then: [{ opType: "nop" }],
             else: [],
-            results: []
+            results: [],
           },
           { opType: "local.get", parameter: 0 },
           {
@@ -308,7 +308,7 @@ describe("parser", () => {
             identifier: null,
             then: [{ opType: "nop" }],
             else: [{ opType: "nop" }],
-            results: []
+            results: [],
           },
           { opType: "local.get", parameter: 0 },
           {
@@ -316,17 +316,17 @@ describe("parser", () => {
             identifier: null,
             then: [{ opType: "i32.const", parameter: { i32: 7 } }],
             else: [{ opType: "i32.const", parameter: { i32: 8 } }],
-            results: ["i32"]
-          }
+            results: ["i32"],
+          },
         ],
         export: "singular",
         identifier: null,
         locals: [],
         nodeType: "func",
         parameters: [{ identifier: null, type: "i32" }],
-        results: ["i32"]
+        results: ["i32"],
       },
-      7
+      7,
     ])
   })
 })

@@ -13,11 +13,11 @@ export interface Elem {
 
 const elem: Parser<Bytes, Elem> = map(
   seq(tableIdx, initializer, vector(funcIdx)),
-  r => ({
+  (r) => ({
     table: r[0],
     offset: r[1],
-    init: r[2]
-  })
+    init: r[2],
+  }),
 )
 
 export const elemSection = section(9, "elem", vector(elem))

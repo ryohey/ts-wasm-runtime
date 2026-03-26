@@ -6,18 +6,18 @@ import { param } from "./func"
 
 const funcDef = map(
   seq(keyword("func"), opt(array(param)), opt(array(blockType))),
-  r => ({
+  (r) => ({
     parameters: r[1] || [],
-    results: r[2] !== null ? [r[2]] : []
-  })
+    results: r[2] !== null ? [r[2]] : [],
+  }),
 )
 
 export const moduleType = map(
   seq(keyword("type"), opt(identifier), array(funcDef)),
-  r =>
+  (r) =>
     ({
       nodeType: "type",
       identifier: r[1],
-      ...r[2]
-    } as WATType)
+      ...r[2],
+    }) as WATType,
 )

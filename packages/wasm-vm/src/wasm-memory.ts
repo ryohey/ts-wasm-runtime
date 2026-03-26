@@ -5,7 +5,7 @@ import {
   Int64Value,
   Float32Value,
   Float64Value,
-  Op
+  Op,
 } from "@ryohey/wasm-ast"
 import { Int32, Float32, Int64, Float64 } from "./number"
 import { WASMFunction } from "./module"

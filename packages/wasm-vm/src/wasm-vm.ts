@@ -13,24 +13,24 @@ import {
   WASMCode,
   WASMMemory,
   WASMMemoryValue,
-  WASMTable
+  WASMTable,
 } from "./wasm-memory"
 import { createFunction } from "./block"
 import { WASMElem, WASMGlobal, WASMFunction, WASMModule } from "./module"
 
 type WASMInstructionSet = PartialInstructionSet<WASMCode, WASMMemory>
 
-const mergeInstructionSet = <T, S>(
-  instructioSets: PartialInstructionSet<T, S>[]
-): InstructionSet<T, S> => code => {
-  for (const is of instructioSets) {
-    const i = is(code)
-    if (i !== null) {
-      return i
+const mergeInstructionSet =
+  <T, S>(instructioSets: PartialInstructionSet<T, S>[]): InstructionSet<T, S> =>
+  (code) => {
+    for (const is of instructioSets) {
+      const i = is(code)
+      if (i !== null) {
+        return i
+      }
     }
+    throw new Error(`There is no instruction for ${JSON.stringify(code)}`)
   }
-  throw new Error(`There is no instruction for ${JSON.stringify(code)}`)
-}
 
 const baseInstructionSet = [
   memoryInstructionSet as WASMInstructionSet,
@@ -38,18 +38,18 @@ const baseInstructionSet = [
   i32InstructionSet as WASMInstructionSet,
   i64InstructionSet as WASMInstructionSet,
   f32InstructionSet as WASMInstructionSet,
-  f64InstructionSet as WASMInstructionSet
+  f64InstructionSet as WASMInstructionSet,
 ]
 
 // Provides WASM instruction set and creates VirtualMachine.
 export const createWASMVM = (controlInstructionSet: WASMInstructionSet) =>
   virtualMachine(
-    mergeInstructionSet([...baseInstructionSet, controlInstructionSet])
+    mergeInstructionSet([...baseInstructionSet, controlInstructionSet]),
   )
 
 const createTable = (elems: WASMElem[]) => {
   const table: WASMTable = {}
-  elems.forEach(e => {
+  elems.forEach((e) => {
     e.funcIds.forEach((id, i) => {
       // TODO: support global.get
       const init = e.offset as Op.Const
@@ -61,7 +61,7 @@ const createTable = (elems: WASMElem[]) => {
 }
 
 const createGlobalMemory = (globals: WASMGlobal[]) =>
-  globals.map(g => {
+  globals.map((g) => {
     // TODO: support global.get
     const init = g.init as Op.Const
     return convertNumber(init.parameter)
@@ -81,7 +81,7 @@ export class WASMVirtualMachine {
   // export された関数を呼ぶ
   callFunction(name: string, ...args: NumberValue[]): NumberValue[] {
     const { functions } = this
-    const funcId = functions.findIndex(t => t.export === name)
+    const funcId = functions.findIndex((t) => t.export === name)
     const fn = functions[funcId]
 
     const memory: WASMMemory = {
@@ -92,16 +92,13 @@ export class WASMVirtualMachine {
       local: [],
       global: this.global,
       programCounter: 0,
-      programTerminated: false
+      programTerminated: false,
     }
 
-    args
-      .map(convertNumber)
-      .reverse()
-      .forEach(memory.values.push)
+    args.map(convertNumber).reverse().forEach(memory.values.push)
 
     createFunction(fn)(memory)
 
-    return fn.results.map(_ => memory.values.pop().toObject())
+    return fn.results.map((_) => memory.values.pop().toObject())
   }
 }

@@ -16,14 +16,14 @@ export const assertionParser = map(
   seq(
     keyword("assert_return"),
     array(seq(keyword("invoke"), string, opt(many(array(operations))))),
-    opt(array(operations))
+    opt(array(operations)),
   ),
-  r => {
+  (r) => {
     return {
       nodeType: "assert_return",
       invoke: r[1][1],
       args: flatten(r[1][2] || []),
-      expected: r[2] || []
+      expected: r[2] || [],
     } as WATAssertReturn
-  }
+  },
 )

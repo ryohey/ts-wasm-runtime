@@ -12,20 +12,20 @@ export interface Code {
   locals: ValType[]
 }
 
-const locals = map(seq(u32, valType), r => range(0, r[0]).map(_ => r[1]))
+const locals = map(seq(u32, valType), (r) => range(0, r[0]).map((_) => r[1]))
 
-const func = map(seq(vector(locals), expr), r => ({
+const func = map(seq(vector(locals), expr), (r) => ({
   locals: flatten(r[0]),
-  body: r[1] as Op.Any[]
+  body: r[1] as Op.Any[],
 }))
 
 const code = map(
   seq(u32, func),
-  r =>
+  (r) =>
     ({
       size: r[0],
-      ...r[1]
-    } as Code)
+      ...r[1],
+    }) as Code,
 )
 
 export const codeSection = section(10, "code", vector(code))

@@ -9,9 +9,9 @@ export interface Export {
   desc: Desc
 }
 
-const export_: Parser<Bytes, Export> = map(seq(name, importDesc), r => ({
+const export_: Parser<Bytes, Export> = map(seq(name, importDesc), (r) => ({
   name: r[0],
-  desc: r[1]
+  desc: r[1],
 }))
 
 export const exportSection = section(7, "export", vector(export_))

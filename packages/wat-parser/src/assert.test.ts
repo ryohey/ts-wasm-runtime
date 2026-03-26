@@ -5,7 +5,7 @@ describe("assertParser", () => {
   it("parses assert_return", () => {
     const sExp = sParser(
       `(assert_return (invoke "8u_good1" (i32.const 0) (i32.const 1)) (i32.const 97))`,
-      0
+      0,
     )
     const r = assertionParser(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -16,16 +16,16 @@ describe("assertParser", () => {
         args: [
           {
             opType: "i32.const",
-            parameter: { i32: 0 }
+            parameter: { i32: 0 },
           },
           {
             opType: "i32.const",
-            parameter: { i32: 1 }
-          }
+            parameter: { i32: 1 },
+          },
         ],
-        expected: [{ opType: "i32.const", parameter: { i32: 97 } }]
+        expected: [{ opType: "i32.const", parameter: { i32: 97 } }],
       },
-      3
+      3,
     ])
   })
   it("parses assert_return without parameters", () => {
@@ -37,9 +37,9 @@ describe("assertParser", () => {
         nodeType: "assert_return",
         invoke: "empty",
         args: [],
-        expected: []
+        expected: [],
       },
-      2
+      2,
     ])
   })
 })

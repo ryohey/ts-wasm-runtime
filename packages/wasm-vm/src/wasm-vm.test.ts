@@ -14,7 +14,7 @@ describe("wasm-vm", () => {
         (func (export "hello") (result i32)
           i32.const 42
         )
-      )`
+      )`,
     )
     const vm = new WASMVirtualMachine(module)
     expect(vm.callFunction("hello")).toStrictEqual([new Int32(42).toObject()])
@@ -28,15 +28,15 @@ describe("wasm-vm", () => {
           get_local 1
           i32.add
         )
-      )`
+      )`,
     )
     const vm = new WASMVirtualMachine(module)
     expect(
       vm.callFunction(
         "add",
         new Int32(133).toObject(),
-        new Int32(234).toObject()
-      )
+        new Int32(234).toObject(),
+      ),
     ).toStrictEqual([new Int32(367).toObject()])
   })
 })

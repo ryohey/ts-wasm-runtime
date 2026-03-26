@@ -13,11 +13,11 @@ export interface Data {
 
 const data: Parser<Bytes, Data> = map(
   seq(memIdx, initializer, vector(var1)),
-  r => ({
+  (r) => ({
     data: r[0],
     offset: r[1],
-    init: r[2]
-  })
+    init: r[2],
+  }),
 )
 
 export const dataSection = section(11, "data", vector(data))

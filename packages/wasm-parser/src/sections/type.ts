@@ -11,10 +11,10 @@ export interface Type {
 
 const funcType: Parser<Bytes, Type> = map(
   seq(byte(0x60), vector(valType), vector(valType)),
-  r => ({
+  (r) => ({
     parameters: r[1],
-    results: r[2]
-  })
+    results: r[2],
+  }),
 )
 
 export const typeSection = section(1, "type", vector(funcType))

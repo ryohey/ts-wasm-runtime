@@ -5,7 +5,7 @@ import {
   int32,
   int64,
   float32,
-  float64
+  float64,
 } from "./types"
 
 describe("type parser", () => {

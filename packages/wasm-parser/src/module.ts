@@ -18,8 +18,8 @@ import { bytes, string, var1 } from "./utils"
 
 // https://webassembly.github.io/spec/core/binary/index.html
 
-const beginWASM = map(seq(string("\0asm"), var1, bytes([0, 0, 0])), r => ({
-  version: r[1]
+const beginWASM = map(seq(string("\0asm"), var1, bytes([0, 0, 0])), (r) => ({
+  version: r[1],
 }))
 
 export interface Module {
@@ -38,7 +38,7 @@ export interface Module {
 }
 
 const getSections = <T>(obj: Section<T>[] | undefined | null): T[] =>
-  obj === null || obj === undefined ? [] : flatten(obj.map(s => s.sections))
+  obj === null || obj === undefined ? [] : flatten(obj.map((s) => s.sections))
 
 export const moduleParser: Parser<Bytes, Module> = map(
   seq<Bytes, any>(
@@ -64,9 +64,9 @@ export const moduleParser: Parser<Bytes, Module> = map(
     opt(many(codeSection)),
     opt(many(customSection)),
     opt(many(dataSection)),
-    opt(many(customSection))
+    opt(many(customSection)),
   ),
-  r => ({
+  (r) => ({
     version: r[0].version,
     types: getSections<Type>(r[1]),
     imports: getSections<Import>(r[3]),
@@ -78,6 +78,6 @@ export const moduleParser: Parser<Bytes, Module> = map(
     starts: getSections<Start>(r[15]),
     elems: getSections<Elem>(r[17]),
     codes: getSections<Code>(r[19]),
-    data: getSections<Data>(r[21])
-  })
+    data: getSections<Data>(r[21]),
+  }),
 )

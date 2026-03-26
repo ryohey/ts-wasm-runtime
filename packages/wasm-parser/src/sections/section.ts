@@ -16,25 +16,25 @@ export interface Section<T> extends SectionStart {
 export const sectionStart = (id: number) =>
   map(
     seq(byte(id), u32),
-    r =>
+    (r) =>
       ({
         id,
-        size: r[1]
-      } as SectionStart)
+        size: r[1],
+      }) as SectionStart,
   )
 
 export const section = <T>(
   id: number,
   nodeType: string,
-  body: Parser<Bytes, T[]>
+  body: Parser<Bytes, T[]>,
 ) =>
   seqMap(sectionStart(id), (sec: SectionStart) =>
-    map(variable(sec.size), r => {
+    map(variable(sec.size), (r) => {
       const b = body(r, 0)
       return {
         nodeType,
         ...sec,
-        sections: b ? b[1] : []
+        sections: b ? b[1] : [],
       }
-    })
+    }),
   ) as Parser<Bytes, Section<T>>

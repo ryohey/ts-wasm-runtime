@@ -9,5 +9,5 @@ export const float: Parser<string, number> = or(
   map(regexp(/^([-\+]?nan)$/), () => NaN),
   map(regexp(/^([-\+]?nan:0x[0-9a-fA-F]+)$/), () => NaN),
   map(regexp(/^(\+?inf)$/), () => Infinity),
-  map(regexp(/^(-inf)$/), () => -Infinity)
+  map(regexp(/^(-inf)$/), () => -Infinity),
 )

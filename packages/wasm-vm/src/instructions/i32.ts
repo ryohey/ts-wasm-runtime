@@ -1,7 +1,7 @@
 import {
   PartialInstructionSet,
   WASMCode,
-  WASMLocalMemory
+  WASMLocalMemory,
 } from "../wasm-memory"
 import { Int32 } from "../number"
 import { binop, monop, boolBinop, boolMonop } from "./helpers"
@@ -10,7 +10,7 @@ import { binop, monop, boolBinop, boolMonop } from "./helpers"
 export const i32InstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
-> = code => {
+> = (code) => {
   switch (code.opType) {
     case "i32.const":
       return ({ values }) => values.push(Int32.obj(code.parameter))

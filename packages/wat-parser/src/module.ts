@@ -17,7 +17,7 @@ import {
   WATTable,
   WATType,
   WATElem,
-  WATModule
+  WATModule,
 } from "./moduleTypes"
 
 const isExport = (x: WATSection): x is WATExport => x.nodeType === "export"
@@ -39,11 +39,11 @@ export const moduleParser = map(
         array(moduleMemory),
         array(moduleTable),
         array(moduleType),
-        array(moduleElem)
-      )
-    )
+        array(moduleElem),
+      ),
+    ),
   ),
-  r =>
+  (r) =>
     ({
       nodeType: "module",
       functions: r[1].filter(isFunc),
@@ -52,6 +52,6 @@ export const moduleParser = map(
       memories: r[1].filter(isMemory),
       tables: r[1].filter(isTable),
       types: r[1].filter(isType),
-      elems: r[1].filter(isElem)
-    } as WATModule)
+      elems: r[1].filter(isElem),
+    }) as WATModule,
 )

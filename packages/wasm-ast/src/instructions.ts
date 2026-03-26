@@ -3,7 +3,7 @@ import {
   Int64Value,
   Float32Value,
   Float64Value,
-  ValType
+  ValType,
 } from "./number"
 
 export interface Base<T extends string> {

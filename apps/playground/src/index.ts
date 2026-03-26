@@ -40,8 +40,8 @@ const JSONView = (json) =>
         numberColor: "white",
         trueColor: "white",
         falseColor: "white",
-      })
-    )
+      }),
+    ),
   )
 
 const Code = (code) => html` <pre class="Code"><code>${code}</code></pre> `
@@ -96,7 +96,7 @@ const RadioSelect = <T>(
   items: RadioItem<T>[],
   name: String,
   value: T,
-  onSelect: (item: T) => void
+  onSelect: (item: T) => void,
 ) =>
   items.map((item, i) => {
     const id = `${name}-${i}`
@@ -113,13 +113,8 @@ const RadioSelect = <T>(
   })
 
 const App = () => {
-  const {
-    sParserInput,
-    consoleInput,
-    consoleOutput,
-    inputMode,
-    wasmBinary,
-  } = store()
+  const { sParserInput, consoleInput, consoleOutput, inputMode, wasmBinary } =
+    store()
   const parsedS = sParser(sParserInput, 0)
   const watModule = parsedS[0] ? watParser(parsedS[1], 0) : null
 
@@ -167,7 +162,7 @@ const App = () => {
         return
       }
 
-      store( {
+      store({
         consoleHistory: [...consoleHistory, consoleInput],
         consoleHistoryIndex: consoleHistory.length + 1,
       })
@@ -175,7 +170,7 @@ const App = () => {
       const input = parsedInput[1]
       const result = vm.callFunction(
         input.name,
-        ...input.arguments.map((i32) => ({ i32: parseInt(i32) }))
+        ...input.arguments.map((i32) => ({ i32: parseInt(i32) })),
       )
       const resultStr = result.map((x) => JSON.stringify(x)).join(", ")
 
@@ -185,29 +180,28 @@ const App = () => {
         consoleInput: "",
         consoleOutput: [...consoleOutput, output],
       })
-    }
-
-    else if (e.key === "ArrowUp") {
-      const { consoleHistory, consoleHistoryIndex } = store();
+    } else if (e.key === "ArrowUp") {
+      const { consoleHistory, consoleHistoryIndex } = store()
       if (consoleHistory.length > 0) {
-        const historyIndex = Math.max(0, consoleHistoryIndex - 1);
-        const lastInput = consoleHistory[historyIndex];
+        const historyIndex = Math.max(0, consoleHistoryIndex - 1)
+        const lastInput = consoleHistory[historyIndex]
         store({
           consoleInput: lastInput,
           consoleHistoryIndex: historyIndex,
-        });
+        })
       }
-    }
-    else if (e.key === "ArrowDown") {
-      const { consoleHistory, consoleHistoryIndex } = store();
-      const historyIndex = Math.min( consoleHistory.length - 1, consoleHistoryIndex + 1);
-      const nextInput = consoleHistory[historyIndex];
+    } else if (e.key === "ArrowDown") {
+      const { consoleHistory, consoleHistoryIndex } = store()
+      const historyIndex = Math.min(
+        consoleHistory.length - 1,
+        consoleHistoryIndex + 1,
+      )
+      const nextInput = consoleHistory[historyIndex]
       store({
         consoleInput: nextInput,
         consoleHistoryIndex: historyIndex,
-      });
+      })
     }
-
   }
 
   const onChangeFile = (e: Event) => {
@@ -242,7 +236,7 @@ const App = () => {
           ],
           "input-select",
           inputMode,
-          onSelectInputMode
+          onSelectInputMode,
         )}
       </div>
 
@@ -314,10 +308,9 @@ const App = () => {
                   ? module.functions
                       .filter((fn) => fn.export)
                       .map(
-                        (fn) =>
-                          html`
-                            <li>${fn.export}(${fn.parameters.join(", ")})</li>
-                          `
+                        (fn) => html`
+                          <li>${fn.export}(${fn.parameters.join(", ")})</li>
+                        `,
                       )
                   : null
               }

@@ -12,30 +12,30 @@ type BlockOp = TextOp.Block | TextOp.Loop
 
 const makeBlockBody = <T extends BlockOp>(
   word: string,
-  opType: T["opType"]
+  opType: T["opType"],
 ): Parser<Element[], T> =>
   map(
     seq(
       keyword(word),
       opt(identifier),
       opt(array(blockType)),
-      opt(many(instructions))
+      opt(many(instructions)),
     ),
-    r =>
+    (r) =>
       ({
         opType,
         identifier: r[1],
         results: r[2] ? [r[2]] : [],
-        body: flatten(r[3] || [])
-      } as T)
+        body: flatten(r[3] || []),
+      }) as T,
   )
 
 const makePlainBlock = <T extends BlockOp>(word: string, opType: T["opType"]) =>
-  map(seq(makeBlockBody<T>(word, opType), keyword("end")), r => r[0])
+  map(seq(makeBlockBody<T>(word, opType), keyword("end")), (r) => r[0])
 
 const makeFoldedBlock = <T extends BlockOp>(
   word: string,
-  opType: T["opType"]
+  opType: T["opType"],
 ) => array(makeBlockBody<T>(word, opType))
 const makeBlock = <T extends BlockOp>(word: string, opType: T["opType"]) =>
   or(makePlainBlock<T>(word, opType), makeFoldedBlock<T>(word, opType))

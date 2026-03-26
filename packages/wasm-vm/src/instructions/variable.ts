@@ -1,14 +1,14 @@
 import {
   PartialInstructionSet,
   WASMCode,
-  WASMLocalMemory
+  WASMLocalMemory,
 } from "../wasm-memory"
 
 // https://webassembly.github.io/spec/core/text/instructions.html#variable-instructions
 export const variableInstructionSet: PartialInstructionSet<
   WASMCode,
   WASMLocalMemory
-> = code => {
+> = (code) => {
   switch (code.opType) {
     case "drop":
       return ({ values }) => {

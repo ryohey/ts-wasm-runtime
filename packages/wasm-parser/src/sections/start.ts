@@ -6,6 +6,9 @@ import { vector } from "../utils"
 
 export type Start = FuncRef
 
-const start: Parser<Bytes, Start> = map(funcIdx, func => ({ func } as FuncRef))
+const start: Parser<Bytes, Start> = map(
+  funcIdx,
+  (func) => ({ func }) as FuncRef,
+)
 
 export const startsSection = section(8, "start", vector(start))

@@ -13,10 +13,10 @@ describe("if", () => {
           identifier: null,
           results: [],
           then: [{ opType: "nop" }],
-          else: [{ opType: "nop" }]
-        }
+          else: [{ opType: "nop" }],
+        },
       ],
-      5
+      5,
     ])
   })
   it("parses if-then-else block", () => {
@@ -27,7 +27,7 @@ describe("if", () => {
       (else
         i32.const 3)
       ))`,
-      0
+      0,
     )
     const r = ifParser(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -38,10 +38,10 @@ describe("if", () => {
           identifier: null,
           results: ["i32"],
           then: [{ opType: "i32.const", parameter: { i32: 10 } }],
-          else: [{ opType: "i32.const", parameter: { i32: 3 } }]
-        }
+          else: [{ opType: "i32.const", parameter: { i32: 3 } }],
+        },
       ],
-      1
+      1,
     ])
   })
 
@@ -56,10 +56,10 @@ describe("if", () => {
           identifier: null,
           results: [],
           then: [{ opType: "nop" }],
-          else: []
-        }
+          else: [],
+        },
       ],
-      3
+      3,
     ])
   })
 
@@ -74,10 +74,10 @@ describe("if", () => {
           identifier: "$foo",
           results: [],
           then: [{ opType: "i32.const", parameter: { i32: 10 } }],
-          else: []
-        }
+          else: [],
+        },
       ],
-      1
+      1,
     ])
   })
 
@@ -93,10 +93,10 @@ describe("if", () => {
           identifier: null,
           then: [{ opType: "nop" }],
           else: [],
-          results: []
-        }
+          results: [],
+        },
       ],
-      1
+      1,
     ])
   })
 
@@ -112,17 +112,17 @@ describe("if", () => {
           identifier: null,
           then: [{ opType: "nop" }],
           else: [{ opType: "nop" }],
-          results: []
-        }
+          results: [],
+        },
       ],
-      1
+      1,
     ])
   })
 
   it("parses folded if-then-else block with result", () => {
     const sExp = sParser(
       `((if (result i32) (local.get 0) (then (i32.const 7)) (else (i32.const 8))))`,
-      0
+      0,
     )
     const r = ifParser(sExp[1], 0)
     expect(r).toStrictEqual([
@@ -134,10 +134,10 @@ describe("if", () => {
           identifier: null,
           then: [{ opType: "i32.const", parameter: { i32: 7 } }],
           else: [{ opType: "i32.const", parameter: { i32: 8 } }],
-          results: ["i32"]
-        }
+          results: ["i32"],
+        },
       ],
-      1
+      1,
     ])
   })
 
@@ -150,7 +150,7 @@ describe("if", () => {
         (then (call $dummy) (i32.const 2))
         (else (call $dummy) (i32.const 3))
       ))`,
-      0
+      0,
     )
 
     const r = ifParser(sExp[1], 0)
@@ -163,23 +163,23 @@ describe("if", () => {
           identifier: null,
           then: [{ opType: "i32.const", parameter: { i32: 1 } }],
           else: [{ opType: "i32.const", parameter: { i32: 0 } }],
-          results: ["i32"]
+          results: ["i32"],
         },
         {
           opType: "text.if",
           identifier: null,
           then: [
             { opType: "text.call", parameter: "$dummy" },
-            { opType: "i32.const", parameter: { i32: 2 } }
+            { opType: "i32.const", parameter: { i32: 2 } },
           ],
           else: [
             { opType: "text.call", parameter: "$dummy" },
-            { opType: "i32.const", parameter: { i32: 3 } }
+            { opType: "i32.const", parameter: { i32: 3 } },
           ],
-          results: ["i32"]
-        }
+          results: ["i32"],
+        },
       ],
-      1
+      1,
     ])
   })
 })

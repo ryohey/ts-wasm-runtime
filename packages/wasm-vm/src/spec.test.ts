@@ -7,10 +7,10 @@ const SPEC_DIR = "./spec"
 describe("spec test", () => {
   const files = fs
     .readdirSync(SPEC_DIR)
-    .filter(f => f.endsWith(".wast"))
-    .map(f => path.join(SPEC_DIR, f))
+    .filter((f) => f.endsWith(".wast"))
+    .map((f) => path.join(SPEC_DIR, f))
 
-  files.forEach(file => {
+  files.forEach((file) => {
     describe(`${file}`, () => {
       const code = fs.readFileSync(file, "utf8")
       console.log(`Testing ${file}:`)

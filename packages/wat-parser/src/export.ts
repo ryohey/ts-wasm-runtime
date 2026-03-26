@@ -9,13 +9,13 @@ export const moduleExport = map(
     string,
     or(
       array(seq(keyword("func"), identifier)),
-      array(seq(keyword("memory"), identifier))
-    )
+      array(seq(keyword("memory"), identifier)),
+    ),
   ),
-  r =>
+  (r) =>
     ({
       nodeType: "export",
       exportType: r[2][0],
-      identifier: r[2][1]
-    } as WATExport)
+      identifier: r[2][1],
+    }) as WATExport,
 )

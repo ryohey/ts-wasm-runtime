@@ -3,7 +3,7 @@ import { range } from "@ryohey/array-helper"
 export const zeroPad = (binary: string, bitWidth: number): string => {
   return (
     range(0, bitWidth - binary.length)
-      .map(_ => "0")
+      .map((_) => "0")
       .join("") + binary
   )
 }
@@ -16,7 +16,7 @@ export const countLeadingZeros = (binary: string, bitWidth: number): number => {
 
 export const countTrailingZeros = (
   binary: string,
-  bitWidth: number
+  bitWidth: number,
 ): number => {
   const bin = zeroPad(binary, bitWidth)
   const index = bin.lastIndexOf("1")
@@ -24,5 +24,5 @@ export const countTrailingZeros = (
 }
 
 export const popCount = (binary: string): number => {
-  return binary.split("").filter(s => s === "1").length
+  return binary.split("").filter((s) => s === "1").length
 }

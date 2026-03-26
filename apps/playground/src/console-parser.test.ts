@@ -8,9 +8,9 @@ describe("console-parser", () => {
       {
         type: "func-call",
         name: "abc",
-        arguments: ["1", "2", "3"]
+        arguments: ["1", "2", "3"],
       },
-      10
+      10,
     ])
   })
 })
