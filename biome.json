@@ -1,8 +1,12 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.9/schema.json",
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["docs/**", "**/dist/**"]
+    "includes": [
+      "**",
+      "!docs",
+      "!**/dist"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -18,7 +22,8 @@
     "rules": {
       "recommended": true,
       "a11y": {
-        "useGenericFontNames": "warn"
+        "useGenericFontNames": "warn",
+        "useHtmlLang": "warn"
       },
       "complexity": {
         "noForEach": "warn",
