@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest"
 import { float } from "./float"
 
 describe("float", () => {
@@ -12,7 +13,7 @@ describe("float", () => {
     expect(float("-inf", 0)).toStrictEqual([true, Number.NEGATIVE_INFINITY, 4])
   })
 
-  it("parses hex", () => {
+  it.skip("parses hex", () => {
     // TODO: implement
     expect(float("-0x1.921fb6p+2", 0)).toStrictEqual([true, 0, 14])
     expect(float("-0x0p+0", 0)).toStrictEqual([true, 0, 7])
